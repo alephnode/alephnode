@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 
 import { rhythm, scale } from '../utils/typography'
+import alephLogo from '../../src/assets/alephnode.png'
 
 class Layout extends React.Component {
   render() {
@@ -11,13 +12,7 @@ class Layout extends React.Component {
 
     if (location.pathname === rootPath) {
       header = (
-        <h1
-          style={{
-            ...scale(1.5),
-            marginBottom: rhythm(1.5),
-            marginTop: 0,
-          }}
-        >
+        <div>
           <Link
             style={{
               boxShadow: 'none',
@@ -26,19 +21,31 @@ class Layout extends React.Component {
             }}
             to={'/'}
           >
-            {title}
+            <img
+              src={alephLogo}
+              alt={`aleph node`}
+              style={{
+                marginRight: rhythm(1 / 2),
+                marginBottom: 0,
+                width: rhythm(4),
+                height: rhythm(4),
+              }}
+            />
+            <h1
+              style={{
+                ...scale(1.3),
+                marginBottom: rhythm(1.5),
+                marginTop: 0,
+              }}
+            >
+              {title}
+            </h1>
           </Link>
-        </h1>
+        </div>
       )
     } else {
       header = (
-        <h3
-          style={{
-            fontFamily: 'Roboto Mono, sans-serif',
-            marginTop: 0,
-            marginBottom: rhythm(1),
-          }}
-        >
+        <div>
           <Link
             style={{
               boxShadow: 'none',
@@ -47,9 +54,27 @@ class Layout extends React.Component {
             }}
             to={'/'}
           >
-            {title}
+            <img
+              src={alephLogo}
+              alt={`aleph node`}
+              style={{
+                marginRight: rhythm(1 / 2),
+                marginBottom: 0,
+                width: rhythm(4),
+                height: rhythm(4),
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: 'Roboto Mono, sans-serif',
+                marginTop: 0,
+                marginBottom: rhythm(1),
+              }}
+            >
+              {title}
+            </h3>
           </Link>
-        </h3>
+        </div>
       )
     }
     return (

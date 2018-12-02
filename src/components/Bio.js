@@ -16,9 +16,11 @@ class Bio extends React.Component {
         }}
       >
         <p>
-          a blog about javascript, node, and other code musings.
+          a blog about javascript, node, and math musings.
           <br />
-          <a href="https://twitter.com/alephnode">twitter plug</a>
+          <a href="https://twitter.com/alephnode" target="_blank">
+            twitter plug
+          </a>
         </p>
       </div>
     )
