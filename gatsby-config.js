@@ -1,9 +1,9 @@
 module.exports = {
   siteMetadata: {
     title: ' aleph node',
-    author: 'Stephen Ward',
-    description: 'Blog time, Dano',
-    siteUrl: 'https://gatsby-starter-blog-demo.netlify.com/',
+    author: 'stephen ward',
+    description: 'blog about js',
+    siteUrl: 'https://alephnode.io/',
   },
   pathPrefix: '/gatsby-starter-blog',
   plugins: [
