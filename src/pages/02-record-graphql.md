@@ -129,11 +129,15 @@ netlify.toml:
   Publish = "public"
 ```
 
-**_ summarize wtf the toml file is doing _**
+This file configures some details related to our eventual Netlify project. `Command`, as mentioned above, is what we want to run once the project is deployed. `Functions` refers to the location of our functions for deployment (netlify-lambda will write this for us when we start the dev environment), and `Publish` identifies the target directory that contains the deploy-ready HTML files for the project.
 
-For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>.
+For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>. Read more about best practices for using it with `netlify-lambda` <a href="https://github.com/netlify/netlify-lambda" target="_blank">here</a>.
 
-**_ prisma init time! _**
+It's time to hook in Prisma. from the root directory, run:
+
+```bash
+λ prisma init
+```
 
 Finally, time to create our `.env` file and set it with our sensitive info we noted earlier for prisma:
 
