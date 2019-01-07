@@ -66,7 +66,7 @@ class Layout extends React.Component {
             />
             <h3
               style={{
-                fontFamily: 'Roboto Mono, sans-serif',
+                fontFamily: 'Helvetica, sans-serif',
                 marginTop: 0,
                 marginBottom: rhythm(1),
               }}

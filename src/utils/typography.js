@@ -4,13 +4,13 @@ const typography = new Typography({
   baseFontSize: '18px',
   baseLineHeight: 1.45,
   headerFontFamily: [
+    'Helvetica',
     'Roboto Mono',
     'Segoe UI',
-    'Helvetica',
     'Arial',
     'sans-serif',
   ],
-  bodyFontFamily: ['Roboto Mono', 'sans-serif'],
+  bodyFontFamily: ['Helvetica', 'sans-serif'],
 })
 
 // Hot reload typography in development.
