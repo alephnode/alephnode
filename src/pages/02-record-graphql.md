@@ -19,8 +19,6 @@ _Please note that this article assumes a basic understanding of node and yarn wo
 
 _This section will give a brief summary of GraphQL and its benefits. Feel free to [skip ahead to the walkthrough](#prereq) if desired._
 
-**_hotlink to skip the section_**
-
 **_graphql blurb, explanation_**
 
 **_also briefly describe the different concepts of graphql_**
@@ -35,7 +33,7 @@ Before I can start writing code, I'll need to <a href="https://app.prisma.io/sig
 λ yarn global add prisma
 ```
 
-OK, time to pick a GraphQL toolkit to help setup the project and link it to the new Prisma account.
+OK, time to pick a GraphQL toolkit to help kickstart the project and link it to the new Prisma account.
 
 ### Coding the Project
 
@@ -52,16 +50,17 @@ OK, time to initialize the project and install dependencies:
 ```bash
 λ mkdir record-collection-api
 λ cd record-collection-api
-λ yarn add apollo-server-lambda dotenv graphql prisma-binding
-λ yarn add --dev netlify-lambda
+λ yarn add apollo-server-lambda dotenv graphql prisma-binding netlify-lambda
 ```
 
-In summary, I installed:
+In detail, I installed:
 
 - _apollo-server-lambda_, knowing that serverless was my end game
 - _dotenv_ to set environment variables for local testing (we'll set those for deployment within our Netlify dashboard)
 - _graphql_, as apollo-server-lambda relies on it, and
 - _prisma-binding_, the bindings for the backend service I'm using.
+
+Alright, now onto building out our configs.
 
 For reference, this is what the finished directory structure will look like:
 
@@ -91,7 +90,7 @@ For reference, this is what the finished directory structure will look like:
 
 ```
 
-To get some housekeeping out of the way, I'll create some config files for the project -- `package.json` and a `netlify.toml` file for configuring the app for Netlify's service.
+The first bit of files to build are `package.json` and `netlify.toml`.
 
 package.json:
 
@@ -139,9 +138,51 @@ It's time to hook in Prisma. from the root directory, run:
 λ prisma init
 ```
 
+<this is where you get the prisma endpoint, I believe. Go through getting the deom server and adding a secret>
+
+<the database file, adding info to prisma.yml>
+
 Finally, time to create our `.env` file and set it with our sensitive info we noted earlier for prisma:
 
 ```.env
 PRISMA_ENDPOINT="endpoint_url_here"
 PRISMA_SECRET="secret-set-here"
 ```
+
+Now that the configs are out of the way, I'm ready to start on app-specific logic.
+
+### GraphQL Implementation
+
+The handler for my code will live in server/index.js, so I'll start there.
+
+server/index.js:
+
+```javascript
+require('dotenv').config()
+const { ApolloServer, gql } = require('apollo-server-lambda')
+const { Prisma } = require('prisma-binding')
+const { typeDefs: td } = require('../src/generated/prisma-schema')
+const typeDefs = require('../src/schema')
+const resolvers = require('../src/resolvers')
+
+const server = new ApolloServer({
+  typeDefs: gql`
+    ${typeDefs}
+  `,
+  resolvers,
+  context: req => ({
+    ...req,
+    prisma: new Prisma({
+      typeDefs: td,
+      secret: process.env.PRISMA_SECRET,
+      endpoint: process.env.PRISMA_ENDPOINT,
+    }),
+  }),
+})
+
+exports.handler = server.createHandler()
+```
+
+There's quite a bit to unpack here, but it'll provide a high-level overview of how the service will function.
+
+I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Finally, I export the server in the form of our handler since this is the format netlify needs (explained in the deployment section).
