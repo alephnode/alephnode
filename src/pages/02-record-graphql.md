@@ -185,4 +185,48 @@ exports.handler = server.createHandler()
 
 There's quite a bit to unpack here, but it'll provide a high-level overview of how the service will function.
 
+<make sure you mention the prisma typeDef later since it's a wee confusing>
+
 I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Finally, I export the server in the form of our handler since this is the format netlify needs (explained in the deployment section).
+
+As noted earlier, the typeDefs define the schema for our service:
+
+src/schema.js:
+
+```javascript
+module.exports = `
+  type Query {
+    info: String!
+    records: [Record!]!
+    artists: [Artist!]!
+    artist(name: String): [Artist!]!
+    tracks: [Track!]!
+    categories: [Category]
+  }
+
+  type Artist {
+    id: ID!
+    name: String!
+    records: [Record]
+  }
+
+  type Record {
+    id: ID!
+    name: String!
+    tracks: [Track]
+  }
+
+  type Track {
+    id: ID!
+    name: String!
+    track_no: Int
+    artists: [Artist]
+  }
+
+  type Category {
+    id: ID!
+    name: String!
+    description: String
+  }
+`
+```
