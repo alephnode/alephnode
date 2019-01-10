@@ -60,13 +60,10 @@ In detail, I installed:
 - _graphql_, as apollo-server-lambda relies on it, and
 - _prisma-binding_, the bindings for the backend service I'm using.
 
-Alright, now onto building out our configs.
-
-For reference, this is what the finished directory structure will look like:
+Now's a good time to provide a high-level overview of what the finished directory structure will look like:
 
 ```
 .
-├── README.md
 ├── database
 │   ├── datamodel.prisma
 │   └── prisma.yml
@@ -90,7 +87,9 @@ For reference, this is what the finished directory structure will look like:
 
 ```
 
-The first bit of files to build are `package.json` and `netlify.toml`.
+Alright, now onto the configs.
+
+The first files to create are `package.json` and `netlify.toml`.
 
 package.json:
 
@@ -132,24 +131,101 @@ This file configures some details related to our eventual Netlify project. `Comm
 
 For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>. Read more about best practices for using it with `netlify-lambda` <a href="https://github.com/netlify/netlify-lambda" target="_blank">here</a>.
 
-It's time to hook in Prisma. from the root directory, run:
+It's time to hook in Prisma. Granted, this step will feel slightly odd because we're going to remove most of the files generated. We do this from the command line because it's the current documented way for receiving an endpoint for a new Prisma Cloud service.
+
+Open a terminal and run:
 
 ```bash
 λ prisma init
 ```
 
-<this is where you get the prisma endpoint, I believe. Go through getting the deom server and adding a secret>
+The command prompt will ask whether to create a new prisma server or link to an existing one. Select "Demo server" and the desired region afterward (right now, they only offer the demo servers in Ireland and the Western US).
 
-<the database file, adding info to prisma.yml>
+After setting a name and staging environment, the prompt asks which programming language will be used. If you're following along, select "Prisma JavaScript Client" and hit enter. Once this is complete, a few files will have been generated:
 
-Finally, time to create our `.env` file and set it with our sensitive info we noted earlier for prisma:
+- datamodel.prisma
+- prisma.yml
+- generated/index.d.ts,index.js,prisma-schema.js
+
+First, delete the generated directory, as we'll regenerate in a moment.
+
+Next, open up the prisma.yml file. You'll need the endpoint to initialize the `prisma-binding` library later, so keep it nearby.
+
+If you'd like to set a secret for added protection, you can configure that within this .yml file:
+
+prisma.yml:
+
+```yaml
+# ...
+endpoint: your-endpoint-here
+secret: your-super-secret-here
+# ...
+```
+
+FWIW, prisma recommends an added level of protection for production services. Read more about it <a href="https://www.prisma.io/docs/1.17/run-prisma-server/authentication-and-security-kke4/" target="_blank">here</a>.
+
+You can also specify the desired location of the files by Prisma. As you might have noticed in the directory structure above, mine lives at:
+
+- src/generated/
+
+... so I'll add that under a generate option:
+
+```yaml
+# ...
+generate:
+  - generator: javascript-client
+    output: ../src/generated/
+```
+
+The `datamodel.prisma` file will be be automatically generated during the `prisma init` step, but that was just to get our prisma endpoint. Remove everything from the file and replace it with our record schema:
+
+datamodel.prisma:
+
+```
+  type Artist {
+    id: ID! @unique
+    name: String!
+    records: [Record]
+  }
+
+  type Record {
+    id: ID! @unique
+    name: String!
+    tracks: [Track]
+  }
+
+  type Track {
+    id: ID! @unique
+    name: String!
+    track_no: Int
+    artists: [Artist]
+  }
+
+  type Category {
+    id: ID! @unique
+    name: String!
+    description: String
+  }
+```
+
+Now that we've tailored the Prisma files to our project, it's time to run:
+
+```
+prisma generate
+```
+
+If done properly, this newly generated directory should be located in the desired spot (the `generate` option in `prisma.yml` above) and match the schema detailed in `datamodel.prisma`.
+
+Since we have our Prisma information, we can populate our `.env` file with the sensitive info:
 
 ```.env
 PRISMA_ENDPOINT="endpoint_url_here"
+# if you set a secret in the prisma.yml file,
+# add it here to pass to prisma-bidning
 PRISMA_SECRET="secret-set-here"
 ```
 
-Now that the configs are out of the way, I'm ready to start on app-specific logic.
+Now that the configs are out of the way, it's time to start on app-specific logic.
 
 ### GraphQL Implementation
 
@@ -187,7 +263,7 @@ There's quite a bit to unpack here, but it'll provide a high-level overview of h
 
 <make sure you mention the prisma typeDef later since it's a wee confusing>
 
-I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Finally, I export the server in the form of our handler since this is the format netlify needs (explained in the deployment section).
+I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Finally, I export the server in the form of our handler since this is the format Netlify needs (explained in the deployment section).
 
 As noted earlier, the typeDefs define the schema for our service:
 
@@ -229,4 +305,35 @@ module.exports = `
     description: String
   }
 `
+```
+
+Pretty self-explanatory if you paid attention to the schema blurb earlier 😃.
+
+Next, I'll define the resolvers that'll map my data to functions that know what to do with them.
+
+I'll define my queries in Query.js:
+
+```javascript
+module.exports = {
+  artists: (_, args, context, info) => {
+    return context.prisma.query.artists({}, info)
+  },
+  records: (_, args, context, info) => {
+    return context.prisma.query.records({}, info)
+  },
+}
+```
+
+For now, I've just written some getters for my artists and records.
+
+I'll create an index file at src/resolvers that passes Query as a property:
+
+src/resolvers/index.js:
+
+```javascript
+const Query = require('./Query')
+
+module.exports = {
+  Query,
+}
 ```
