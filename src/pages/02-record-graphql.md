@@ -87,7 +87,7 @@ Now's a good time to provide a high-level overview of what the finished director
 
 ```
 
-Alright, now onto the configs.
+Alright, onto the configs.
 
 The first files to create are `package.json` and `netlify.toml`.
 
@@ -131,7 +131,7 @@ This file configures some details related to our eventual Netlify project. `Comm
 
 For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>. Read more about best practices for using it with `netlify-lambda` <a href="https://github.com/netlify/netlify-lambda" target="_blank">here</a>.
 
-It's time to hook in Prisma. Granted, this step will feel slightly odd because we're going to remove most of the files generated. We do this from the command line because it's the current documented way for receiving an endpoint for a new Prisma Cloud service.
+It's time to hook in Prisma. Granted, this step will feel slightly odd because we're going to remove most of the files generated. We do this from the command line because it's the <a href="https://www.prisma.io/docs/get-started/01-setting-up-prisma-demo-server-JAVASCRIPT-a001/" target="_blank">current documented way</a> to receive an endpoint for a new Prisma Cloud service.
 
 Open a terminal and run:
 
@@ -210,8 +210,8 @@ datamodel.prisma:
 
 Now that we've tailored the Prisma files to our project, it's time to run:
 
-```
-prisma generate
+```bash
+λ prisma generate
 ```
 
 If done properly, this newly generated directory should be located in the desired spot (the `generate` option in `prisma.yml` above) and match the schema detailed in `datamodel.prisma`.
@@ -261,11 +261,11 @@ exports.handler = server.createHandler()
 
 There's quite a bit to unpack here, but it'll provide a high-level overview of how the service will function.
 
-<make sure you mention the prisma typeDef later since it's a wee confusing>
+I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Notice how I import the typeDefs generated within `src/generated/prisma-schema.js`, renaming it to distinguish from the app schema also required in the module.
 
-I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Finally, I export the server in the form of our handler since this is the format Netlify needs (explained in the deployment section).
+Finally, export the server in the form of our handler since this is the format Netlify needs (explained in the deployment section).
 
-As noted earlier, the typeDefs define the schema for our service:
+The next file we will create is `src/schema.js`, which holds the typeDefs passed to our ApolloServer instance. As noted earlier, the typeDefs define the schema for our service:
 
 src/schema.js:
 
@@ -307,11 +307,11 @@ module.exports = `
 `
 ```
 
-Pretty self-explanatory if you paid attention to the schema blurb earlier 😃.
+Pretty self-explanatory if you paid attention to the GraphQL blurb earlier 😃.
 
-Next, I'll define the resolvers that'll map my data to functions that know what to do with them.
+Next, define the resolvers that'll map data to functions that know what to do with it.
 
-I'll define my queries in Query.js:
+Define queries in Query.js:
 
 ```javascript
 module.exports = {
@@ -324,9 +324,9 @@ module.exports = {
 }
 ```
 
-For now, I've just written some getters for my artists and records.
+For now, I've just written some getters for the artists and records.
 
-I'll create an index file at src/resolvers that passes Query as a property:
+Lastly, I'll create an index file at src/resolvers that passes Query as a property:
 
 src/resolvers/index.js:
 
@@ -337,3 +337,7 @@ module.exports = {
   Query,
 }
 ```
+
+And with that, I'm ready to test this locally before deploying 🤘.
+
+### Running the Local Server
