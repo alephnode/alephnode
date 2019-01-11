@@ -164,11 +164,11 @@ secret: your-super-secret-here
 
 FWIW, prisma recommends an added level of protection for production services. Read more about it <a href="https://www.prisma.io/docs/1.17/run-prisma-server/authentication-and-security-kke4/" target="_blank">here</a>.
 
-You can also specify the desired location of the files by Prisma. As you might have noticed in the directory structure above, mine lives at:
+You can also specify the desired location of the files that Prisma generates. As you might have noticed in the directory structure above, mine is located at:
 
 - src/generated/
 
-... so I'll add that under a generate option:
+... so I'll add that under the generate section of the yml file:
 
 ```yaml
 # ...
@@ -177,7 +177,7 @@ generate:
     output: ../src/generated/
 ```
 
-The `datamodel.prisma` file will be be automatically generated during the `prisma init` step, but that was just to get our prisma endpoint. Remove everything from the file and replace it with our record schema:
+The `datamodel.prisma` file is automatically generated during the `prisma init` step, but the model initially created didn't have the proper schema. Remove everything from the file and replace it with our record schema:
 
 datamodel.prisma:
 
@@ -208,13 +208,13 @@ datamodel.prisma:
   }
 ```
 
-Now that we've tailored the Prisma files to our project, it's time to run:
+Now that we've tailored the Prisma files to our project, it's time to re-generate:
 
 ```bash
 λ prisma generate
 ```
 
-If done properly, this newly generated directory should be located in the desired spot (the `generate` option in `prisma.yml` above) and match the schema detailed in `datamodel.prisma`.
+If done properly, this newly generated directory will be created in the desired spot (the `generate` option in `prisma.yml` above) and match the schema detailed in `datamodel.prisma`.
 
 Since we have our Prisma information, we can populate our `.env` file with the sensitive info:
 
@@ -225,7 +225,7 @@ PRISMA_ENDPOINT="endpoint_url_here"
 PRISMA_SECRET="secret-set-here"
 ```
 
-Now that the configs are out of the way, it's time to start on app-specific logic.
+Now that the configs are out of the way, it's time to start on API-specific logic.
 
 ### GraphQL Implementation
 
@@ -341,3 +341,37 @@ module.exports = {
 And with that, I'm ready to test this locally before deploying 🤘.
 
 ### Running the Local Server
+
+Let's spin up the dev server and make sure the project looks good. From the root of the project directory, open a terminal and run:
+
+```bash
+λ yarn serve
+```
+
+This should start the dev server on port 9000. If you go to http://localhost:9000/index in a web browser, it will launch the GraphQL playgound. This is a graphical interface to explore the API and experience the beautiful introspection that comes with the spec. Give it a try yourself.
+
+After checking that queries return the intended results, it's time to deploy the API live to Netlify.
+
+### Deploying to Netlify
+
+The easiest way to add a site to Netlify is to connect it to a GitHub repository and push an update to it. This is the allure of Netlify when prototyping-<a href="https://www.netlify.com/docs/continuous-deployment/" target="_blank">effortless, streamlined CD integration</a>.
+
+Once you create an account (if you haven't already) and <a href="https://www.netlify.com/blog/2016/09/29/a-step-by-step-guide-deploying-on-netlify/" target="_blank">follow the instructions on the Netlify site</a> to connect the service to your repository, the next push will trigger a deployment. When it's published, you should see a URL provided in the Netlify dashboard for the service.
+
+For example, mine is located <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>.
+
+If you see the screen above, congrats! You've successfully deployed your first serverless API :D
+
+### Wrapping Up
+
+What started as a lazy Saturday morning ended in a neglected task scratched off my to-do list, all thanks to a few powerful services available in the JS ecosystem today.
+
+Although a lot of ground was covered architecting the GraphQL API and deploying it to a serverless offering, there's still a lot to learn.
+
+For more information about the spec, or for alternative impelemntation choices, check out these awesome resources:
+
+- [HowToGraphQL](https://www.howtographql.com/)
+- [Deploying a GraphQL API with a Self-Hosted Database](https://medium.freecodecamp.org/graphql-zero-to-production-a7c4f786a57b)
+- [Combine Graphql Server with React Client](https://blog.apollographql.com/deploy-a-fullstack-apollo-app-with-netlify-45a7dfd51b0b)
+
+As always, thanks for reading!
