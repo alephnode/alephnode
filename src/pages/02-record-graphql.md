@@ -13,7 +13,7 @@ To accomplish this, I deployed the project as a function using Netlify, with Pri
 
 Taken together, the tools helped me ship a lightweight, serverless API in no time.
 
-You can see the finished result <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>, or jump straight to <a href="https://github.com/srmward/netlify-prisma-graphql-starter-kit" target="_blank">the source</a> if you'd prefer.
+You can see the finished result <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>, or jump straight to <a href="https://github.com/alephnode/netlify-prisma-graphql-starter-kit" target="_blank">the source</a> if you'd prefer.
 
 _Please note that this article assumes a basic understanding of node and yarn workflows. Refer to their respective references/getting started guides if you need a refresher before continuing._
 
