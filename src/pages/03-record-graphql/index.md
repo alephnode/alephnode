@@ -15,7 +15,7 @@ To accomplish this, I deployed the project as a function using Netlify, with Pri
 
 You can see the finished result <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>, or jump straight to <a href="https://github.com/alephnode/netlify-prisma-graphql-starter-kit" target="_blank">the source</a> if you'd prefer.
 
-_Please note that this article assumes a basic understanding of node and yarn workflows. Refer to their respective references/getting started guides if you need a refresher before continuing._
+_This article assumes a basic understanding of Node and Yarn workflows. Refer to their respective documentation/getting started guides if you need a refresher before continuing._
 
 <!-- ### Wait, Why GraphQL?
 
@@ -29,7 +29,7 @@ _This section will give a brief summary of GraphQL and its benefits. Feel free t
 
 ### <div id="prereq">Prerequisite - Prisma Sign Up</div>
 
-Before I can start writing code, I'll need to <a href="https://app.prisma.io/signup">create a Prisma Cloud account</a>. Afterward, I can use their CLI tools to create a new service for my API:
+Before I can start writing code, I'll need to <a href="https://app.prisma.io/signup">create a Prisma Cloud account</a>. I'll then install their CLI tools, which I'll use to create a new service for my API later on:
 
 ```bash
 λ yarn global add prisma
