@@ -9,6 +9,8 @@ One example would be generating reports from log files for internal dashboards a
 
 Streams in Node are abstractions that transform monolithic data sources into a mercurial flow of information, performing tasks in a series rather than one operation. Like conveyor belts at airport service counters, they enable programs to send data (or luggage) from one place to another without having to carry the load in one trip.
 
+### The Essence of Streams
+
 Streams have well-defined, "readable" _sources_, and separate _destinations_, which are "writable". If we want to establish a connection between some specific source and destination pair (like TCP connections or cryptographic operations), we create a "duplex". Duplexes that manipulate the stream of data along its journey are called "transforms". (Think middleware or webhooks, but for data.)
 
 Because only segments of data are loaded into memory rather than all at once, streams provide a noticeable performance increase over other methods. Data is also processed sooner, helping to cut time even more. A detailed breakdown of performance and the additional benefits (using the event stream library) can be found <a href="https://itnext.io/using-node-js-to-read-really-really-large-files-pt-1-d2057fe76b33" target="_blank">in this stellar write-up</a>.
@@ -16,6 +18,8 @@ Because only segments of data are loaded into memory rather than all at once, st
 Let's apply what we've learned so far to the problem posed earlier: converting dates in a given dataset.
 
 Our example dataset, _posts.json_, is a basic array of posts:
+
+_posts.json:_
 
 ```json
 //posts.json
@@ -58,8 +62,9 @@ Our example dataset, _posts.json_, is a basic array of posts:
 
 First, let's write a function that performs the conversion:
 
+_convertDate.js:_
+
 ```javascript
-//convertDate.js
 const convertDate = timestamp => {
   const date = new Date(timestamp * 1000) //convert timestamp to milliseconds
 
@@ -82,8 +87,9 @@ _Keep in mind this is meant to be a trivial example. Depending on build tools an
 
 Next, let's define the transform that'll apply this function to our data.
 
+_dateConverter.js:_
+
 ```javascript
-//dateConverter.js
 const { Transform } = require('stream')
 const convertDate = require('./convertDate')
 
@@ -99,13 +105,13 @@ const dateConverter = new Transform({
 module.exports = dateConverter
 ```
 
-Let's dig deeper. Our export, `dateConverter`, is a new Transform instance (from the stream library) where we define our desired function. We first parse the chunk to provide us with the JSON object. We then loop through the response, switching each element's timestamp to the preferred format along the way. We then push the data and trigger the callback.
+Let's dig deeper. Our export, <b>dateConverter</b>, is a new Transform instance (from the stream library) where we define our desired function. We first parse the chunk to provide us with the JSON object. We then loop through the response, switching each element's timestamp to the preferred format along the way. We then push the data and trigger the callback.
 
 Finally, define the index file where we run our script:
 
-```javascript
-//index.js
+_index.js:_
 
+```javascript
 //require our modules
 const fs = require('fs')
 const dateConverter = require('./dateConverter')
@@ -123,8 +129,9 @@ src.pipe(dateConverter).pipe(dst)
 
 Once we run our script, we see our new posts-clean.json file with the updated timestamp:
 
+_posts-clean.json:_
+
 ```json
-//posts-clean.json
 [
   {
     "userId": 1,

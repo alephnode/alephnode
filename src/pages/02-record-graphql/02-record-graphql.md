@@ -3,15 +3,15 @@ title: 'Building a Serverless GraphQL API for My Record Collection'
 date: '2019-01-08'
 ---
 
-_01/10/19: This post needs some supplementary images, a mutation example, and a brief blurb on the basics of GraphQl, but it felt odd having it sit unpublished for untended spots. I'll wrap it up this weekend._
+<div id="header-img-container">
+<img id="gql-img" src="./images/graphql-img.png">
+</div>
 
 Although I had no formal resolution for the new year, the season _did_ inspire me to revisit tasks that've piled onto my backlog in recent months.
 
 One of the neglected items was a virtual catalog of my record collection. After considering a few different ways to approach the project, an idea took shape 💡: build a GraphQL API and serve it over the web with as little friction as possible.
 
 To accomplish this, I deployed the project as a function using Netlify, with Prisma Cloud handling the backend. (Both services are definitely worth checking out and are detailed below.)
-
-Taken together, the tools helped me ship a lightweight, serverless API in no time.
 
 You can see the finished result <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>, or jump straight to <a href="https://github.com/alephnode/netlify-prisma-graphql-starter-kit" target="_blank">the source</a> if you'd prefer.
 
@@ -41,9 +41,9 @@ OK, time to pick a GraphQL toolkit to help kickstart the project and link it to 
 
 Using Node, there are a few frameworks and toolsets for implementing a GraphQL API available. Among the most popular are:
 
-- graphql-yoga
-- apollo-server
-- graphql-express
+- _graphql-yoga_
+- _apollo-server_
+- _graphql-express_
 
 While I chose graphql-yoga to build my sweet <a href="https://plant-help.co" target="_blank">plant help app</a> last summer, I went with Apollo server after being impressed with the project's <a href="https://www.apollographql.com/docs/apollo-server/" target="_blank">documentation</a> and growing popularity in the JS ecosystem. That said, graphql-yoga is released and maintained by Prisma, so it's definitely worth <a href="https://github.com/prisma/graphql-yoga">checking out</a>.
 
@@ -91,11 +91,11 @@ Now's a good time to provide a high-level overview of what the finished director
 
 Alright, onto the configs.
 
-The first files to create are `package.json` and `netlify.toml`.
+The first files to create are _package.json_ and _netlify.toml_.
 
-package.json:
+_package.json:_
 
-```javascript
+```javascript{numberLines: true}
 {
  "name": "record-collection-api",
  "version": "1.0.0",
@@ -118,9 +118,9 @@ package.json:
 
 ```
 
-Notice the scripts section and how it uses netlify-lambda. `serve` is how we test our functions locally, and `build` is the script we want to run once the service is deployed. We'll cover this more in the next section.
+Notice the scripts section and how it uses netlify-lambda. <b>serve</b> is how we test our functions locally, and <b>build</b> is the script we want to run once the service is deployed. We'll cover this more in the next section.
 
-netlify.toml:
+_netlify.toml:_
 
 ```toml
 [build]
@@ -129,9 +129,9 @@ netlify.toml:
  Publish = "public"
 ```
 
-This file configures some details related to our eventual Netlify project. `Command`, as mentioned above, is what we want to run once the project is deployed. `Functions` refers to the location of our functions for deployment (netlify-lambda will write this for us when we start the dev environment), and `Publish` identifies the target directory that contains the deploy-ready HTML files for the project.
+This file configures some details related to our eventual Netlify project. <b>Command</b>, as mentioned above, is what we want to run once the project is deployed. <b>Functions</b> refers to the location of our functions for deployment (netlify-lambda will write this for us when we start the dev environment), and <b>Publish</b> identifies the target directory that contains the deploy-ready HTML files for the project.
 
-For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>. Read more about best practices for using it with `netlify-lambda` <a href="https://github.com/netlify/netlify-lambda" target="_blank">here</a>.
+For a deeper dive into Netlify's .toml configs, here's <a href="https://www.netlify.com/docs/netlify-toml-reference/" target="_blank">the documentation</a>. Read more about best practices for using it with <b>netlify-lambda</b> <a href="https://github.com/netlify/netlify-lambda" target="_blank">here</a>.
 
 It's time to hook in Prisma. Granted, this step will feel slightly odd because we're going to remove most of the files generated. We do this from the command line because it's the <a href="https://www.prisma.io/docs/get-started/01-setting-up-prisma-demo-server-JAVASCRIPT-a001/" target="_blank">current documented way</a> to receive an endpoint for a new Prisma Cloud service.
 
@@ -145,17 +145,17 @@ The command prompt will ask whether to create a new prisma server or link to an 
 
 After setting a name and staging environment, the prompt asks which programming language will be used. If you're following along, select "Prisma JavaScript Client" and hit enter. Once this is complete, a few files will have been generated:
 
-- datamodel.prisma
-- prisma.yml
-- generated/index.d.ts,index.js,prisma-schema.js
+- _datamodel.prisma_
+- _prisma.yml_
+- _generated/index.d.ts,index.js,prisma-schema.js_
 
 First, delete the generated directory, as we'll regenerate in a moment.
 
-Next, open up the prisma.yml file. You'll need the endpoint to initialize the `prisma-binding` library later, so keep it nearby.
+Next, open up the prisma.yml file. You'll need the endpoint to initialize the <b>prisma-binding</b> library later, so keep it nearby.
 
 If you'd like to set a secret for added protection, you can configure that within this .yml file:
 
-prisma.yml:
+_prisma.yml:_
 
 ```yaml
 # ...
@@ -168,7 +168,7 @@ FWIW, prisma recommends an added level of protection for production services. Re
 
 You can also specify the desired location of the files that Prisma generates. As you might have noticed in the directory structure above, mine is located at:
 
-- src/generated/
+- _src/generated/_
 
 ... so I'll add that under the generate section of the yml file:
 
@@ -179,9 +179,9 @@ generate:
     output: ../src/generated/
 ```
 
-The `datamodel.prisma` file is automatically generated during the `prisma init` step, but the model initially created didn't have the proper schema. Remove everything from the file and replace it with our record schema:
+The _datamodel.prisma_ file is automatically generated during the <b>prisma init</b> step, but the model initially created didn't have the proper schema. Remove everything from the file and replace it with our record schema:
 
-datamodel.prisma:
+_datamodel.prisma:_
 
 ```
  type Artist {
@@ -216,9 +216,11 @@ Now that we've tailored the Prisma files to our project, it's time to re-generat
 λ prisma generate
 ```
 
-If done properly, this newly generated directory will be created in the desired spot (the `generate` option in `prisma.yml` above) and match the schema detailed in `datamodel.prisma`.
+If done properly, this newly generated directory will be created in the desired spot (the <b>generate</b> option in _prisma.yml_ above) and match the schema detailed in _datamodel.prisma_.
 
-Since we have our Prisma information, we can populate our `.env` file with the sensitive info:
+Since we have our Prisma information, we can populate our _.env_ file with the sensitive info:
+
+_.env:_
 
 ```.env
 PRISMA_ENDPOINT="endpoint_url_here"
@@ -233,7 +235,7 @@ Now that the configs are out of the way, it's time to start on API-specific logi
 
 The handler for my code will live in server/index.js, so I'll start there.
 
-server/index.js:
+_server/index.js:_
 
 ```javascript
 require('dotenv').config()
@@ -263,13 +265,13 @@ exports.handler = server.createHandler()
 
 There's quite a bit to unpack here, but it'll provide a high-level overview of how the service will function.
 
-I define the server, which is a new ApolloServer instance. It takes typeDefs (using the `gql` tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the `prisma-binding` library to hook in my new Prisma service into the API. Notice how I import the typeDefs generated within `src/generated/prisma-schema.js`, renaming it to distinguish from the app schema also required in the module.
+I define the server, which is a new ApolloServer instance. It takes typeDefs (using the <b>gql</b> tagged template literal to ensure it's in its proper schema format) as well as resolvers as arguments. The third argument is context, which is where I'll use the <b>prisma-binding</b> library to hook in my new Prisma service into the API. Notice how I import the typeDefs generated within _src/generated/prisma-schema.js_, renaming it to distinguish from the app schema also required in the module.
 
 Finally, export the server in the form of our handler since this is the format Netlify needs (explained in the deployment section).
 
-The next file we will create is `src/schema.js`, which holds the typeDefs passed to our ApolloServer instance. As noted earlier, the typeDefs define the schema for our service:
+The next file we will create is _src/schema.js_, which holds the typeDefs passed to our ApolloServer instance. As noted earlier, the typeDefs define the schema for our service:
 
-src/schema.js:
+_src/schema.js:_
 
 ```javascript
 module.exports = `
@@ -313,7 +315,7 @@ module.exports = `
 
 Next, define the resolvers that'll map data to functions that know what to do with it.
 
-Define queries in Query.js:
+Define queries in _Query.js:_
 
 ```javascript
 module.exports = {
@@ -330,7 +332,7 @@ For now, I've just written some getters for the artists and records.
 
 Lastly, I'll create an index file at src/resolvers that passes Query as a property:
 
-src/resolvers/index.js:
+_src/resolvers/index.js:_
 
 ```javascript
 const Query = require('./Query')
@@ -362,7 +364,11 @@ Once you create an account (if you haven't already) and <a href="https://www.net
 
 For example, mine is located <a href="https://agitated-ptolemy-91fe65.netlify.com/api" target="_blank">here</a>.
 
-If you see the screen above, congrats! You've successfully deployed your first serverless API :D
+<img src="./images/graphql-screen.png" />
+
+<br/>
+
+If you see the screen above, congrats! You've successfully deployed your first serverless API 💅
 
 ### Wrapping Up
 
