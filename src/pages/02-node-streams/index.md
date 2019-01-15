@@ -1,6 +1,6 @@
 ---
 title: The Tranquility of Streams in Node
-date: '2019-01-01'
+date: '2019-01-02'
 ---
 
 It's common for me to make changes to a dataset before using it elsewhere.
