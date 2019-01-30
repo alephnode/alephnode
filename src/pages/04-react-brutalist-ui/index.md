@@ -3,6 +3,11 @@ title: 'Creating a Reusable Brutalist React Component Library with Storybook'
 date: '2019-01-20'
 ---
 
+<div id="header-img-container">
+<img id="gql-img" src="./images/storybook-logo.svg">
+<div class="src-container"><span class="source"><i>source: https://storybookjs.org</i></span></div>
+</div>
+
 One of the most valuable tools when practicing component-based design is a self-documenting repository that's generic enough for use across multiple projects. DRY, as the cool kids say.
 
 Since the last few component libraries I've built have been home-rolled, I was curious what the open-source community had to offer for launching one quickly.
@@ -12,8 +17,6 @@ After vetting a few notable candidates, I chose Storybook as my sandbox.
 Why, you ask? First, it gives me a sensible layout, presentable look, and showcase of features -- saving hours of work as a result. It's also trusted by companies like airbnb, coursera, and Slack, so I know it's battle-tested.
 
 Although I was disappointed with the lack of customizatable features available on the platform, I was able to get the hang of the "Storybook way" of documenting my components within a few short minutes and ship an online reference within a few hours ✨.
-
-_This article assumes a basic understanding of React, Node, and Yarn workflows. Refer to their respective documentation/getting started guides if you need a refresher before continuing._
 
 ### Getting Started - Research/POA
 
@@ -30,6 +33,10 @@ I chose a Brutalist design systen as my backdrop for three reasons:
 </ol>
 
 With a few major decisions out of the way, it's time to start coding.
+
+You can view the finished project <a href="https://react-brutalist-ui.sh" target="_blank">here</a>, or check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a>.
+
+_Note: This article assumes a basic understanding of React, Node, and Yarn workflows. Refer to their respective documentation/getting started guides if you need a refresher before continuing._
 
 ### Initializing the Project
 

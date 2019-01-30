@@ -1,9 +1,20 @@
 #header-img-container {
-  margin: 1.5rem auto 2.5rem -1rem;
+  margin: 2rem auto 2.5rem -1rem;
 }
 
 .gatsby-highlight {
   margin-bottom: 2rem;
+}
+
+.source {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.src-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 /* Eventual Styles */
