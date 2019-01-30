@@ -18,7 +18,7 @@ Why, you ask? First, it gives me a sensible layout, presentable look, and showca
 
 Although there could be more customizatable features available on the platform -- <examples>, I was able to get the hang of the "Storybook way" of documenting my components within a few short minutes and ship an online reference within a few hours ✨.
 
-### Getting Started - Research/POA
+### Getting Started
 
 One of the best pieces of advice I've found when crafting a component library comes from Cory House's <a href="https://www.pluralsight.com/courses/react-creating-reusable-components" target="_blank">PluralSight course</a> (paywall). In it, he describes the numerous decisions one makes when implementing a component library. Some of them include:
 
@@ -35,7 +35,7 @@ After careful thought for my test project, I chose a Brutalist design systen for
 <li>I like the way it looks. <i>(It's a palate cleanser of sorts.)</i></li>
 </ol>
 
-I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility. I also intend to publish this to NPM in the form of a <select package type>, so I'll use <something that helps>.
+I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility. I also intend to publish this to NPM in the form of a **\_\_**, so I'll use **\_\_**.
 
 With a few key decisions made, it's time to start coding.
 
@@ -96,7 +96,7 @@ For reference, the finished repo tree will look like this:
 └── yarn.lock
 ```
 
-To start, I navigate to the project directory and created a _package.json_ file. (I'm using Parcel as my bundler, so swap it out if you'd like to use sonething different.)
+To start, I navigate to the project directory and create a _package.json_ file. (I'm using Parcel as my bundler, so swap it out if you'd like to use sonething different.)
 
 _package.json:_
 
@@ -136,7 +136,7 @@ _package.json:_
 }
 ```
 
-Next, I initialized Storybook using their cli. (I'm using npx so I don't have to install globally):
+Next, I initialize Storybook using their cli. (I'm using npx so I don't have to install globally):
 
 ```bash
 λ npx -p @storybook/cli sb init
@@ -156,11 +156,54 @@ You should see a basic template with an example button component, like so:
 
 <br/>
 
-With Storybook properly running, it's time to build the first component.
+**# I should add the generated Storybook files section here, explaining some stuff/defaults #**
 
-### First Component - Simple Body Text Wrapper
+With Storybook properly running, it's time to get some shared styles and theming out of the way for use in my components.
 
-My components for the library will need somewhere to live, so I'll create a _components_ folder in _./src_. Inside this folder, I'll create my first component: Graph.
+### Layouts
+
+The first layout file I'll create is for the color schemes used throughout the application. In brutalism, it's common to use basic, bold colors, so I'll add a few to my palette:
+
+_./src/theming/colors.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+
+const defineColor = hex => css`
+  ${hex};
+`
+
+export const COLORS = {
+  BLACK: defineColor('#272727'),
+  WHITE: defineColor('#FFFFFF'),
+  RED: defineColor('#FF0000'),
+  BLUE: defineColor('#0000FF'),
+  LIGHT_GRAY: defineColor('#C6C4C5'),
+}
+```
+
+I'll also create a file for common layouts used for containing elements and UI templates.
+
+_./src/theming/layouts:_
+
+```javascript
+//insert layouts here
+```
+
+Finally, I'll define a few global typography choices in a dedicated module. Brutalist design tends to favor system defaults and courier, so I'll create variables for those.
+
+_./src/theming/type.js:_
+
+```javascript
+//insert type here
+```
+
+Now that I've scaffolded a few global styles, it's time to start on the fun part: building the components 🔨!
+
+### First Component
+
+I'll create a _components_ folder in _./src_ to house all the reusable elements in my library. Inside this directory, I'll add my first component: Graph.
 
 _./src/components/Graph/index.js:_
 
