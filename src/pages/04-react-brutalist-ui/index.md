@@ -8,23 +8,26 @@ date: '2019-01-20'
 <div class="src-container"><span class="source"><i>source: https://storybookjs.org</i></span></div>
 </div>
 
-One of the most valuable tools when practicing component-based design is a self-documenting repository that's generic enough for use across multiple projects. DRY, as the cool kids say.
+One of the most valuable tools in component-based design is a self-documenting repository that's generic enough for use across multiple projects. DRY, as the cool kids say.
 
 Since the last few component libraries I've built have been home-rolled, I was curious what the open-source community had to offer for launching one quickly.
 
-After vetting a few notable candidates, I chose Storybook as my sandbox.
+After vetting a few notable candidates, I chose <a href="https://storybookjs.org" target="_blank">Storybook</a> as my sandbox.
 
 Why, you ask? First, it gives me a sensible layout, presentable look, and showcase of features -- saving hours of work as a result. It's also trusted by companies like airbnb, coursera, and Slack, so I know it's battle-tested.
 
-Although I was disappointed with the lack of customizatable features available on the platform, I was able to get the hang of the "Storybook way" of documenting my components within a few short minutes and ship an online reference within a few hours ✨.
+Although there could be more customizatable features available on the platform -- <examples>, I was able to get the hang of the "Storybook way" of documenting my components within a few short minutes and ship an online reference within a few hours ✨.
 
 ### Getting Started - Research/POA
 
-One of the best pieces of advice I've found when crafting a component library comes from Cory House's <a href="https://www.pluralsight.com/courses/react-creating-reusable-components" target="_blank">PluralSight course</a> (paywall). In it, he describes the numerous decisions one makes when implementing a component library.
+One of the best pieces of advice I've found when crafting a component library comes from Cory House's <a href="https://www.pluralsight.com/courses/react-creating-reusable-components" target="_blank">PluralSight course</a> (paywall). In it, he describes the numerous decisions one makes when implementing a component library. Some of them include:
 
-- SO MANY DECISIONS TO MAKE, EXPLAIN HERE \*
+- To which (if any) design system will the component styles/UX adhere?
+- CSS-in-JS or stylesheets?
+- Which build types will be shipped (UMD, AMD, ESModules, etc)?
+- Should the developer be allowed to override styles?
 
-I chose a Brutalist design systen as my backdrop for three reasons:
+After careful thought for my test project, I chose a Brutalist design systen for three reasons:
 
 <ol>
 <li>The style essentialy submits full creative license to the designer, and</li>
@@ -32,7 +35,9 @@ I chose a Brutalist design systen as my backdrop for three reasons:
 <li>I like the way it looks. <i>(It's a palate cleanser of sorts.)</i></li>
 </ol>
 
-With a few major decisions out of the way, it's time to start coding.
+I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility. I also intend to publish this to NPM in the form of a <select package type>, so I'll use <something that helps>.
+
+With a few key decisions made, it's time to start coding.
 
 You can view the finished project <a href="https://react-brutalist-ui.sh" target="_blank">here</a>, or check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a>.
 
@@ -40,7 +45,58 @@ _Note: This article assumes a basic understanding of React, Node, and Yarn workf
 
 ### Initializing the Project
 
-To start, I navigate to the project directory and created a _package.json_ file. (I'm using Parcel as my bundler, so swap it out if you're using sonething different.)
+For reference, the finished repo tree will look like this:
+
+```
+.
+├── README.md
+├── package.json
+├── src
+│   ├── components
+│   │   ├── Button
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── Container
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── Graph
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── Headline
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── Input
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── Login
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   └── Marquee
+│   │       ├── index.js
+│   │       └── styles.js
+│   ├── global.css
+│   ├── stories
+│   │   ├── All.stories.js
+│   │   ├── Button
+│   │   │   ├── Button.stories.js
+│   │   │   └── ButtonDescription.md
+│   │   ├── Container.stories.js
+│   │   ├── Graph.stories.js
+│   │   ├── Headline.stories.js
+│   │   ├── Input.stories.js
+│   │   ├── Login.stories.js
+│   │   ├── Marquee.stories.js
+│   │   └── index.stories.js
+│   └── theming
+│       ├── colors.js
+│       ├── layouts.js
+│       └── type.js
+├── static
+│   └── favicon.ico
+└── yarn.lock
+```
+
+To start, I navigate to the project directory and created a _package.json_ file. (I'm using Parcel as my bundler, so swap it out if you'd like to use sonething different.)
 
 _package.json:_
 
@@ -51,23 +107,33 @@ _package.json:_
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@storybook/addon-options": "^4.1.9",
     "emotion": "^10.0.6",
     "prop-types": "^15.6.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.0-alpha.1",
+    "react-dom": "^16.8.0-alpha.1",
     "react-emotion": "^10.0.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.11.0",
     "@babel/core": "^7.2.2",
-    "babel-loader": "^8.0.5"
+    "@storybook/addon-actions": "^4.1.6",
+    "@storybook/addon-console": "^1.1.0",
+    "@storybook/addon-info": "^4.1.9",
+    "@storybook/addon-links": "^4.1.6",
+    "@storybook/addons": "^4.1.6",
+    "@storybook/react": "^4.1.6",
+    "@storybook/storybook-deployer": "^2.8.1",
+    "babel-loader": "^8.0.5",
+    "parcel-bundler": "^1.11.0"
   },
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "build-storybook -c .storybook -s ./static -o build",
+    "deploy": "now ./build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   }
 }
-
 ```
 
 Next, I initialized Storybook using their cli. (I'm using npx so I don't have to install globally):
@@ -102,21 +168,37 @@ _./src/components/Graph/index.js:_
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import React from 'react'
-import { testStyles } from './styles.js'
+import { graphStyles } from './styles.js'
+import PropTypes from 'prop-types'
 
-export default ({ text, css }) => <p css={{ ...testStyles, ...css }}>{text}</p>
+const Graph = ({ text, styles }) => (
+  <p css={{ ...graphStyles, ...styles }}>{text}</p>
+)
+
+Graph.propTypes = {
+  text: PropTypes.string.isRequired,
+  styles: PropTypes.object,
+}
+
+Graph.defaultProps = {
+  text: 'Example Graph text',
+  styles: {},
+}
+
+export default Graph
 ```
 
-This is just a simple paragraph wrapper. Let's create the styles file I imported in the Graph declaration file:
+This is just a simple paragraph wrapper. I add the propTypes and defaultProps to populate the info table provided by Storybook (explained later). Let's create the styles file I imported in the Graph declaration file:
 
 _./src/components/Graph/styles.js:_
 
 ```javascript
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
+import { COLORS } from '../../theming/colors.js'
 
-export const testStyles = css`
-  color: blue;
+export const marqueeStyles = css`
+  color: ${COLORS.RED};
 `
 ```
 
