@@ -167,19 +167,12 @@ The first layout file I'll create is for the color schemes used throughout the a
 _./src/theming/colors.js:_
 
 ```javascript
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core'
-
-const defineColor = hex => css`
-  ${hex};
-`
-
 export const COLORS = {
-  BLACK: defineColor('#272727'),
-  WHITE: defineColor('#FFFFFF'),
-  RED: defineColor('#FF0000'),
-  BLUE: defineColor('#0000FF'),
-  LIGHT_GRAY: defineColor('#C6C4C5'),
+  BLACK: '#272727',
+  WHITE: '#FFFFFF',
+  RED: '#FF0000',
+  BLUE: '#0000FF',
+  LIGHT_GRAY: '#C6C4C5',
 }
 ```
 
@@ -196,7 +189,14 @@ Finally, I'll define a few global typography choices in a dedicated module. Brut
 _./src/theming/type.js:_
 
 ```javascript
-//insert type here
+const TYPE = {
+  PRIMARY: 'Courier, sans-serif',
+}
+
+TYPE.SECONDARY = TYPE.CAPTION = TYPE.LABEL = TYPE.LINK =
+  '-apple-system, BlinkMacSystemFont, HelveticaNeue, Helvetica, Roboto, Arial, sans-serif'
+
+export { TYPE }
 ```
 
 Now that I've scaffolded a few global styles, it's time to start on the fun part: building the components 🔨!
@@ -239,9 +239,11 @@ _./src/components/Graph/styles.js:_
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { COLORS } from '../../theming/colors.js'
+import { TYPE } from '../../theming/type.js'
 
-export const marqueeStyles = css`
-  color: ${COLORS.RED};
+export const graphStyles = css`
+  color: ${COLORS.BLACK};
+  font-family: ${TYPE.SECONDARY};
 `
 ```
 
@@ -253,16 +255,18 @@ _/.storybook/config.js:_
 import { addDecorator, configure } from '@storybook/react'
 import { withOptions } from '@storybook/addon-options'
 import { themes } from '@storybook/components'
+import '@storybook/addon-console'
 
 addDecorator(
   withOptions({
-    name: 'Theme',
-    theme: {},
+    name: 'Brutalist UI',
+    url: 'https://github.com/alephnode/react-brutalist-ui',
   })
 )
 
-// Change the next line
-const req = require.context('../stories', true, /.stories.js$/)
+// automatically import all files ending in *.stories.js
+// change this line if you must
+const req = require.context('../src/stories', true, /.stories.js$/)
 function loadStories() {
   req.keys().forEach(filename => req(filename))
 }
