@@ -10,7 +10,15 @@ const typography = new Typography({
     'Arial',
     'sans-serif',
   ],
-  bodyFontFamily: ['Helvetica', 'sans-serif'],
+  bodyFontFamily: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'HelveticaNeue',
+    'Helvetica',
+    'Roboto',
+    'Arial',
+    'sans-serif',
+  ],
 })
 
 // Hot reload typography in development.
