@@ -160,9 +160,9 @@ You should see a basic template with an example button component, like so:
 
 With Storybook properly running, it's time to get some shared styles and theming out of the way for use in my components.
 
-### Layouts
+### Theming
 
-The first layout file I'll create is for the color schemes used throughout the application. In brutalism, it's common to use basic, bold colors, so I'll add a few to my palette:
+The first theming file I'll create is for the color schemes used throughout the application. In brutalism, it's common to use basic, bold colors, so I'll add a few to my palette:
 
 _./src/theming/colors.js:_
 
@@ -181,7 +181,53 @@ I'll also create a file for common layouts used for containing elements and UI t
 _./src/theming/layouts:_
 
 ```javascript
-//insert layouts here
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+
+const LAYOUTS = {
+  FLEX: css`
+    display: flex;
+  `,
+  FLEX_V: css`
+    display: flex;
+    flex-direction: column;
+  `,
+  FLEX_WRAP: css`
+    display: flex;
+    flex-wrap: wrap;
+  `,
+  FLEX_V_WRAP: css`
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  `,
+  FLEX_START: css`
+    align-items: flex-start;
+  `,
+  FLEX_CENTER: css`
+    align-items: center;
+  `,
+  FLEX_END: css`
+    align-items: flex-end;
+  `,
+  FLEX_JUSTIFY_START: css`
+    justify-content: flex-start;
+  `,
+  FLEX_JUSTIFY_CENTER: css`
+    justify-content: center;
+  `,
+  FLEX_JUSTIFY_END: css`
+    justify-content: flex-end;
+  `,
+  FLEX_JUSTIFY_SPACE: css`
+    justify-content: space-around;
+  `,
+  FLEX_JUSTIFY: css`
+    justify-content: space-between;
+  `,
+}
+
+export { LAYOUTS }
 ```
 
 Finally, I'll define a few global typography choices in a dedicated module. Brutalist design tends to favor system defaults and courier, so I'll create variables for those.
