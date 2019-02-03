@@ -1,6 +1,6 @@
 ---
 title: 'Creating a Reusable Brutalist React Component Library with Storybook'
-date: '2019-01-20'
+date: '2019-01-30'
 ---
 
 <div id="img-container">
@@ -180,7 +180,12 @@ function loadStories() {
 configure(loadStories, module)
 ```
 
-#### TALK ABOUT THE ADDONS I CHOSE
+After initiating the project, I knew there were a few additional features I wanted aside from the out-of-the-box offerings provided by Storybook. Luckily, they've built extensibility right into the product. I landed on two "add-ons" to include in my project:
+
+- _@storybook/addon-console_, which prints all console output in the action logger within Storybook, and
+- _@storybook/addon-info_, which generates a considerable amount of information for the project.
+
+For notes on adding add-ons to your project, refer to the <a href="https://storybook.js.org/addons/introduction/" target="_blank">Storybook documentation</a> or the docs specific to the library.
 
 With Storybook properly running, it's time to get some shared styles and theming out of the way for use in my components.
 
@@ -372,16 +377,15 @@ As another example, let's wire up a stateful component.
 
 ### Stateful Component Example
 
-A common set of stateful components required in web apps are form controls. In this example, I'll wire up an input component.
+A common set of stateful components required in web apps are form controls. In this example, I'll wire up an input component, then consume it in a form component that'll take advantage of React's new hooks feature.
 
-First, like the component above, I'll create the module.
+First, I'll create the input module.
 
 _./src/components/Input/index.js:_
 
 ```javascript
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState } from 'react'
 import { inputStyles, inputContainerStyles, labelStyles } from './styles.js'
 import PropTypes from 'prop-types'
 
@@ -405,10 +409,139 @@ Input.propTypes = {
 export default Input
 ```
 
+The props I chose to explicitly set were the input label and styles to override the base rules applied. Notice I don't explicitly set the `onChange` prop, as I've decided to handle all changes to the input in the form component to better group all related data for the eventual API call or state change.
+
+Here's the styles page referenced, if you're implementing alongside the tutorial:
+
+_./src/components/Input/styles.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { COLORS } from '../../theming/colors.js'
+
+export const inputStyles = css`
+  border: 1px solid lightgray;
+`
+export const inputContainerStyles = css`
+  border: 1px solid black;
+  padding: 2rem 4rem;
+  font-family: Helvetica;
+  display: inline-block;
+`
+
+export const labelStyles = css`
+  color: ${COLORS.BLACK};
+  margin-right: 1rem;
+`
+```
+
+Now that I have my input component, I can consume it in a reusable form element. For this example, I'll create a login form.
+
+_./src/components/Login/index.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+import Input from '../Input'
+
+const Login = ({ onSubmit, styles = {} }) => {
+  const [values, setValues] = useState({ email: '', password: '' })
+
+  const onChange = ({ target: { name, value } }) =>
+    setValues({ ...values, [name]: value })
+
+  return (
+    <form onSubmit={e => onSubmit(e, values)}>
+      <Input
+        name="email"
+        label="email"
+        placeholder="email"
+        type="email"
+        value={values.email}
+        onChange={onChange}
+        styles={styles}
+      />
+      <Input
+        name="password"
+        label="password"
+        placeholder="password"
+        type="password"
+        value={values.password}
+        onChange={onChange}
+        styles={styles}
+      />
+      <input type="submit" />
+    </form>
+  )
+}
+
+Login.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+}
+
+export default Login
+```
+
+As this was admittedly my first foray into React hooks, I have to say I was blown away with how concise the component declaration was compared with the class-based implementation of days past.
+
+And, as mentioned earlier, the `onChange` event is handled in the top-level Login component, making it responsible for the state of its children.
+
 ### BONUS: Marquee (!!!!)
 
+This wouldn't be a very good Brutalist component library if it didn't have the most coveted gaudy, jarring element of them all: a Marquee!
+
+Here's my sample implementation:
+
+_./src/components/Marquee/index.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import React from 'react'
+import { marqueeStyles } from './styles.js'
+import PropTypes from 'prop-types'
+
+const Marquee = ({ text, styles }) => (
+  <marquee css={{ ...marqueeStyles, ...styles }}>{text}</marquee>
+)
+Marquee.defaultProps = {
+  text: 'Enter text',
+  styles: {},
+}
+
+Marquee.propTypes = {
+  text: PropTypes.string.isRequired,
+  styles: PropTypes.object,
+}
+
+export default Marquee
+```
+
+_./src/components/Marquee/styles.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { COLORS } from '../../theming/colors.js'
+
+export const marqueeStyles = css`
+  color: ${COLORS.RED};
+`
+```
+
+Pretty brainless component; just passes in the text you want to scroll across the page. It'd be practical to set some properties for orientiation and style overrides, but this will get me to MVP for now.
+
 ### Wrapping Up
+
+For startups and enterprise projects alike, Storybook proves itself as a quick bootstrapping platform for storing and documenting components you plan to reuse across different applications.
+
+If you missed the links earlier, here's the <a href="https://react-brutalist-ui.sh" target="_blank">demo page</a> and <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">repo</a> for this project.
 
 For more helpful resources, check out:
 
 - <a href="https://www.learnstorybook.com/" target="_blank">Learn Storybook</a>
+- <a href="https://storybook.js.org/examples/" target="_blank">Example Storybook Projects</a>
+- <a href="https://blog.bitsrc.io/reusable-components-in-react-a-practical-guide-ec15a81a4d71" target="_blank">Reusable Components in React — A Practical Guide</a>
