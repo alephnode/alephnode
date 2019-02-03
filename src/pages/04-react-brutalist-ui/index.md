@@ -10,9 +10,9 @@ date: '2019-01-20'
 
 One of the most valuable tools in component-based design is a self-documenting repository that's generic enough for use across multiple projects. <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank">_DRY_</a>, as the cool kids say.
 
-Since the last few component libraries I've built have been home-rolled, I wondered recently what the open-source community had to offer for launching one quickly.
+Since the last few component libraries I've built have been home-rolled, I lurked Reddit, blogs, and GitHub recently to see what the open-source community had to offer for launching one quickly.
 
-After vetting a few notable candidates, I chose <a href="https://storybookjs.org" target="_blank">Storybook</a> as my sandbox.
+After vetting a few candidates, I chose <a href="https://storybookjs.org" target="_blank">Storybook</a> as my sandbox.
 
 Why, you ask? First, it gives me a sensible layout, presentable look, and showcase of features -- saving hours of work as a result. It's also trusted by companies like Airbnb, Coursera, and Slack, so I know it's battle-tested.
 
@@ -35,7 +35,7 @@ The full list is even more daunting:
 
 So, when prepping for this experiment, I clearly had a few choices to make.
 
-First, the design framework. I chose a <a href="https://www.awwwards.com/brutalism-brutalist-websites.html" target="_blank">Brutalist design systen</a> for three reasons:
+First, the design framework. I chose a <a href="https://www.awwwards.com/brutalism-brutalist-websites.html" target="_blank">Brutalist design system</a> for three reasons:
 
 <ol>
 <li>The style essentialy submits full creative license to the designer</li>
@@ -45,11 +45,11 @@ First, the design framework. I chose a <a href="https://www.awwwards.com/brutali
 
 \* _In fact, the very act of building a component library for Brutalist design defeats the purpose. That said, I'm implementing barebones components that most immediately resemble the style. Plus, I suck at naming things_ 🤦‍♂️.
 
-I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility.
+I also chose <a href="https://emotion.sh/" target="_blank">Emotion</a> for my styling library. I've used it in a few projects and admire its versatility.
 
 Phew. With a few key decisions made, it's time to start coding.
 
-If you want to skip the walkthrough, the finished project is hosted <a href="https://react-brutalist-ui.sh" target="_blank">here</a>. Check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a>, while you're at it.
+If you want to skip the walkthrough, the finished project is hosted <a href="https://react-brutalist-ui.sh" target="_blank">here</a>. Check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a> while you're at it.
 
 _Note: This article assumes a basic understanding of React, Node, and Yarn workflows. Refer to their respective documentation/getting started guides if you need a refresher before continuing._
 
@@ -87,9 +87,7 @@ For reference, the finished repo tree will look like this:
 │   ├── global.css
 │   ├── stories
 │   │   ├── All.stories.js
-│   │   ├── Button
-│   │   │   ├── Button.stories.js
-│   │   │   └── ButtonDescription.md
+│   │   ├── Button.stories.js
 │   │   ├── Container.stories.js
 │   │   ├── Graph.stories.js
 │   │   ├── Headline.stories.js
@@ -117,7 +115,6 @@ _package.json:_
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@storybook/addon-options": "^4.1.9",
     "emotion": "^10.0.6",
     "prop-types": "^15.6.2",
     "react": "^16.8.0-alpha.1",
@@ -126,20 +123,10 @@ _package.json:_
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "@storybook/addon-actions": "^4.1.6",
-    "@storybook/addon-console": "^1.1.0",
-    "@storybook/addon-info": "^4.1.9",
-    "@storybook/addon-links": "^4.1.6",
-    "@storybook/addons": "^4.1.6",
-    "@storybook/react": "^4.1.6",
-    "@storybook/storybook-deployer": "^2.8.1",
     "babel-loader": "^8.0.5",
   },
   "scripts": {
-    "build": "build-storybook -c .storybook -s ./static -o build",
     "deploy": "now ./build",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
   }
 }
 ```
@@ -152,7 +139,9 @@ Next, I initialize Storybook using their cli. (I'm using npx so I don't have to 
 
 _Note: if you try to initialize Storybook before creating a package.json file, it'll spit an ugly error._
 
-Storybook should detect that we're using React and initialize a bare proect for us. When the command is finished executing, you can test that everything works by running:
+Storybook should detect that we're using React and initialize a bare proect for us. It'll add some scripts to your _package.json_ file, as well as a _.storybook_ directory with a few configs.
+
+When the command is finished executing, you can test that everything works by running:
 
 ```bash
 λ yarn storybook
@@ -164,13 +153,40 @@ You should see a basic template with an example button component, like so:
 
 <br/>
 
-**# I should add the generated Storybook files section here, explaining some stuff/defaults #**
+By default, Storybook looks for _\*.stories.js_ files in a _stories_ directory in the root of your project. If you'd like to change this location (mine lives within my src directory), modify the following line in the Storybook config:
+
+_/.storybook/config.js:_
+
+```javascript
+import { addDecorator, configure } from '@storybook/react'
+import { withOptions } from '@storybook/addon-options'
+import { themes } from '@storybook/components'
+import '@storybook/addon-console'
+
+addDecorator(
+  withOptions({
+    name: 'Brutalist UI',
+    url: 'https://github.com/alephnode/react-brutalist-ui',
+  })
+)
+
+// automatically import all files ending in *.stories.js
+// change this line if you must
+const req = require.context('../src/stories', true, /.stories.js$/)
+function loadStories() {
+  req.keys().forEach(filename => req(filename))
+}
+
+configure(loadStories, module)
+```
+
+#### TALK ABOUT THE ADDONS I CHOSE
 
 With Storybook properly running, it's time to get some shared styles and theming out of the way for use in my components.
 
 ### Theming
 
-The first theming file I'll create is for the color schemes used throughout the application. In brutalism, it's common to use basic, bold colors, so I'll add a few to my palette:
+The first theming file I'll create is for the color schemes used throughout the application. In Brutalism, it's common to use basic, bold colors, so I'll add a few to my palette:
 
 _./src/theming/colors.js:_
 
@@ -251,7 +267,7 @@ const LAYOUTS = {
 export { LAYOUTS }
 ```
 
-Finally, I'll define a few global typography choices in a dedicated module. Brutalist design tends to favor system defaults and courier, so I'll create variables for those.
+Finally, I'll define a few global typography choices in a dedicated module. Brutalist design tends to favor system defaults and Courier, so I'll create variables for those.
 
 _./src/theming/type.js:_
 
@@ -266,7 +282,7 @@ TYPE.SECONDARY = TYPE.CAPTION = TYPE.LABEL = TYPE.LINK =
 export { TYPE }
 ```
 
-Now that I've scaffolded a few global styles, it's time to start on the fun part: building the components 🔨!
+Now that I've scaffolded a few global styles, it's time to build the components 🔨!
 
 ### First Component
 
@@ -298,7 +314,9 @@ Graph.defaultProps = {
 export default Graph
 ```
 
-This is just a simple paragraph wrapper. I add the propTypes and defaultProps to populate the info table provided by Storybook (explained later). Let's create the styles file I imported in the Graph declaration file:
+This is just a simple paragraph wrapper. I add the propTypes and defaultProps to populate the info table provided by Storybook (explained earlier).
+
+Let's create the styles file I imported in the Graph module:
 
 _./src/components/Graph/styles.js:_
 
@@ -314,32 +332,82 @@ export const graphStyles = css`
 `
 ```
 
-By default, Storybook looks for _\*.stories.js_ files in a _stories_ directory in the root of your project. If you'd like to change this location, modify the following line in the Storybook config:
+Pretty straightforward if you've used Emotion before. If not, notice the clarity of the API and the use of CSS syntax. It's also consuming a few of our global theming variables, which will be a common theme in the project (shitty pun intended).
 
-_/.storybook/config.js:_
+Now that we have a simple component bootstrapped, it's time to write a story for it to display in our project:
+
+_./src/stories/Graph.stories.js:_
 
 ```javascript
-import { addDecorator, configure } from '@storybook/react'
-import { withOptions } from '@storybook/addon-options'
-import { themes } from '@storybook/components'
-import '@storybook/addon-console'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import React from 'react'
+import Graph from '../components/Graph'
+import { storiesOf } from '@storybook/react'
+import { withInfo } from '@storybook/addon-info'
 
-addDecorator(
-  withOptions({
-    name: 'Brutalist UI',
-    url: 'https://github.com/alephnode/react-brutalist-ui',
+const customStyle = css`
+  background-color: black;
+  color: red;
+  font-family: courier;
+  padding: 20px 5px;
+`
+
+storiesOf('Graph', module)
+  .add('Demo - Basic', () => <Graph />)
+  .add('Demo - Custom Styles', () => (
+    <Graph text="Wow, I'm stylish." styles={customStyle} />
+  ))
+  .addDecorator(withInfo)
+  .add('Reference', () => <Graph text="I am a sample graph." />, {
+    info: { inline: true },
   })
-)
+```
 
-// automatically import all files ending in *.stories.js
-// change this line if you must
-const req = require.context('../src/stories', true, /.stories.js$/)
-function loadStories() {
-  req.keys().forEach(filename => req(filename))
+The API for defining stories with Storybook is intuitive. I initialize the stories section by calling the storiesOf() method, passing in the name of the component, and chain each example. `add()` takes the display text you'd like for the demo, as well as the callback that renders the desired demo component.
+
+As will be custom for my library, I like to add a basic demo, one with enhanced styles, and a reference page with the details provided by _ iNFO ADDON _.
+
+As another example, let's wire up a stateful component.
+
+### Stateful Component Example
+
+A common set of stateful components required in web apps are form controls. In this example, I'll wire up an input component.
+
+First, like the component above, I'll create the module.
+
+_./src/components/Input/index.js:_
+
+```javascript
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { useState } from 'react'
+import { inputStyles, inputContainerStyles, labelStyles } from './styles.js'
+import PropTypes from 'prop-types'
+
+const Input = ({ label, styles = {}, ...props }) => {
+  const { container = {}, lbl = {}, input = {} } = styles
+  return (
+    <div css={{ ...inputContainerStyles, ...container }}>
+      <label htmlFor={`ip-${label}`} css={{ ...labelStyles, ...lbl }}>
+        {label}
+      </label>
+      <input id={`ip-${label}`} css={{ ...inputStyles, ...input }} {...props} />
+    </div>
+  )
 }
 
-configure(loadStories, module)
+Input.propTypes = {
+  label: PropTypes.string.isRequired,
+  styles: PropTypes.object,
+}
+
+export default Input
 ```
+
+### BONUS: Marquee (!!!!)
+
+### Wrapping Up
 
 For more helpful resources, check out:
 
