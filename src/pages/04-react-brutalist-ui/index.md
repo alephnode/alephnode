@@ -38,7 +38,7 @@ So, when prepping for this experiment, I clearly had a few choices to make.
 First, the design framework. I chose a <a href="https://www.awwwards.com/brutalism-brutalist-websites.html" target="_blank">Brutalist design system</a> for three reasons:
 
 <ol>
-<li>The style essentialy submits full creative license to the designer</li>
+<li>The style essentially submits full creative license to the designer</li>
 <li>An MVP would be relatively quick since the elements found on most Brutalist-inspired sites are notably straightforward *</li>
 <li>I like the way it looks <i>(It's a palate cleanser of sorts)</i></li>
 </ol>
@@ -139,7 +139,7 @@ Next, I initialize Storybook using their cli. (I'm using npx so I don't have to 
 
 _Note: if you try to initialize Storybook before creating a package.json file, it'll spit an ugly error._
 
-Storybook should detect that we're using React and initialize a bare proect for us. It'll add some scripts to your _package.json_ file, as well as a _.storybook_ directory with a few configs.
+Storybook should detect that we're using React and initialize a bare project for us. It'll add some scripts to your _package.json_ file, as well as a _.storybook_ directory with a few configs.
 
 When the command is finished executing, you can test that everything works by running:
 
@@ -369,9 +369,9 @@ storiesOf('Graph', module)
   })
 ```
 
-The API for defining stories with Storybook is intuitive. I initialize the stories section by calling the storiesOf() method, passing in the name of the component, and chain each example. `add()` takes the display text you'd like for the demo, as well as the callback that renders the desired demo component.
+The API for defining stories with Storybook is intuitive. I initialize the stories section by calling the `storiesOf()` method, passing in the name of the component, and chain each example. `add()` takes the display text you'd like for the demo, as well as the callback that renders the desired demo component.
 
-As will be custom for my library, I like to add a basic demo, one with enhanced styles, and a reference page with the details provided by _ iNFO ADDON _.
+As will be custom for my library, I like to add a basic demo, one with enhanced styles, and a reference page with the details provided by _@storybook/addon-info_.
 
 As another example, let's wire up a stateful component.
 
@@ -532,7 +532,7 @@ export const marqueeStyles = css`
 `
 ```
 
-Pretty brainless component; just passes in the text you want to scroll across the page. It'd be practical to set some properties for orientiation and style overrides, but this will get me to MVP for now.
+Pretty brainless component; just passes in the text you want to scroll across the page. It'd be practical to set some properties for orientation and style overrides, but this will get me to MVP for now.
 
 ### Wrapping Up
 
