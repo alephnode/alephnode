@@ -3,43 +3,53 @@ title: 'Creating a Reusable Brutalist React Component Library with Storybook'
 date: '2019-01-20'
 ---
 
-<div id="header-img-container">
+<div id="img-container">
 <img id="gql-img" src="./images/storybook-logo.svg">
 <div class="src-container"><span class="source"><i>source: https://storybookjs.org</i></span></div>
 </div>
 
-One of the most valuable tools in component-based design is a self-documenting repository that's generic enough for use across multiple projects. DRY, as the cool kids say.
+One of the most valuable tools in component-based design is a self-documenting repository that's generic enough for use across multiple projects. <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank">_DRY_</a>, as the cool kids say.
 
-Since the last few component libraries I've built have been home-rolled, I was curious what the open-source community had to offer for launching one quickly.
+Since the last few component libraries I've built have been home-rolled, I wondered recently what the open-source community had to offer for launching one quickly.
 
 After vetting a few notable candidates, I chose <a href="https://storybookjs.org" target="_blank">Storybook</a> as my sandbox.
 
-Why, you ask? First, it gives me a sensible layout, presentable look, and showcase of features -- saving hours of work as a result. It's also trusted by companies like airbnb, coursera, and Slack, so I know it's battle-tested.
+Why, you ask? First, it gives me a sensible layout, presentable look, and showcase of features -- saving hours of work as a result. It's also trusted by companies like Airbnb, Coursera, and Slack, so I know it's battle-tested.
 
-Although there could be more customizatable features available on the platform -- <examples>, I was able to get the hang of the "Storybook way" of documenting my components within a few short minutes and ship an online reference within a few hours ✨.
+After a few days of experimenting, I was able to get the hang of the "Storybook way" of documenting my components and ship an online reference for future projects ✨.
 
 ### Getting Started
 
-One of the best pieces of advice I've found when crafting a component library comes from Cory House's <a href="https://www.pluralsight.com/courses/react-creating-reusable-components" target="_blank">PluralSight course</a> (paywall). In it, he describes the numerous decisions one makes when implementing a component library. Some of them include:
+An important caveat I've encountered when crafting a component library comes from Cory House's <a href="https://www.pluralsight.com/courses/react-creating-reusable-components" target="_blank">PluralSight course</a> (paywall). In it, he describes the numerous decisions one makes when implementing a component library. Some of them include:
 
 - To which (if any) design system will the component styles/UX adhere?
 - CSS-in-JS or stylesheets?
 - Which build types will be shipped (UMD, AMD, ESModules, etc)?
 - Should the developer be allowed to override styles?
 
-After careful thought for my test project, I chose a Brutalist design systen for three reasons:
+The full list is even more daunting:
+
+<div id="img-container">
+<img src="images/ch-pluralsight.png">
+</div>
+
+So, when prepping for this experiment, I clearly had a few choices to make.
+
+First, the design framework. I chose a <a href="https://www.awwwards.com/brutalism-brutalist-websites.html" target="_blank">Brutalist design systen</a> for three reasons:
 
 <ol>
-<li>The style essentialy submits full creative license to the designer, and</li>
-<li>An MVP would be relatively quick since the elements found on most Brutalist-inspired sites are notably straightforward.</li>
-<li>I like the way it looks. <i>(It's a palate cleanser of sorts.)</i></li>
+<li>The style essentialy submits full creative license to the designer</li>
+<li>An MVP would be relatively quick since the elements found on most Brutalist-inspired sites are notably straightforward *</li>
+<li>I like the way it looks <i>(It's a palate cleanser of sorts)</i></li>
 </ol>
 
-I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility. I also intend to publish this to NPM in the form of a **\_\_**, so I'll use **\_\_**.
+\* _In fact, the very act of building a component library for Brutalist design defeats the purpose. That said, I'm implementing barebones components that most immediately resemble the style. Plus, I suck at naming things_ 🤦‍♂️.
 
-With a few key decisions made, it's time to start coding.
+I also chose to use Emotion for my styling library. I've used it in a few projects and admire its versatility.
 
-You can view the finished project <a href="https://react-brutalist-ui.sh" target="_blank">here</a>, or check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a>.
+Phew. With a few key decisions made, it's time to start coding.
+
+If you want to skip the walkthrough, the finished project is hosted <a href="https://react-brutalist-ui.sh" target="_blank">here</a>. Check out the <a href="https://github.com/alephnode/react-brutalist-ui" target="_blank">source code on GitHub</a>, while you're at it.
 
 _Note: This article assumes a basic understanding of React, Node, and Yarn workflows. Refer to their respective documentation/getting started guides if you need a refresher before continuing._
 
@@ -96,7 +106,7 @@ For reference, the finished repo tree will look like this:
 └── yarn.lock
 ```
 
-To start, I navigate to the project directory and create a _package.json_ file. (I'm using Parcel as my bundler, so swap it out if you'd like to use sonething different.)
+To start, I navigate to the project directory and create a _package.json_ file.
 
 _package.json:_
 
@@ -124,10 +134,8 @@ _package.json:_
     "@storybook/react": "^4.1.6",
     "@storybook/storybook-deployer": "^2.8.1",
     "babel-loader": "^8.0.5",
-    "parcel-bundler": "^1.11.0"
   },
   "scripts": {
-    "start": "parcel index.html",
     "build": "build-storybook -c .storybook -s ./static -o build",
     "deploy": "now ./build",
     "storybook": "start-storybook -p 6006",
@@ -184,45 +192,58 @@ _./src/theming/layouts:_
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
+const FLEX = css`
+  display: flex;
+`
+
 const LAYOUTS = {
-  FLEX: css`
-    display: flex;
+  FLEX,
+  FULL_HEIGHT: css`
+    height: 100%;
   `,
   FLEX_V: css`
-    display: flex;
+    ${FLEX}
     flex-direction: column;
   `,
   FLEX_WRAP: css`
-    display: flex;
+    ${FLEX}
     flex-wrap: wrap;
   `,
   FLEX_V_WRAP: css`
-    display: flex;
+    ${FLEX}
     flex-direction: column;
     flex-wrap: wrap;
   `,
   FLEX_START: css`
+    ${FLEX}
     align-items: flex-start;
   `,
   FLEX_CENTER: css`
+    ${FLEX}
     align-items: center;
   `,
   FLEX_END: css`
+    ${FLEX}
     align-items: flex-end;
   `,
   FLEX_JUSTIFY_START: css`
+    ${FLEX}
     justify-content: flex-start;
   `,
   FLEX_JUSTIFY_CENTER: css`
+    ${FLEX}
     justify-content: center;
   `,
   FLEX_JUSTIFY_END: css`
+    ${FLEX}
     justify-content: flex-end;
   `,
   FLEX_JUSTIFY_SPACE: css`
+    ${FLEX}
     justify-content: space-around;
   `,
   FLEX_JUSTIFY: css`
+    ${FLEX}
     justify-content: space-between;
   `,
 }

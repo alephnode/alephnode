@@ -3,7 +3,7 @@ title: 'Building a Serverless GraphQL API for My Record Collection'
 date: '2019-01-08'
 ---
 
-<div id="header-img-container">
+<div id="img-container">
 <img id="gql-img" src="./images/graphql-img.png">
 <div class="src-container"><span class="source"><i>source: https://graphql.org</i></span></div>
 </div>
