@@ -1,5 +1,3 @@
-require('now-env')
-
 module.exports = {
   siteMetadata: {
     title: ' aleph node',
@@ -14,12 +12,6 @@ module.exports = {
       options: {
         path: `${__dirname}/src/pages`,
         name: 'pages',
-      },
-    },
-    {
-      resolve: 'gatsby-plugin-mailchimp',
-      options: {
-        endpoint: process.env.MC_ENDP,
       },
     },
     {
@@ -76,6 +68,13 @@ module.exports = {
       resolve: 'gatsby-plugin-typography',
       options: {
         pathToConfigModule: 'src/utils/typography',
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-mailchimp',
+      options: {
+        endpoint:
+          'https://alephnode.us20.list-manage.com/subscribe/post?u=6d2b32469f6b52f1d542b9dce&amp;id=269b5c1b1d',
       },
     },
   ],

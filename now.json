@@ -7,8 +7,5 @@
       "use": "@now/static-build",
       "config": { "distDir": "public" }
     }
-  ],
-  "env": {
-    "MC_ENDP": "@mailchimp-endpoint"
-  }
+  ]
 }

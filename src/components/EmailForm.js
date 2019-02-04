@@ -52,6 +52,7 @@ export default class EmailForm extends React.Component {
               border: 'none',
               padding: '5px 15px',
               fontWeight: 'bold',
+              cursor: 'pointer',
             }}
             value="Submit"
           >
