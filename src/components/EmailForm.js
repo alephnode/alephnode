@@ -48,7 +48,7 @@ export default class EmailForm extends React.Component {
             subscribe
           </button>
         </form>
-        <p>No spam. Unsubscrube at any time.</p>
+        <p>No spam. Unsubscribe at any time.</p>
       </div>
     )
 
