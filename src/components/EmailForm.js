@@ -44,18 +44,7 @@ export default class EmailForm extends React.Component {
             value={this.state.email}
             aria-label="email"
           />
-          <button
-            type="submit"
-            style={{
-              marginLeft: '10px',
-              background: 'yellow',
-              border: 'none',
-              padding: '5px 15px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-            }}
-            value="Submit"
-          >
+          <button id="newsletterBtn" type="submit" value="Submit">
             subscribe
           </button>
         </form>

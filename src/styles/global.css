@@ -16,3 +16,19 @@
   display: flex;
   justify-content: center;
 }
+
+#newsletterBtn {
+  margin-left: 10px;
+  background: #ffff00;
+  border: none;
+  padding: 5px 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 453px) {
+  #newsletterBtn {
+    margin: 0.75rem 0 0 0;
+    margin-left: 0;
+  }
+}
