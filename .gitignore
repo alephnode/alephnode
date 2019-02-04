@@ -8,6 +8,10 @@ yarn-error.log*
 #drafts 
 drafts
 
+#secrets
+now-secrets.json
+
+
 # Runtime data
 pids
 *.pid

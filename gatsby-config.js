@@ -1,3 +1,5 @@
+require('now-env')
+
 module.exports = {
   siteMetadata: {
     title: ' aleph node',
@@ -12,6 +14,12 @@ module.exports = {
       options: {
         path: `${__dirname}/src/pages`,
         name: 'pages',
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-mailchimp',
+      options: {
+        endpoint: process.env.MC_ENDP,
       },
     },
     {
