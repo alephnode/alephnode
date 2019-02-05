@@ -44,7 +44,7 @@ export default class EmailForm extends React.Component {
             value={this.state.email}
             aria-label="email"
           />
-          <button id="newsletterBtn" type="submit" value="Submit">
+          <button id="newsletter-btn" type="submit" value="Submit">
             subscribe
           </button>
         </form>
@@ -63,9 +63,9 @@ export default class EmailForm extends React.Component {
 
     return (
       <div
+        id="newsletter"
         style={{
           marginBottom: rhythm(2.5),
-          border: '1px solid hsla(0,0%,0%,0.2)',
           padding: '2rem',
         }}
       >

@@ -5,10 +5,23 @@ import { rhythm, scale } from '../utils/typography'
 import alephLogo from '../../src/assets/alephnode.png'
 
 class Layout extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      theme: false,
+    }
+  }
+  componentDidMount() {
+    this.setState({ theme: window.__theme })
+    window.__onThemeChange = () => {
+      this.setState({ theme: window.__theme })
+    }
+  }
   render() {
     const { location, title, children } = this.props
     const rootPath = `${__PATH_PREFIX__}/`
     let header
+    let { theme } = this.state
 
     if (location.pathname === rootPath) {
       header = (
@@ -86,6 +99,19 @@ class Layout extends React.Component {
           padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
         }}
       >
+        {theme ? (
+          <button
+            id="theme-btn"
+            name={theme || 'dark'}
+            onClick={({ target: { name } }) =>
+              window.__setPreferredTheme(name === 'dark' ? 'light' : 'dark')
+            }
+          >
+            {theme === 'dark' ? '💡' : '🕯'}
+          </button>
+        ) : (
+          <div style={{ height: '24px' }} />
+        )}
         {header}
         {children}
       </div>
