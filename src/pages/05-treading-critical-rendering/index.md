@@ -3,6 +3,11 @@ title: 'How Websites Happen, Part One: Treading the Critical Rendering Path'
 date: '2019-02-07'
 ---
 
+<div id="img-container">
+<img id="knowledge-img" src="./images/road.jpg">
+<div class="src-container"><span class="source"><i>Photo by Danka & Peter on Unsplash</i></span></div>
+</div>
+
 Looking back, it surprises me how long I coasted as a web developer without knowing how browsers _actually_ work.
 
 Don't get me wrong--I had a general idea of the process: the static HTML file is requested and received, scripts and styles are loaded, and the JavaScript included on the page enables interaction without reload.
