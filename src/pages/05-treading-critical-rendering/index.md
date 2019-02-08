@@ -1,5 +1,5 @@
 ---
-title: 'How Websites Happen: Treading the Critical Rendering Path'
+title: 'How Websites Happen, Part One: Treading the Critical Rendering Path'
 date: '2019-02-07'
 ---
 
@@ -78,7 +78,7 @@ If you've ever noticed the boxy visualization at the bottom-right section of the
 
 After all the hard work mentioned in previous sections is finished, it's finally time for the most straightforward process: converting the encoded information into pixels on the screen. In the last step, known as painting, the render tree and layout information are translated pixel by pixel into the content visible to the human eye.
 
-In the second part of this article, I'll provide a few examples of how different styles affect the efficiency of the painting process. _(Spoiler alert: 200 MB background images with gradient overlays take longer to paint than a, say, white background)_.
+In the second part of this article, I'll provide a few examples of how different styles affect the efficiency of the painting process. _(Spoiler alert: 200 MB background images with gradient overlays take longer to paint than, say, a white background)_.
 
 ### The Finished Product
 
@@ -97,7 +97,7 @@ _The process, visualized:_
 <div class="src-container"><span class="source"><i>source: MindNode illustration</span></div>
 </div>
 
-After all these processes are complete, the website is ready for your viewing pleasure!
+After all these steps are complete, the website is ready for your viewing pleasure!
 
 ### Performance - Up Next
 
