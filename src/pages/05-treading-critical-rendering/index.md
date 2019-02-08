@@ -40,9 +40,15 @@ After styles are loaded, the JavaScript fetched by the browser is finally able t
 
 ### Step Two: JavaScript Execution
 
-With the DOM constructed and styles identified, any JavaScript referenced is executed for the page, modifying the content, styles, and other information it needs to properly display the resource.
+With the DOM constructed and styles identified, all JavaScript logic is executed. The modifying of content, styles, and other information needed to properly display the resource is done at this stage.
+
+As more applications and services move toward web-first delivery, developers are increasingly relying on JavaScript to handle the brunt of the app logic. As such, this is the section that often causes the most bottleneck and is the main area to target when looking to optimize content delivery.
+
+While the second part of this post will detail specifics on how to optimize site performance, it's worth mentioning that several excellent strategies have unearthed in recent years that profoundly expand the possibilities of what can be done over the web, including code splitting, service workers, tree shaking, and other rad features.
 
 ### Step Three: Scaling the Render Tree
+
+At this point, the HTML file received earlier has a corresponding DOM tree, or object representation, along with associated style information via the CSSOM. All JavaScript has loaded and run, meaning our DOM and CSSOM are ready to be merged and presented to the end user.
 
 ### Step Four: Assessing the Layout
 
