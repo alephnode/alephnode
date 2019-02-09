@@ -5,7 +5,7 @@ date: '2019-02-07'
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/road.jpg">
-<div class="src-container"><span class="source"><i>Photo by Danka & Peter on Unsplash</i></span></div>
+<div class="src-container"><span class="source">Photo by Danka & Peter on Unsplash</span></div>
 </div>
 
 Looking back, it surprises me how long I coasted as a web developer without knowing how browsers _actually_ work.
@@ -18,7 +18,7 @@ It reminds me of the knowledge graph published by <a href="http://bradfrost.com/
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/frost-knowledge.jpg">
-<div class="src-container"><span class="source"><i>source: http://bradfrost.com/blog/post/i-have-no-idea-what-the-hell-i-am-doing/attachment/knowledge-graph/</i></span></div>
+<div class="src-container"><span class="source">source: http://bradfrost.com/blog/post/i-have-no-idea-what-the-hell-i-am-doing/attachment/knowledge-graph/</span></div>
 </div>
 
 Although the mentioned topics provide enough working knowledge to successfully launch a site or deliver an MVP, they fall short of the understanding that stands out in an increasingly <a href="https://en.wikipedia.org/wiki/Time_to_first_byte" target="_blank">TTFB</a>-worshipping market, or for anyone who aims to optimize performance.
@@ -39,7 +39,7 @@ _Example DOM:_
 
 <div id="img-container">
 <img id="dom-img" src="./images/example-doc.png">
-<div class="src-container"><span class="source"><i>source: MindNode illustration</span></div>
+<div class="src-container"><span class="source">source: MindNode illustration</span></div>
 </div>
 
 Once the DOM object is created, the browser needs to gather the object's style properties before rendering it. This is where CSSOM comes into play.
@@ -70,7 +70,7 @@ _Example render tree:_
 
 <div id="img-container">
 <img id="render-img" src="./images/render-example.png">
-<div class="src-container"><span class="source"><i>source: MindNode illustration</span></div>
+<div class="src-container"><span class="source">source: MindNode illustration</span></div>
 </div>
 
 ### Step Four: Assessing the Layout
@@ -99,7 +99,7 @@ _The process, visualized:_
 
 <div id="img-container">
 <img id="crp-img" src="./images/crp-summary.png">
-<div class="src-container"><span class="source"><i>source: MindNode illustration</span></div>
+<div class="src-container"><span class="source">source: MindNode illustration</span></div>
 </div>
 
 After all these steps are complete, the website is ready for your viewing pleasure!

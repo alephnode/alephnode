@@ -5,10 +5,12 @@ body {
 
 body.light {
   --bg: #ffffff;
+  --src-txt: #999;
 }
 
 body.dark {
   --bg: #222c44;
+  --src-txt: #bbb;
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   transition: color 0.25s ease-out;
@@ -45,13 +47,18 @@ body.dark #newsletter {
 
 .source {
   font-size: 0.75rem;
-  color: #999;
+  font-style: italic;
+}
+
+body.light .source {
+  color: var(--src-txt);
 }
 
 .src-container {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 
 #newsletter {
@@ -65,6 +72,12 @@ body.dark #newsletter {
   padding: 5px 15px;
   font-weight: bold;
   cursor: pointer;
+}
+
+@media screen and (max-width: 720px) {
+  #img-container {
+    margin: 2.5rem auto;
+  }
 }
 
 @media screen and (max-width: 453px) {

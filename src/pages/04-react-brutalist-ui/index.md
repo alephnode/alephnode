@@ -5,7 +5,7 @@ date: '2019-01-30'
 
 <div id="img-container">
 <img id="gql-img" src="./images/storybook-logo.svg">
-<div class="src-container"><span class="source"><i>source: https://storybookjs.org</i></span></div>
+<div class="src-container"><span class="source">source: https://storybookjs.org</span></div>
 </div>
 
 One of the most valuable tools in component-based design is a self-documenting repository that's generic enough for use across multiple projects. <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank">_DRY_</a>, as the cool kids say.
@@ -31,6 +31,7 @@ The full list is even more daunting:
 
 <div id="img-container">
 <img src="images/ch-pluralsight.png">
+<div class="src-container"><span class="source">source: Cory House, PluralSight</span></div>
 </div>
 
 So, when prepping for this experiment, I clearly had a few choices to make.
@@ -40,7 +41,7 @@ First, the design framework. I chose a <a href="https://www.awwwards.com/brutali
 <ol>
 <li>The style essentially submits full creative license to the designer</li>
 <li>An MVP would be relatively quick since the elements found on most Brutalist-inspired sites are notably straightforward *</li>
-<li>I like the way it looks <i>(It's a palate cleanser of sorts)</i></li>
+<li>I like the way it looks (It's a palate cleanser of sorts)</li>
 </ol>
 
 \* _In fact, the very act of building a component library for Brutalist design defeats the purpose. That said, I'm implementing barebones components that most immediately resemble the style. Plus, I suck at naming things_ 🤦‍♂️.

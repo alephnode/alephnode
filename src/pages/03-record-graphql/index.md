@@ -5,7 +5,7 @@ date: '2019-01-08'
 
 <div id="img-container">
 <img id="gql-img" src="./images/graphql-img.png">
-<div class="src-container"><span class="source"><i>source: https://graphql.org</i></span></div>
+<div class="src-container"><span class="source">source: https://graphql.org</span></div>
 </div>
 
 Although I had no formal resolution for the new year, the season _did_ inspire me to revisit tasks that've piled onto my backlog in recent months.

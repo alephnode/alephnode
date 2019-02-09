@@ -17,7 +17,15 @@ Alright, let's get started!
 
 Before we can optimize the performance of a site, we need a site (!). Luckily, I've prepared a basic project for us to work with.
 
-Rather than giving a detailed walkthrough of building the app, I'm going to only highlight a few areas
+To get started, create a new simple project by running:
+
+```bash
+  yarn init
+```
+
+Enter through the details and you're good to go.
+
+Now would be a good time to create the basic files
 
 ### Code Splitting
 
