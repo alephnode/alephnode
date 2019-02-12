@@ -9,7 +9,7 @@ For the second half of this topic, I'll focus on ways developers can reduce the 
 
 To better illustrate the ideas expressed, I'll walk through creating a simple SPA in vanilla JavaScript.
 
-You can see the demo app here, or view/clone the source on GitHub and skip the next section if you're here only for the 🔥 perf tips.
+You can see the demo app here, or view/clone the source on GitHub and skip the next section if you're here only for the performance tips.
 
 Alright, let's get started!
 
