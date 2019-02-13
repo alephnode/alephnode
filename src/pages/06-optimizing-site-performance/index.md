@@ -17,15 +17,143 @@ Alright, let's get started!
 
 Before we can optimize the performance of a site, we need a site (!). Luckily, I've prepared a basic project for us to work with.
 
+When we're finished, the project directory will look like this:
+
+```
+.
+├── index.html
+├── package.json
+├── src
+│   ├── app.js
+│   ├── base
+│   │   └── index.js
+│   ├── common
+│   │   ├── register-component
+│   │   │   └── index.js
+│   │   ├── routes
+│   │   │   └── index.js
+│   │   └── styles.css
+│   ├── components
+│   │   ├── v-container
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── v-graph
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── v-headline
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── v-img-container
+│   │   │   └── index.js
+│   │   ├── v-link
+│   │   │   ├── index.js
+│   │   │   └── styles.js
+│   │   ├── v-logo
+│   │   │   └── index.js
+│   │   └── v-router
+│   │       └── index.js
+│   └── pages
+│       ├── page-one
+│       │   └── index.js
+│       └── page-two
+│           └── index.js
+└── yarn.lock
+```
+
 To get started, create a new simple project by running:
 
 ```bash
-  yarn init
+  yarn init -y
 ```
 
-Enter through the details and you're good to go.
+Next, let's create the two main components for the site: the entry, or _index.html_, and where the main component will live, _app.js_.
 
-Now would be a good time to create the basic files
+The index file is simple enough:
+
+_index.html_:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Vanilla Site</title>
+    <link rel="stylesheet" href="src/common/styles.css" />
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <v-app></v-app>
+  </body>
+</html>
+```
+
+Over in _app.js_, there's quite a bit more going on:
+
+_app.js:_
+
+```javascript
+import { html } from 'lit-html'
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
+import Base from './base'
+import registerComponent from './common/register-component'
+import routes from './common/routes'
+import './components/v-logo'
+import './components/v-router'
+import './pages/page-one'
+import './pages/page-two'
+
+class VApp extends Base {
+  constructor() {
+    super()
+    this.navigate = this.navigate.bind(this)
+  }
+
+  onMount() {
+    let page = location.pathname.substr(1)
+    this.setActivePage((page && this.isRegistered(page)) || 'v-page-one')
+    this.shadowRoot
+      .querySelector('#root')
+      .addEventListener('nav-changed', ({ detail: { route } }) =>
+        this.navigate(route)
+      )
+  }
+
+  navigate(route) {
+    this.setActivePage(route)
+  }
+
+  setActivePage(page) {
+    if (!page) return
+    const pageTag = `<${page}></${page}>`
+    this.htmlToRender = html`
+      ${unsafeHTML(pageTag)}
+    `
+    history.pushState({}, page, page.split('v-')[1])
+    this.updateTpl()
+  }
+
+  isRegistered(page) {
+    return routes.indexOf(`v-${page}`) > -1 ? `v-${page}` : false
+  }
+
+  tpl() {
+    return this.htmlToRender
+      ? html`
+          <div id="root">
+            <v-logo></v-logo>
+            <v-router></v-router>
+            ${this.htmlToRender}
+          </div>
+        `
+      : ``
+  }
+}
+
+registerComponent('v-app', VApp)
+```
 
 ### Code Splitting
 
