@@ -1,5 +1,6 @@
 import React from 'react'
 import Helmet from 'react-helmet'
+import '../styles/global.css'
 import { Link, graphql } from 'gatsby'
 import EmailForm from '../components/EmailForm'
 
