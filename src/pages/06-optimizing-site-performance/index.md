@@ -51,12 +51,15 @@ When we're finished, the project directory will look like this:
 │   │   ├── v-logo
 │   │   │   └── index.js
 │   │   └── v-router
-│   │       └── index.js
+│   │       ├── index.js
+│   │       └── styles.js
 │   └── pages
 │       ├── page-one
-│       │   └── index.js
+│       │   ├── index.js
+│       │   └── styles.js
 │       └── page-two
-│           └── index.js
+│           ├── index.js
+│           └── styles.js
 └── yarn.lock
 ```
 
@@ -81,14 +84,76 @@ _index.html_:
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Vanilla Site</title>
     <link rel="stylesheet" href="src/common/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Playfair+Display:900"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="./src/app.js"></script>
   </head>
   <body>
     <v-app></v-app>
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>
 ```
+
+I load the polyfill for web components in the head, as well as a typeface to add some personality. I then reference the project's main module before the closing body tag.
+
+Next, I'll create the base class that'll provide the main API I'll use in my components:
+
+_./src/base/index.js:_
+
+```javascript
+import { render } from 'lit-html'
+
+class Base extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+  }
+
+  connectedCallback() {
+    this._render()
+    this.onMount()
+  }
+
+  updateTpl() {
+    this._render()
+  }
+
+  disconnectedCallback() {
+    this.onUnmount()
+  }
+
+  dispatch(event, detail) {
+    this.dispatchEvent(
+      new CustomEvent(event, { detail, bubbles: true, composed: true })
+    )
+  }
+
+  getChild(qry) {
+    return this.shadowRoot.querySelector(qry)
+  }
+
+  getChildren(qry) {
+    return this.shadowRoot.querySelectorAll(qry)
+  }
+
+  _render() {
+    render(this.tpl(), this.shadowRoot)
+  }
+
+  /*abstract*/ onMount() {}
+  /*abstract*/ onUnmount() {}
+  /*abstract*/ tpl() {}
+}
+
+export default Base
+```
+
+Several spots in the class should look familiar if you've ever used web components.
+
+I also implemented a few render methods, which take advantage of the Polymer team's excellent new templating library _lit-html_. You can read more about that project <a href="https://github.com/Polymer/lit-html" target="_blank">here</a>. The team also offers a base class of its own, Lit-Element, but I don't need something that robust for this small example project.
 
 Over in _app.js_, there's quite a bit more going on:
 
@@ -154,6 +219,21 @@ class VApp extends Base {
 
 registerComponent('v-app', VApp)
 ```
+
+The bulk of the logic in this module involves handling routing and swapping out the main view upon navigation. I also reference several components and pages I created for the project. I'll dump the code for those in a moment, but let's zoom in on the _registerComponent_ method to see what it's doing.
+
+_./src/common/register-component/index.js:_
+
+```javascript
+export default (txt, className) =>
+  (() => {
+    if (customElements.get(txt)) return
+    const register = () => customElements.define(txt, className)
+    window.WebComponents ? window.WebComponents.waitFor(register) : register()
+  })()
+```
+
+The module is an IIFE that accepts the name of my component and its associated class. It then checks if the component has already been registered, then handles creation depending on availability of the WebComponents API from the browser.
 
 ### Code Splitting
 
