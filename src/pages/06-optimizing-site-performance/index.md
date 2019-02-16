@@ -225,15 +225,14 @@ The bulk of the logic in this module involves handling routing and swapping out 
 _./src/common/register-component/index.js:_
 
 ```javascript
-export default (txt, className) =>
-  (() => {
-    if (customElements.get(txt)) return
-    const register = () => customElements.define(txt, className)
-    window.WebComponents ? window.WebComponents.waitFor(register) : register()
-  })()
+export default (txt, className) => {
+  if (customElements.get(txt)) return
+  const register = () => customElements.define(txt, className)
+  window.WebComponents ? window.WebComponents.waitFor(register) : register()
+}
 ```
 
-The module is an IIFE that accepts the name of my component and its associated class. It then checks if the component has already been registered, then handles creation depending on availability of the WebComponents API from the browser.
+The method accepts the name of my component and its associated class. It then checks if the component has already been registered, then handles registration depending on availability of the WebComponents API from the browser.
 
 ### Code Splitting
 
