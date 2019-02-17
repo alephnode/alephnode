@@ -182,9 +182,50 @@ If you've made it this far, you've either seen the skeleton of the example appli
 
 One of the most powerful tools available to help us accomplish this task is a <b>module bundler</b>. In short, it enables us to package all our app logic together in one file to minimize the number of requests needed to render our app.
 
-A popular option that's the darling of the JavaScript community is Webpack.
+Althought the race has tightened recently with offerings like Rollup and Parcel, The leading solution for module bundling for the last few years has been Webpack.
 
-For this application, I'll use Parcel sinze it's zero configuration makes adding it to your application effortless.
+In its simplest usage, it'll parse our JavaScript files from before--marking all dependencies along the way--and combine them into a single file that gets injected into _index.html_ after the build process.
+
+In order to use Webpack in our project, we'll need to have install a few dependencies:
+
+```bash
+yarn add webpack webpack-dev-server html-webpack-plugin
+```
+
+To be clear, _webpack-dev-server_ is what we'll use to help preview our app during development, and _html-webpack-plugin_ enables the script injection described earlier.
+
+Now that we have the dependencies installed, let's create a simple Webpack config file in the project's root.
+
+_./webpack.config.js:_
+
+```javascript
+const webpack = require('webpack')
+const { resolve } = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  context: resolve(__dirname, 'src'),
+  entry: {
+    app: './app.js',
+  },
+  output: {
+    filename: '[name].bundle.js',
+    path: resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    hot: true,
+    publicPath: '/',
+    historyApiFallback: true,
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: resolve(__dirname, 'index.html'),
+    }),
+  ],
+}
+```
 
 ### Code Splitting
 
