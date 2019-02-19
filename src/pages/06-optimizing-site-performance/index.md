@@ -78,7 +78,7 @@ export default Base
 
 If you're familiar with web components, much of the above should look familiar to you. If not, I'm effectively writing a few wrapper methods to offer more semantic names for lifecycle methods extended from HTMLElement. I also pull in the only dependency in the project, _lit-html_, to render content to the page.
 
-If you haven't checked it out yet, _lit-html_ is a lightweight, intuitive library from the Polymer team that makes templating a breeze. It also just hit its first stable release, so it's worth taking a look.
+If you haven't checked it out yet, <a href="https://lit-html.polymer-project.org/" target="_blank">_lit-html_</a> is a lightweight, intuitive library from the Polymer team that makes templating a breeze. It also just hit its first stable release, so it's worth taking a look.
 
 Now that we've seen the base class used across the project, let's take a look at the main app module:
 
@@ -182,7 +182,7 @@ If you've made it this far, you've either seen the skeleton of the example appli
 
 One of the most powerful tools available to help us accomplish this task is a <b>module bundler</b>. In short, it enables us to package all our app logic together in one file to minimize the number of requests needed to render our app.
 
-Althought the race has tightened recently with offerings like Rollup and Parcel, The leading solution for module bundling for the last few years has been Webpack.
+Although the race has tightened recently with offerings like Rollup and Parcel, The leading solution for module bundling for the last few years has been <a href="https://webpack.js.org/" target="_blank">Webpack</a>.
 
 In its simplest usage, it'll parse our JavaScript files from before--marking all dependencies along the way--and combine them into a single file that gets injected into _index.html_ after the build process.
 
@@ -227,7 +227,9 @@ module.exports = {
 }
 ```
 
-### Code Splitting
+_Note that the Webpack file syntax uses CommonJS (all those require's at the top), which is different from the ES Modules we've used previously to import external modules. For a refresher on the different module systems,_ <a href="https://medium.freecodecamp.org/anatomy-of-js-module-systems-and-building-libraries-fadcd8dbd0e" target="_blank">this article</a> _is a fantastic guide._
+
+Looking deeper at the config above, we identify the entry point of our application, or _app.js_ as we linked in our _index.html_ previously, and define a location and file name for the eventual bundled output. We also add a few configs for the dev server, specifically where to find our root HTML file, as well as the option to use _historyApiFallback_ for redirecting to our _index.html_ file on page refresh. Otherwise, the browser will request the HTML file from the server at the wrong location, and our users will get an ugly error 😳.
 
 ### Tree Shaking
 
