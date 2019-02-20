@@ -12,7 +12,7 @@ In the <a href="/05-treading-critical-rendering" target="_blank">previous post</
 
 For the second half of this topic, I'll focus on ways developers can reduce the time and cost associated with these steps, making for a more performant, enjoyable user experience as a result.
 
-To better illustrate the ideas expressed, I'll walk through creating a simple SPA in vanilla JavaScript.
+To better illustrate the ideas, I'll walk through creating a simple SPA in ([mostly](#lit-section))\* vanilla JavaScript.
 
 You can see the demo app <a href="https://vanilla-site-dzmkgredfp.now.sh/page-one" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here only for the performance tips.
 
@@ -22,9 +22,11 @@ Alright, let's get started!
 
 Before we can optimize the performance of a site, we need a site 😃. Luckily, I've prepared a basic project for us to work with.
 
-The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this project provides two examples: one basic site, and the same site optimized. Because the project is relatively straightforward (mostly web component declarations), I'll only walk through the core modules before explaining the optimization steps.
+The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this app provides two examples: one basic site, and the same site optimized. Because the project is relatively straightforward (mostly Web Component declarations), I'll only walk through the core modules before explaining the optimization steps.
 
-The first module we'll look at is the base class from which all components, pages, and core app logic is derived. _Note: all examples from the first section will be taken from the /basic directory, if you're following along with the source code._
+The first module we'll look at is the base class from which all components, pages, and core app logic is derived.
+
+_Note: all examples from the first section will be taken from the /basic directory, if you're following along with the source code._
 
 _./basic/src/base/index.js:_
 
@@ -76,7 +78,7 @@ class Base extends HTMLElement {
 export default Base
 ```
 
-If you're familiar with web components, much of the above should look familiar to you. If not, I'm effectively writing a few wrapper methods to offer more semantic names for lifecycle methods extended from HTMLElement. I also pull in the only dependency in the project, _lit-html_, to render content to the page.
+If you're familiar with Web Components, much of the above should look familiar to you. If not, I'm effectively writing a few wrapper methods to offer more semantic names for lifecycle methods extended from HTMLElement. <div id="lit-section">\* I also pull in the only dependency in the project, _lit-html_, to render content to the page.</div>
 
 If you haven't checked it out yet, <a href="https://lit-html.polymer-project.org/" target="_blank">_lit-html_</a> is a lightweight, intuitive library from the Polymer team that makes templating a breeze. It also just hit its first stable release, so it's worth taking a look.
 
@@ -151,7 +153,7 @@ registerComponent('v-app', VApp)
 
 The app module's primary concern is maintaining control of the application's viewport, namely which page is currently being displayed. Whenever a new page is requested, the module checks to see if it has a corresponding component to render for that route. If not, it defaults to displaying the homepage.
 
-The final line of the file (and every file with a web component declaration in the project) takes care of the custom element's registration:
+The final line of the file (and every file with a Web Component declaration in the project) takes care of registration:
 
 _./src/common/register-component/index.js:_
 
@@ -163,16 +165,15 @@ export default (txt, className) => {
 }
 ```
 
-Although it's exciting to build apps almost entirely in JavaScript with web components, it _does_ come with some performance costs. A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
+Although it's exciting to build apps almost entirely in JavaScript with Web Components, it _does_ come with some performance costs. A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/perf-test-basic.png">
-<div class="src-container"><span class="source">Photo by Denisse Leon on Unsplash</span></div>
 </div>
 
 As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in a page load speed of close to 700ms, which is pretty poor considering how little content is on the page.
 
-Upon closer inspection, we can see that all those _index.js_ references are my web component declarations--many of which aren't even used on the first page. No good!
+Upon closer inspection, we can see that all those _index.js_ references are my Web Component declarations--many of which aren't even used on the first page. No good!
 
 In order to get this app in better shape, let's take a look at a few of the optimization techniques available.
 
@@ -220,16 +221,59 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      inject: true,
       template: resolve(__dirname, 'index.html'),
     }),
   ],
 }
 ```
 
-_Note that the Webpack file syntax uses CommonJS (all those require's at the top), which is different from the ES Modules we've used previously to import external modules. For a refresher on the different module systems,_ <a href="https://medium.freecodecamp.org/anatomy-of-js-module-systems-and-building-libraries-fadcd8dbd0e" target="_blank">this article</a> _is a fantastic guide._
+_Note that the Webpack file syntax uses CommonJS (all those require's at the top), which is different from the ES Modules we've used previously. For a refresher on the different module systems,_ <a href="https://medium.freecodecamp.org/anatomy-of-js-module-systems-and-building-libraries-fadcd8dbd0e" target="_blank">this article</a> _is a fantastic guide._
 
-Looking deeper at the config above, we identify the entry point of our application, or _app.js_ as we linked in our _index.html_ previously, and define a location and file name for the eventual bundled output. We also add a few configs for the dev server, specifically where to find our root HTML file, as well as the option to use _historyApiFallback_ for redirecting to our _index.html_ file on page refresh. Otherwise, the browser will request the HTML file from the server at the wrong location, and our users will get an ugly error 😳.
+Looking deeper at the config above, we identify the entry point of our application, or _app.js_ as we linked in our _index.html_ previously, and define a location and file name for the eventual bundled output (app.bundle.js, in this case).
+
+We also add a few configs for the dev server, specifically where to find our root HTML file, as well as the option to use _historyApiFallback_ for redirecting to our _index.html_ file on page refresh. Otherwise, the browser will request the HTML file from the server at the wrong location, and our users will get an ugly 404 error 😳.
+
+Finally, the _HTMLWebpackPlugin_ allows us to customize the _index.html_ file created during the build by pointing to a template.
+
+With our Webpack file in place, go ahead and run:
+
+```bash
+yarn start
+```
+
+to make sure your dev server is working. If everything looks good, you're ready to build!
+
+```bash
+yarn build
+```
+
+When the build is finished, navigate to the newly created _dist/_ directory and launch a static server. I like to use _serve_:
+
+```bash
+serve --single
+```
+
+If you inspect the resulting page in the network tab again, you should see all those scripts folded into _app.bundle.js_!
+
+<div id="img-container">
+<img id="knowledge-img" src="./images/perf-test-module-2.png">
+</div>
+
+As the image shows, the requests dropped to a measly eight, and the page loaded in ~150ms.
+
+This is good, but we could do better. Notice upon inspecting the _app.bundle.js_ file that components are loaded that aren't used on the page, like _v-page-two_ and _v-img-container_.
+
+_app.bundle.js_:
+
+<div id="img-container">
+<img id="knowledge-img" src="./images/component-base-use.png">
+</div>
+
+To fix this, we'll use another tool on the modern web's workbench: _code splitting_!
+
+### Code Splitting
+
+One of the coolest features that Webpack supports is the ability to programmatically load files at your discretion rather than requiring everything all at once.
 
 ### Tree Shaking
 
