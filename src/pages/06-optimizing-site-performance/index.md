@@ -1,6 +1,6 @@
 ---
 title: 'How Websites Happen, Part Two: Optimizing Performance'
-date: '2019-02-10'
+date: '2019-02-21'
 ---
 
 <div id="img-container">
@@ -323,4 +323,14 @@ Down to nine requests at ~129ms, not bad!
 
 ### Service Worker
 
-### Manifest.json, a11y
+Our app has made considerable progress with just a few short config options, but there's another technique that'll increase performance for users on repeat visits as well: implementing a <strong>service worker</strong>.
+
+### Wrapping Up
+
+With a few modifications to our original project, we were able to increase the page load time by a factor of XX. Thanks to the minification, bundling, and code splitting capabilities of Webpack--paired with a service worker with sensible configs--we can ship a JavaScript-powered web app without the bloat plaguing so many projects in the space.
+
+Although we touched on quite a few options in this article, there are still plenty of ways to push the performance envelope even further. Below are a few articles that go into more detail, as well as offer additional performance tweaks:
+
+- cookie expiration article
+- tree shaking example
+- advanced service worker, cache busting article
