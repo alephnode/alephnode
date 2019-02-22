@@ -275,7 +275,51 @@ To fix this, we'll use another tool on the modern web's workbench: _code splitti
 
 One of the coolest features that Webpack supports is the ability to programmatically load files at your discretion rather than requiring everything all at once.
 
-### Tree Shaking
+Using this feature is simple. Let's head back to the _app.js_ file and refactor the code to use this feature.
+
+_app.js:_
+
+```javascript
+/// ... Vapp class from before ...
+  async onMount() {
+    let page = location.pathname.substr(1)
+    await this.setActivePage((page && this.isRegistered(page)) || 'v-page-one')
+    this.shadowRoot
+      .querySelector('#root')
+      .addEventListener('nav-changed', ({ detail: { route } }) => this.navigate(route)
+      )
+  }
+
+  navigate(route) {
+    this.setActivePage(route)
+  }
+
+  async setActivePage(page) {
+    if (!page) return
+    let prettyName = page.split('v-')[1]
+    const pageTag = `<${page}></${page}>`
+    this.htmlToRender = html`
+      ${unsafeHTML(pageTag)}
+    `
+    history.pushState({}, page,prettyName)
+    // Here's the interesting part ...
+    await import(`./pages/${prettyName}`)
+    this.updateTpl()
+  }
+  // ...
+```
+
+First, we remove the two page component references in _app.js_. Then, we use async/await to 1. wait for _setActivePage()_ to finish, where our dynamic import will happen, and 2. wait for the module to import before updating the markup.
+
+Now, our page modules will only be requested from the browser when we navigate to their corresponding page.
+
+Let's check the dev tools again to see our progress:
+
+<div id="img-container">
+<img id="knowledge-img" src="./images/code-split-perf.png">
+</div>
+
+Down to nine requests at ~129ms, not bad!
 
 ### Service Worker
 
