@@ -316,7 +316,7 @@ Now, our page modules will only be requested from the browser when we navigate t
 Let's check the dev tools again to see our progress:
 
 <div id="img-container">
-<img id="knowledge-img" src="./images/webpack-split.png">
+<img id="knowledge-img" src="./images/webpack-codesplit.png">
 </div>
 
 Down to nine requests at ~400ms, not bad!
