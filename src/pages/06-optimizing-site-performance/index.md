@@ -168,10 +168,10 @@ export default (txt, className) => {
 Although it's exciting to build apps almost entirely in JavaScript with Web Components, it _does_ come with some performance costs. A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
 
 <div id="img-container">
-<img id="knowledge-img" src="./images/perf-test-basic.png">
+<img id="knowledge-img" src="./images/site-basic.png">
 </div>
 
-As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in a page load speed of close to 700ms, which is pretty poor considering how little content is on the page.
+As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in a page load speed of close to 450ms.
 
 Upon closer inspection, we can see that all those _index.js_ references are my Web Component declarations--many of which aren't even used on the first page. No good!
 
@@ -256,10 +256,10 @@ serve --single
 If you inspect the resulting page in the network tab again, you should see all those scripts folded into _app.bundle.js_!
 
 <div id="img-container">
-<img id="knowledge-img" src="./images/perf-test-module-2.png">
+<img id="knowledge-img" src="./images/webpack-module.png">
 </div>
 
-As the image shows, the requests dropped to a measly eight, and the page loaded in ~150ms.
+As the image shows, the requests dropped to a measly eight, and the page loaded in ~434ms.
 
 This is good, but we could do better. Notice upon inspecting the _app.bundle.js_ file that components are loaded that aren't used on the page, like _v-page-two_ and _v-img-container_.
 
@@ -316,10 +316,10 @@ Now, our page modules will only be requested from the browser when we navigate t
 Let's check the dev tools again to see our progress:
 
 <div id="img-container">
-<img id="knowledge-img" src="./images/code-split-perf.png">
+<img id="knowledge-img" src="./images/webpack-split.png">
 </div>
 
-Down to nine requests at ~129ms, not bad!
+Down to nine requests at ~400ms, not bad!
 
 ### Service Worker
 
