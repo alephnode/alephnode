@@ -84,7 +84,7 @@ If you haven't checked it out yet, <a href="https://lit-html.polymer-project.org
 
 Now that we've seen the base class used across the project, let's take a look at the main app module:
 
-_./src/app.js:_
+_./basic/src/app.js:_
 
 ```javascript
 import { html } from '/node_modules/lit-html/lit-html.js'
@@ -155,7 +155,7 @@ The app module's primary concern is maintaining control of the application's vie
 
 The final line of the file (and every file with a Web Component declaration in the project) takes care of registration:
 
-_./src/common/register-component/index.js:_
+_./basic/src/common/register-component/index.js:_
 
 ```javascript
 export default (txt, className) => {
@@ -197,7 +197,7 @@ To be clear, _webpack-dev-server_ is what we'll use to help preview our app duri
 
 Now that we have the dependencies installed, let's create a simple Webpack config file in the project's root.
 
-_./webpack.config.js:_
+_./optimized/webpack.config.js:_
 
 ```javascript
 const webpack = require('webpack')
@@ -263,7 +263,7 @@ As the image shows, the requests dropped to a measly eight, and the page loaded 
 
 This is good, but we could do better. Notice upon inspecting the _app.bundle.js_ file that components are loaded that aren't used on the page, like _v-page-two_ and _v-img-container_.
 
-_app.bundle.js_:
+_./optimized/dist/app.bundle.js_:
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/component-base-use.png">
@@ -277,7 +277,7 @@ One of the coolest features that Webpack supports is the ability to programmatic
 
 Using this feature is simple. Let's head back to the _app.js_ file and refactor the code to use this feature.
 
-_app.js:_
+_./optimized/src/app.js:_
 
 ```javascript
 /// ... Vapp class from before ...
