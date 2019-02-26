@@ -321,6 +321,14 @@ Let's check the dev tools again to see our progress:
 
 Down to nine requests at ~400ms, not bad!
 
+### LIGHTHOUSE RECOMMENDATIONS AFTER WEBPACK
+
+### PRPL pattern
+
+### HTTP2/PUSH
+
+### DEBATE ON NO. OF REQUESTS VS. SIZE
+
 ### Service Worker
 
 Our app has made considerable progress with just a few short config options, but there's another technique that'll increase performance for users on repeat visits as well: implementing a <strong>service worker</strong>.
@@ -334,3 +342,4 @@ Although we touched on quite a few options in this article, there are still plen
 - cookie expiration article
 - tree shaking example
 - advanced service worker, cache busting article
+- http2 info, simple server setup
