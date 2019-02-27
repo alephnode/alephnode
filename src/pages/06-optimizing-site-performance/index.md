@@ -1,6 +1,6 @@
 ---
 title: 'How Websites Happen, Part Two: Optimizing Performance'
-date: '2019-02-21'
+date: '2019-02-25'
 ---
 
 <div id="img-container">
@@ -12,21 +12,15 @@ In the <a href="/05-treading-critical-rendering" target="_blank">previous post</
 
 For the second half of this topic, I'll focus on ways developers can reduce the time and cost associated with these steps, making for a more performant, enjoyable user experience as a result.
 
-To better illustrate the ideas, I'll walk through creating a simple SPA in ([mostly](#lit-section))\* vanilla JavaScript.
+To better illustrate the ideas, I've prepared a simple app in ([mostly](#lit-section))\* vanilla JavaScript.
 
-You can see the demo app <a href="https://vanilla-site-dzmkgredfp.now.sh/page-one" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here only for the performance tips.
+You can see the demo app <a href="https://vanilla-site-dzmkgredfp.now.sh/page-one" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here for the performance tips.
 
-Alright, let's get started!
+### Exploring the Site
 
-### Building the Site
-
-Before we can optimize the performance of a site, we need a site 😃. Luckily, I've prepared a basic project for us to work with.
-
-The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this app provides two examples: one basic site, and the same site optimized. Because the project is relatively straightforward (mostly Web Component declarations), I'll only walk through the core modules before explaining the optimization steps.
+The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this project provides two examples: one basic site and one optimized. Because the project is relatively straightforward (mostly Web Component declarations), I'll only walk through the core modules before explaining the optimization steps.
 
 The first module we'll look at is the base class from which all components, pages, and core app logic is derived.
-
-_Note: all examples from the first section will be taken from the /basic directory, if you're following along with the source code._
 
 _./basic/src/base/index.js:_
 
@@ -78,7 +72,7 @@ class Base extends HTMLElement {
 export default Base
 ```
 
-If you're familiar with Web Components, much of the above should look familiar to you. If not, I'm effectively writing a few wrapper methods to offer more semantic names for lifecycle methods extended from HTMLElement. <div id="lit-section">\* I also pull in the only dependency in the project, _lit-html_, to render content to the page.</div>
+If you're familiar with Web Components, much of the above should look familiar. If not, I'm effectively writing a few semantic wrappers for the lifecycle methods extended from HTMLElement. <div id="lit-section">\* I also pull in the only dependency in the project, _lit-html_, to render content to the page.</div>
 
 If you haven't checked it out yet, <a href="https://lit-html.polymer-project.org/" target="_blank">_lit-html_</a> is a lightweight, intuitive library from the Polymer team that makes templating a breeze. It also just hit its first stable release, so it's worth taking a look.
 
@@ -171,7 +165,7 @@ Although it's exciting to build apps almost entirely in JavaScript with Web Comp
 <img id="knowledge-img" src="./images/site-basic.png">
 </div>
 
-As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in a page load speed of close to 450ms.
+As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in almost 63 KB sent from the server.
 
 Upon closer inspection, we can see that all those _index.js_ references are my Web Component declarations--many of which aren't even used on the first page. No good!
 
@@ -187,7 +181,7 @@ Although the race has tightened recently with offerings like Rollup and Parcel, 
 
 In its simplest usage, it'll parse our JavaScript files from before--marking all dependencies along the way--and combine them into a single file that gets injected into _index.html_ after the build process.
 
-In order to use Webpack in our project, we'll need to have install a few dependencies:
+In order to use Webpack in our project, we'll need to install a few dependencies:
 
 ```bash
 yarn add webpack webpack-dev-server html-webpack-plugin
@@ -195,7 +189,7 @@ yarn add webpack webpack-dev-server html-webpack-plugin
 
 To be clear, _webpack-dev-server_ is what we'll use to help preview our app during development, and _html-webpack-plugin_ enables the script injection described earlier.
 
-Now that we have the dependencies installed, let's create a simple Webpack config file in the project's root.
+Now that we have the dependencies installed, let's create a simple Webpack config in the project's root.
 
 _./optimized/webpack.config.js:_
 
@@ -259,7 +253,7 @@ If you inspect the resulting page in the network tab again, you should see all t
 <img id="knowledge-img" src="./images/webpack-module.png">
 </div>
 
-As the image shows, the requests dropped to a measly eight, and the page loaded in ~434ms.
+As the image shows, the requests dropped to a measly eight, and the total page size is now 53.1 KB.
 
 This is good, but we could do better. Notice upon inspecting the _app.bundle.js_ file that components are loaded that aren't used on the page, like _v-page-two_ and _v-img-container_.
 
@@ -309,7 +303,10 @@ _./optimized/src/app.js:_
   // ...
 ```
 
-First, we remove the two page component references in _app.js_. Then, we use async/await to 1. wait for _setActivePage()_ to finish, where our dynamic import will happen, and 2. wait for the module to import before updating the markup.
+First, we remove the two page component references in _app.js_. Then, we use async/await to
+
+1. wait for _setActivePage()_ to finish, where our dynamic import will happen, and
+2. wait for the module to import before updating the markup.
 
 Now, our page modules will only be requested from the browser when we navigate to their corresponding page.
 
@@ -319,7 +316,7 @@ Let's check the dev tools again to see our progress:
 <img id="knowledge-img" src="./images/webpack-codesplit.png">
 </div>
 
-Down to nine requests at ~400ms, not bad!
+Down to 34.9 KB, not bad!
 
 ### LIGHTHOUSE RECOMMENDATIONS AFTER WEBPACK
 
