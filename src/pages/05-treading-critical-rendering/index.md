@@ -44,7 +44,9 @@ _Example DOM:_
 
 Once the DOM object is created, the browser needs to gather the object's style properties before rendering it. This is where CSSOM comes into play.
 
-What is CSSOM? Well, most websites have styles associated with their markup. When the browser encounters a linked stylesheet or any other asset, it sends the request for said asset back to the server. During this time, its blocked from rendering the page until the response is returned. This is why CSS is commonly referred to as <b>render-blocking</b>.
+What is CSSOM? Well, most websites have styles associated with their markup. Just how the lines in the HTML file were parsed and converted into a node-ripe tree structure, the styles related to the asset are given the same treatment. The resulting object is known as the CSSOM.
+
+When the browser encounters a linked stylesheet or any other asset, it sends the request for said asset back to the server. During this time, its blocked from rendering the page until the response is returned. This is why CSS is commonly referred to as <b>render-blocking</b>.
 
 If you think about it, this makes sense. The browser is aware that styles matter to the rendering process ahead, and it needs to interpret the information received as a whole due to the cascading nature of styles (hence the name, CSS).
 
@@ -75,7 +77,7 @@ _Example render tree:_
 
 ### Step Four: Assessing the Layout
 
-During the next phase, commonly referred to as layout, or "reflow", the prep work for visualization is performed. Device dimensions are determined, informing the styles with information they'll need to properly render. To the pixel, the render tree is calculated to exist precisely as intended for the device used.
+During the next phase, commonly referred to as layout (or "reflow" in Firefox parlance), the prep work for visualization is performed. Device dimensions are determined, informing the styles with information they'll need to properly render. To the pixel, the render tree is calculated to exist precisely as intended for the device used.
 
 If you've ever noticed the boxy visualization at the bottom-right section of the developer tools in Chrome (within the "Elements" tab), you'll see the hard work of the layout phase at your disposal. This is known as the "box model" that has all the margin, padding, border, and pixel coordinate information about each element on the page.
 

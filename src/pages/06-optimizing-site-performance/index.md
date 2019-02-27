@@ -8,9 +8,9 @@ date: '2019-02-25'
 <div class="src-container"><span class="source">Photo by Denisse Leon on Unsplash</span></div>
 </div>
 
-In the <a href="/05-treading-critical-rendering" target="_blank">previous post</a>, I walked through the details of the critical rendering path. It explained the process an HTML file goes through from being received by the browser all the way to its visualization on the page.
+In the <a href="/05-treading-critical-rendering" target="_blank">previous post</a>, I walked through the details of the critical rendering path. It explained the process an HTML file goes through from being received by the browser to its visualization on the page.
 
-For the second half of this topic, I'll focus on ways developers can reduce the time and cost associated with these steps, making for a more performant, enjoyable user experience as a result.
+For the second half of the topic, I'll focus on a few ways developers can reduce the time and cost associated with these steps, making for a more performant, enjoyable user experience as a result.
 
 To better illustrate the ideas, I've prepared a simple app in ([mostly](#lit-section))\* vanilla JavaScript.
 
@@ -171,6 +171,16 @@ Upon closer inspection, we can see that all those _index.js_ references are my W
 
 In order to get this app in better shape, let's take a look at a few of the optimization techniques available.
 
+### First Things First: Check Your Images
+
+Before delving deep into config options and code tweaks, it's worth mentioning that unchecked images are often the cause of bulky page sizes.
+
+The easiest way to reduce image size is to run them through a compression tool. There are a few different options online, but I enjoy <A href="https://compressor.io/" target="_blank">Compressor IO </a> for my optimization needs.
+
+It's also beneficial to prefer JPEG over PNG assets for photos and other complex images. This is because of the compression algorithm JPEG uses, lossy, which removes pixel data (unlike PNG's lossless algorithm).
+
+Once you've made a pass through the assets referenced on your page, it's time to look at code-side optimizations worth making.
+
 ### <div id="module-bundler">Module Bundler</div>
 
 If you've made it this far, you've either seen the skeleton of the example application or have a general idea of the issue at hand: building a site using mostly JavaScript while keeping the browser's requests light and as few as possible.
@@ -316,9 +326,21 @@ Let's check the dev tools again to see our progress:
 <img id="knowledge-img" src="./images/webpack-codesplit.png">
 </div>
 
-Down to 34.9 KB, not bad!
+Cutting the content delivered down by ~56% (to 34.9 KB) is quite an achievement, but we can still do better. To gain a little more insight, let's head over to another section of the dev tools: the <strong>Audits</strong> tab.
 
-### LIGHTHOUSE RECOMMENDATIONS AFTER WEBPACK
+### Auditing Performance
+
+When we run an audit on our site, we see a lot of stellar scores with a glaring outlier:
+
+<div id="img-container">
+<img id="perf-audit-img" src="./images/site-perf.png">
+</div>
+
+Yikes, someone bombed a section of the test! Let's drill in and see what's causing the poor marks:
+
+<div id="img-container">
+<img id="perf-audit-img" src="./images/site-perf-poor.png">
+</div>
 
 ### PRPL pattern
 
@@ -327,8 +349,6 @@ Down to 34.9 KB, not bad!
 ### DEBATE ON NO. OF REQUESTS VS. SIZE
 
 ### Service Worker
-
-Our app has made considerable progress with just a few short config options, but there's another technique that'll increase performance for users on repeat visits as well: implementing a <strong>service worker</strong>.
 
 ### Wrapping Up
 
