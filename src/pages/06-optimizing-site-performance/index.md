@@ -165,9 +165,11 @@ Although it's exciting to build apps almost entirely in JavaScript with Web Comp
 <img id="knowledge-img" src="./images/site-basic.png">
 </div>
 
-As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser. This high number of trips resulted in almost 63 KB sent from the server.
+As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser and almost 63 KB sent from the server.
 
-Upon closer inspection, we can see that all those _index.js_ references are my Web Component declarations--many of which aren't even used on the first page. No good!
+While the size isn't exactly massive, it's also just a simple app with hardly any content. Adding more images, API calls, and boilerplate pages would easily double or triple this number.
+
+Upon closer inspection, we can see that many of the file references are my Web Component declarations--many of which aren't even used on the first page. No good!
 
 In order to get this app in better shape, let's take a look at a few of the optimization techniques available.
 
@@ -177,7 +179,7 @@ Before delving deep into config options and code tweaks, it's worth mentioning t
 
 The easiest way to reduce image size is to run them through a compression tool. There are a few different options online, but I enjoy <A href="https://compressor.io/" target="_blank">Compressor IO </a> for my optimization needs.
 
-It's also beneficial to prefer JPEG over PNG assets for photos and other complex images. This is because of the compression algorithm JPEG uses, lossy, which removes pixel data (unlike PNG's lossless algorithm).
+It's also beneficial to prefer JPEG over PNG assets for photos and other complex images. This is because of the compression algorithm JPEG uses, lossy, which removes pixel data (unlike PNG, which is lossless).
 
 Once you've made a pass through the assets referenced on your page, it's time to look at code-side optimizations worth making.
 
@@ -199,7 +201,7 @@ yarn add webpack webpack-dev-server html-webpack-plugin
 
 To be clear, _webpack-dev-server_ is what we'll use to help preview our app during development, and _html-webpack-plugin_ enables the script injection described earlier.
 
-Now that we have the dependencies installed, let's create a simple Webpack config in the project's root.
+Now that we have the dependencies installedA, let's create a simple Webpack config in the project's root.
 
 _./optimized/webpack.config.js:_
 
@@ -242,16 +244,16 @@ Finally, the _HTMLWebpackPlugin_ allows us to customize the _index.html_ file cr
 With our Webpack file in place, go ahead and run:
 
 ```bash
-yarn start
+webpack-dev-server --mode development
 ```
 
 to make sure your dev server is working. If everything looks good, you're ready to build!
 
 ```bash
-yarn build
+webpack -p
 ```
 
-When the build is finished, navigate to the newly created _dist/_ directory and launch a static server. I like to use _serve_:
+When the build is finished, navigate to the newly created _dist/_ directory and launch a static server. I like to use <a href="https://github.com/zeit/serve" target="_blank">_serve_</a>:
 
 ```bash
 serve --single
@@ -277,7 +279,7 @@ To fix this, we'll use another tool on the modern web's workbench: _code splitti
 
 ### Code Splitting
 
-One of the coolest features that Webpack supports is the ability to programmatically load files at your discretion rather than requiring everything all at once.
+One of the most useful features that Webpack offers is programmatically loading modules inline rather than requiring static imports at the top of the dependent file. This is referred to as _code splitting_.
 
 Using this feature is simple. Let's head back to the _app.js_ file and refactor the code to use this feature.
 
@@ -330,7 +332,7 @@ Cutting the content delivered down by ~56% (to 34.9 KB) is quite an achievement,
 
 ### Auditing Performance
 
-When we run an audit on our site, we see a lot of stellar scores with a glaring outlier:
+When we run an audit on the site, we see a lot of stellar scores with a glaring outlier:
 
 <div id="img-container">
 <img id="perf-audit-img" src="./images/site-perf.png">
@@ -339,16 +341,103 @@ When we run an audit on our site, we see a lot of stellar scores with a glaring 
 Yikes, someone bombed a section of the test! Let's drill in and see what's causing the poor marks:
 
 <div id="img-container">
-<img id="perf-audit-img" src="./images/site-perf-poor.png">
+<img id="perf-audit-img" src="./images/site-perf-poor-2.png">
 </div>
 
-### PRPL pattern
+The section in question, _Progressive Web App_, measures how gracefully the site handles network loss and caching through the use of a service worker. Although some of these suggestions might seem like overkill, it's worth peppering them into an application to adhere to best practices.
+
+### Manifest.json
+
+The easiest item I spot on the list is to create a _manifest.json_ file. If you're not familiar with this practice, you can read more about it here. In short, it provides the browser with information about your site it'll use when users save it to their home screens on various devices. Let's create one now.
+
+_optimized/manifest.json:_
+
+```json
+{
+  "short_name": "perf-zone",
+  "name": "Performance Zone",
+  "icons": [
+    {
+      "src": "/assets/site-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/site-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "display": "standalone",
+  "theme_color": "#000000"
+}
+```
+
+Being JSON, many of the properties are self-documenting.
+
+In order for the browser to know about this file, I include a reference in my _index.html_ file template:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sample site" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Vanilla Site</title>
+    <link rel="stylesheet" href="./src/common/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Playfair+Display:900"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  </head>
+  <body>
+    <v-app></v-app>
+    <noscript
+      >If you don't allow JavaScript, you're going to have a bad time
+      here!</noscript
+    >
+  </body>
+</html>
+```
+
+I also threw in a noscript tag to appease the browser's fallback content request.
+
+Next, I installed `copy-webpack-plugin` and created some icons and a simple _robots.txt_ file so that my new config files make their way into my build directory when I'm ready to deploy:
+
+```javascript
+// ...webpack config...
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: './manifest.json',
+      },
+      { from: './robots.txt' },
+      {
+        from: './favicon.ico',
+      },
+      {
+        from: './assets/*',
+        to: './',
+      },
+    ]),
+  ],
+  // ...webpack config...
+```
+
+Now with fallback content, _manifest.json_, and a _robots.txt_ served up, it's time to tackle the real culprit of this section: the _service worker_.
+
+### Service Worker
 
 ### HTTP2/PUSH
 
 ### DEBATE ON NO. OF REQUESTS VS. SIZE
-
-### Service Worker
 
 ### Wrapping Up
 
