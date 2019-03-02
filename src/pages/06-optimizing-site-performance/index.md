@@ -482,10 +482,10 @@ The only thing stopping the site from being ready is a simple redirect rule that
 ./optimized/src/static/\_redirects:
 
 ```
-/*       /index.html
+/*    /index.html   200
 ```
 
-To deploy the site, I just simply build the project again and navigate to the _/dist_ directory. Then it's as simple as running:
+To deploy the site, I build the project again and navigate to the _/dist_ directory. Then I deploy from the CLI by running:
 
 ```bash
 netlify deploy --production
@@ -509,3 +509,5 @@ Although we touched on quite a few options in this article, there are still plen
 - tree shaking example
 - advanced service worker, cache busting article
 - http2 info, simple server setup
+
+As always, thanks for reading.
