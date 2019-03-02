@@ -1,6 +1,6 @@
 ---
 title: 'How Websites Happen, Part Two: Optimizing Performance'
-date: '2019-02-25'
+date: '2019-02-27'
 ---
 
 <div id="img-container">
@@ -8,13 +8,13 @@ date: '2019-02-25'
 <div class="src-container"><span class="source">Photo by Denisse Leon on Unsplash</span></div>
 </div>
 
-In the <a href="/05-treading-critical-rendering" target="_blank">previous post</a>, I walked through the details of the critical rendering path. It explained the process an HTML file goes through from being received by the browser to its visualization on the page.
+In the <a href="/05-treading-critical-rendering" target="_blank">previous post</a>, I walked through the details of the critical rendering path. It explained how an HTML file goes from arrival at the browser to its visualization on the page.
 
 For the second half of the topic, I'll focus on a few ways developers can reduce the time and cost associated with these steps, making for a more performant, enjoyable user experience as a result.
 
 To better illustrate the ideas, I've prepared a simple app in ([mostly](#lit-section))\* vanilla JavaScript.
 
-You can see the demo app <a href="https://vanilla-site-dzmkgredfp.now.sh/page-one" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here for the performance tips.
+You can see the demo app <a href="https://vanilla-spa.netlify.com" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here for the performance tips.
 
 ### Exploring the Site
 
@@ -116,7 +116,6 @@ class VApp extends Base {
     this.htmlToRender = html`
       ${unsafeHTML(pageTag)}
     `
-    history.pushState({}, page, page.split('v-')[1])
     this.updateTpl()
   }
 
@@ -330,6 +329,8 @@ Let's check the dev tools again to see our progress:
 
 Cutting the content delivered down by ~56% (to 34.9 KB) is quite an achievement, but we can still do better. To gain a little more insight, let's head over to another section of the dev tools: the <strong>Audits</strong> tab.
 
+### DEBATE ON NO. OF REQUESTS VS. SIZE
+
 ### Auditing Performance
 
 When we run an audit on the site, we see a lot of stellar scores with a glaring outlier:
@@ -358,12 +359,12 @@ _optimized/manifest.json:_
   "name": "Performance Zone",
   "icons": [
     {
-      "src": "/assets/site-icon.png",
+      "src": "/icons/site-icon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/assets/site-icon-512.png",
+      "src": "/icons/site-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -390,7 +391,6 @@ In order for the browser to know about this file, I include a reference in my _i
     <link rel="manifest" href="/manifest.json" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Vanilla Site</title>
-    <link rel="stylesheet" href="./src/common/styles.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Playfair+Display:900"
       rel="stylesheet"
@@ -416,14 +416,7 @@ Next, I installed `copy-webpack-plugin` and created some icons and a simple _rob
   plugins: [
     new CopyWebpackPlugin([
       {
-        from: './manifest.json',
-      },
-      { from: './robots.txt' },
-      {
-        from: './favicon.ico',
-      },
-      {
-        from: './assets/*',
+        from: './static',
         to: './',
       },
     ]),
@@ -431,13 +424,80 @@ Next, I installed `copy-webpack-plugin` and created some icons and a simple _rob
   // ...webpack config...
 ```
 
-Now with fallback content, _manifest.json_, and a _robots.txt_ served up, it's time to tackle the real culprit of this section: the _service worker_.
+Now with fallback content, _manifest.json_, and a _robots.txt_ served, it's time to tackle the real culprit of this section: the _service worker_.
 
 ### Service Worker
 
-### HTTP2/PUSH
+_explain service worker_
 
-### DEBATE ON NO. OF REQUESTS VS. SIZE
+_./optimized/src/static/sw.js:_
+
+```javascript
+self.addEventListener('install', function(e) {
+  e.waitUntil(
+    caches.open('perf-zone').then(function(cache) {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/app.bundle.js',
+        'vendor.bundle.js',
+      ])
+    })
+  )
+})
+
+self.addEventListener('fetch', function(e) {
+  e.respondWith(
+    caches.match(e.request).then(function(res) {
+      return res || fetch(e.request)
+    })
+  )
+})
+```
+
+_explain caching_
+
+Then, I reference the newly created service worker in my _index.html_ file.
+
+_./optimized/index.html:_
+
+```html
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(function() {
+      console.log('Service Worker Registered')
+    })
+  }
+</script>
+```
+
+With my service worker written and the file referenced in the project's root file, I'm ready to deploy this site and see the results.
+
+For a simple, reliable deployment for a static site with easy /index.html fallback policies for our static routes, we're going to use Netlify.
+
+_Note: If you're following along, you'll want to create an account on Netlify's site and install their cli tools from npm before continuing._
+
+The only thing stopping the site from being ready is a simple redirect rule that lets Netlify know how to handle our static routes. To accomplish this, we'll write a quick config file that'll live in our static directory that copies into our build:
+
+./optimized/src/static/\_redirects:
+
+```
+/*       /index.html
+```
+
+To deploy the site, I just simply build the project again and navigate to the _/dist_ directory. Then it's as simple as running:
+
+```bash
+netlify deploy --production
+```
+
+It'll ask for the path, which defaults to the current directory. It then prints the url for the app in the terminal.
+
+Once we navigate to the site and run the audit one last time, we see the results we've been ever-so patiently waiting for:
+
+<div id="img-container">
+<img id="perf-complete-img" src="./images/perf-score-best.png">
+</div>
 
 ### Wrapping Up
 
