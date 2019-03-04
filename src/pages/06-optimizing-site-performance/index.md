@@ -14,13 +14,13 @@ For the second half of the topic, I'll focus on a few ways developers can reduce
 
 To better illustrate the ideas, I've prepared a simple app in ([mostly](#lit-section))\* vanilla JavaScript.
 
-You can see the demo app <a href="https://vanilla-spa.netlify.com" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you're here for the performance tips.
+You can see the demo app <a href="https://vanilla-spa.netlify.com" target="_blank">here</a>, or <a href="https://github.com/alephnode/vanilla-spa" target="_blank">view/clone the source on GitHub</a> and [skip the next section](#module-bundler) if you don't care to read details about the example site.
 
 ### Exploring the Site
 
-The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this project provides two examples: one basic site and one optimized. Because the project is relatively straightforward (mostly Web Component declarations), I'll only walk through the core modules before explaining the optimization steps.
+The <a href="https://github.com/alephnode/vanilla-spa" target="_blank">repository</a> for this project provides two examples: one basic site and one optimized. Because the project is relatively straightforward (mostly Web Component declarations), I'll walk through only the core modules before explaining the optimization steps.
 
-The first module we'll look at is the base class from which all components, pages, and core app logic is derived.
+The first module of focus is the base class from which all components, pages, and core app logic is derived.
 
 _./basic/src/base/index.js:_
 
@@ -72,7 +72,7 @@ class Base extends HTMLElement {
 export default Base
 ```
 
-If you're familiar with Web Components, much of the above should look familiar. If not, I'm effectively writing a few semantic wrappers for the lifecycle methods extended from HTMLElement. <div id="lit-section">\* I also pull in the only dependency in the project, _lit-html_, to render content to the page.</div>
+If you're familiar with Web Components, much of the above should look familiar. If not, I'm writing a few semantic wrapper functions for the lifecycle methods extended from HTMLElement. <div id="lit-section">\* I also pull in the only dependency in the project, _lit-html_, to render content to the page.</div>
 
 If you haven't checked it out yet, <a href="https://lit-html.polymer-project.org/" target="_blank">_lit-html_</a> is a lightweight, intuitive library from the Polymer team that makes templating a breeze. It also just hit its first stable release, so it's worth taking a look.
 
@@ -158,15 +158,17 @@ export default (txt, className) => {
 }
 ```
 
-Although it's exciting to build apps almost entirely in JavaScript with Web Components, it _does_ come with some performance costs. A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
+After fleshing out a few more components and examining the project in the browser, it's noticeable that this small site with a few pages comes with some performance costs.
+
+A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/site-basic.png">
 </div>
 
-As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests from the browser and almost 63 KB sent from the server.
+As you can see (click the image to expand if needed), simply loading the page in the browser resulted in almost 40 resource requests and about 63 KB sent from the server.
 
-While the size isn't exactly massive, it's also just a simple app with hardly any content. Adding more images, API calls, and boilerplate pages would easily double or triple this number.
+While the size isn't _massive_, it's also just a simple app with hardly any content. Adding more images, API calls, and boilerplate pages would easily double or triple this number.
 
 Upon closer inspection, we can see that many of the file references are my Web Component declarations--many of which aren't even used on the first page. No good!
 
@@ -200,7 +202,7 @@ yarn add webpack webpack-dev-server html-webpack-plugin
 
 To be clear, _webpack-dev-server_ is what we'll use to help preview our app during development, and _html-webpack-plugin_ enables the script injection described earlier.
 
-Now that we have the dependencies installedA, let's create a simple Webpack config in the project's root.
+Now that we have the dependencies installed, let's create a simple Webpack config in the project's root.
 
 _./optimized/webpack.config.js:_
 
@@ -329,8 +331,6 @@ Let's check the dev tools again to see our progress:
 
 Cutting the content delivered down by ~56% (to 34.9 KB) is quite an achievement, but we can still do better. To gain a little more insight, let's head over to another section of the dev tools: the <strong>Audits</strong> tab.
 
-### DEBATE ON NO. OF REQUESTS VS. SIZE
-
 ### Auditing Performance
 
 When we run an audit on the site, we see a lot of stellar scores with a glaring outlier:
@@ -349,9 +349,11 @@ The section in question, _Progressive Web App_, measures how gracefully the site
 
 ### Manifest.json
 
-The easiest item I spot on the list is to create a _manifest.json_ file. If you're not familiar with this practice, you can read more about it here. In short, it provides the browser with information about your site it'll use when users save it to their home screens on various devices. Let's create one now.
+The easiest task I spot on the list is creating a _manifest.json_ file. If you're not sure why this file is useful, you can read more about it <a href="https://developers.google.com/web/fundamentals/web-app-manifest/" target="_blank">here</a>.
 
-_optimized/manifest.json:_
+In short, it provides the browser with information about your page to supply to users when saving the site to their devices. Let's create one now.
+
+_./optimized/manifest.json:_
 
 ```json
 {
@@ -376,7 +378,11 @@ _optimized/manifest.json:_
 }
 ```
 
-Being JSON, many of the properties are self-documenting.
+Being JSON, many of the properties are self-documenting. You set a few name variables, identify icons and theming to use for the app, and fill in a few other configs.
+
+One important property to set is "start_url". It's the page the browser will direct users to when they launch your app, and is important to sync with our service worker in the next section.
+
+The "standalone" setting on the "display" property will launch the site without an address bar/tooling so it looks and feels like a native app.
 
 In order for the browser to know about this file, I include a reference in my _index.html_ file template:
 
@@ -409,7 +415,7 @@ In order for the browser to know about this file, I include a reference in my _i
 
 I also threw in a noscript tag to appease the browser's fallback content request.
 
-Next, I installed `copy-webpack-plugin` and created some icons and a simple _robots.txt_ file so that my new config files make their way into my build directory when I'm ready to deploy:
+Next, I installed `copy-webpack-plugin` and created some icons and a simple _robots.txt_ file so my new config files make their way into my build directory when I'm ready to deploy:
 
 ```javascript
 // ...webpack config...
@@ -424,7 +430,7 @@ Next, I installed `copy-webpack-plugin` and created some icons and a simple _rob
   // ...webpack config...
 ```
 
-Now with fallback content, _manifest.json_, and a _robots.txt_ served, it's time to tackle the real culprit of this section: the _service worker_.
+Now with fallback content, _manifest.json_, and a _robots.txt_ served, it's time to tackle the real culprit of the poor grade: the _service worker_.
 
 ### Service Worker
 
@@ -471,13 +477,13 @@ _./optimized/index.html:_
 </script>
 ```
 
-With my service worker written and the file referenced in the project's root file, I'm ready to deploy this site and see the results.
+With my service worker written and the file referenced in _index.html_, I'm ready to deploy this site and see the results.
 
-For a simple, reliable deployment for a static site with easy /index.html fallback policies for our static routes, we're going to use Netlify.
+For a simple, reliable SPA deployment with easy /index.html fallback policies for our static routes, we're going to use <a href="https://www.netlify.com/" target="_blank">Netlify</a>.
 
-_Note: If you're following along, you'll want to create an account on Netlify's site and install their cli tools from npm before continuing._
+_Note: If you're following along, you'll want to_ <a href="https://app.netlify.com/signup" target="_blank">_create an account_</a> _on Netlify's site and_ <a href="https://www.netlify.com/docs/cli/" target="_blank">_install their cli tools_</a> _before continuing._
 
-The only thing stopping the site from being ready is a simple redirect rule that lets Netlify know how to handle our static routes. To accomplish this, we'll write a quick config file that'll live in our static directory that copies into our build:
+The only thing stopping the site from being ready is a simple redirect rule that lets Netlify know how to handle our static routes. To accomplish this, we'll write a quick config file that'll live in our static directory that gets copied into our build:
 
 ./optimized/src/static/\_redirects:
 
@@ -499,11 +505,15 @@ Once we navigate to the site and run the audit one last time, we see the results
 <img id="perf-complete-img" src="./images/perf-score-best.png">
 </div>
 
+We did it 🎉!
+
 ### Wrapping Up
 
-With a few modifications to our original project, we were able to increase the page load time by a factor of XX. Thanks to the minification, bundling, and code splitting capabilities of Webpack--paired with a service worker with sensible configs--we can ship a JavaScript-powered web app without the bloat plaguing so many projects in the space.
+With a few modifications to our original project, we were able to decrease the page load time, optimize our caching strategy and handle offline requests.
 
-Although we touched on quite a few options in this article, there are still plenty of ways to push the performance envelope even further. Below are a few articles that go into more detail, as well as offer additional performance tweaks:
+Thanks to the minification, bundling, and code splitting capabilities of Webpack--paired with a service worker with sensible configs--we can ship a JavaScript-powered web app without the bloat plaguing so many projects in the space.
+
+Although we touched on several options in this article, there are still plenty of ways to push the performance envelope even further. Below are a few articles that go into more detail, as well as offer additional performance tweaks:
 
 - cookie expiration article
 - tree shaking example
