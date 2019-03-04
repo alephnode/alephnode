@@ -380,7 +380,7 @@ _./optimized/manifest.json:_
 
 Being JSON, many of the properties are self-documenting. You set a few name variables, identify icons and theming to use for the app, and fill in a few other configs.
 
-One important property to set is "start_url". It's the page the browser will direct users to when they launch your app, and is important to sync with our service worker in the next section.
+One important property to set is "start_url". It's the page the browser will direct users to when they launch your app.
 
 The "standalone" setting on the "display" property will launch the site without an address bar/tooling so it looks and feels like a native app.
 
@@ -434,7 +434,9 @@ Now with fallback content, _manifest.json_, and a _robots.txt_ served, it's time
 
 ### Service Worker
 
-_explain service worker_
+Service workers are scripts that run in the background of your application, separate from the app logic used for the site itself. This is useful for features such as caching, push notifications, and offline asset delivery. For more information, Google has published a <a href="https://developers.google.com/web/fundamentals/primers/service-workers/" target="_blank">thorough overview</a>.
+
+For our purposes, we'll implement a basic example that gives us the features Google requires to pass its audit.
 
 _./optimized/src/static/sw.js:_
 
@@ -461,9 +463,13 @@ self.addEventListener('fetch', function(e) {
 })
 ```
 
-_explain caching_
+The service worker created consists of two event listeners. The first creates a new cache and adds our important resources (the index file as well as our app and vendor bundles).
 
-Then, I reference the newly created service worker in my _index.html_ file.
+Next, we listen for fetch events and intercept them with the corresponding logic. If the content exists in the cache, serve it, otherwise continue the fetch request.
+
+This is how we're able to still serve the site even if the user is offline; they're pulling the necessary resources from their device rather than a network request.
+
+After the file is created, I reference it in _index.html_.
 
 _./optimized/index.html:_
 
@@ -477,9 +483,11 @@ _./optimized/index.html:_
 </script>
 ```
 
+After a simple check for browser compatibility, we register the service worker and print a message to the console confirming its success.
+
 With my service worker written and the file referenced in _index.html_, I'm ready to deploy this site and see the results.
 
-For a simple, reliable SPA deployment with easy /index.html fallback policies for our static routes, we're going to use <a href="https://www.netlify.com/" target="_blank">Netlify</a>.
+For a simple, reliable SPA deployment with easy /index.html fallback policies for our static routes, we're going to use <a href="https://www.netlify.com/" target="_blank">Netlify</a>. It also gives us https out of the box, which we'll need to implement our service worker.
 
 _Note: If you're following along, you'll want to_ <a href="https://app.netlify.com/signup" target="_blank">_create an account_</a> _on Netlify's site and_ <a href="https://www.netlify.com/docs/cli/" target="_blank">_install their cli tools_</a> _before continuing._
 
@@ -507,6 +515,26 @@ Once we navigate to the site and run the audit one last time, we see the results
 
 We did it 🎉!
 
+### A Note on Service Workers
+
+Keep in mind that service workers have their drawbacks, namely in cache busting. For this reason, it's common practice to add a hash value to your resources to easily deregister outdated files.
+
+In Webpack, this is as easy as adding the [hash] keyword to your bundle names in the output section.
+
+Ex:
+
+```javascript
+// ...
+  output: {
+    filename: '[name].[hash].bundle.js',
+    chunkFilename: '[name].[hash].bundle.js',
+    path: resolve(__dirname, 'dist'),
+  },
+// ...
+```
+
+Then, to help automate the process of service worker configuration, I would recommend the <a href="https://github.com/goldhand/sw-precache-webpack-plugin" target="_blank">SW Precache Webpack Plugin</a> (thorough documentation provided in their linked GitHub page).
+
 ### Wrapping Up
 
 With a few modifications to our original project, we were able to decrease the page load time, optimize our caching strategy and handle offline requests.
@@ -515,9 +543,8 @@ Thanks to the minification, bundling, and code splitting capabilities of Webpack
 
 Although we touched on several options in this article, there are still plenty of ways to push the performance envelope even further. Below are a few articles that go into more detail, as well as offer additional performance tweaks:
 
-- cookie expiration article
-- tree shaking example
-- advanced service worker, cache busting article
-- http2 info, simple server setup
+- <a href="https://webpack.js.org/guides/tree-shaking/" target="_blank">Webpack tree shaking example</a>
+- <a href="https://developers.google.com/web/showcase/2015/service-workers-iowa" target="_blank">advanced service worker, cache busting</a>
+- <a href="https://http2.github.io/" target="_blank">HTTP2 info, simple server setup</a>
 
 As always, thanks for reading.
