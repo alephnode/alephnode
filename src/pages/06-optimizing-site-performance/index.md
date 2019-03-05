@@ -160,7 +160,7 @@ export default (txt, className) => {
 
 After fleshing out a few more components and examining the project in the browser, it's noticeable that this small site with a few pages comes with some performance costs.
 
-A closer look at the "network" tab in Chrome's developer tools offers insight into this idea:
+A closer look at the "network" tab in Chrome's DevTools offers insight into this idea:
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/site-basic.png">
@@ -178,9 +178,9 @@ In order to get this app in better shape, let's take a look at a few of the opti
 
 Before delving deep into config options and code tweaks, it's worth mentioning that unchecked images are often the cause of bulky page sizes.
 
-The easiest way to reduce image size is to run them through a compression tool. There are a few different options online, but I enjoy <A href="https://compressor.io/" target="_blank">Compressor IO </a> for my optimization needs.
+The easiest way to reduce image size is to compress them. There are a few different options online, but I enjoy <A href="https://compressor.io/" target="_blank">Compressor IO </a> for my optimization needs.
 
-It's also beneficial to prefer JPEG over PNG assets for photos and other complex images. This is because of the compression algorithm JPEG uses, lossy, which removes pixel data (unlike PNG, which is lossless).
+It's also beneficial to prefer JPEG over PNG assets for photos and other complex images. This is because of the compression algorithm JPEG uses, lossy, which removes pixel data that's redundant to save memory (unlike PNG, which is lossless and preserves pixel data).
 
 Once you've made a pass through the assets referenced on your page, it's time to look at code-side optimizations worth making.
 
@@ -238,7 +238,7 @@ _Note that the Webpack file syntax uses CommonJS (all those require's at the top
 
 Looking deeper at the config above, we identify the entry point of our application, or _app.js_ as we linked in our _index.html_ previously, and define a location and file name for the eventual bundled output (app.bundle.js, in this case).
 
-We also add a few configs for the dev server, specifically where to find our root HTML file, as well as the option to use _historyApiFallback_ for redirecting to our _index.html_ file on page refresh. Otherwise, the browser will request the HTML file from the server at the wrong location, and our users will get an ugly 404 error 😳.
+We also add a few configs for the dev server, specifically where to find our root HTML file, as well as the option to use _historyApiFallback_ for redirecting to our _index.html_ file on page refresh. Otherwise, the browser will request the HTML file from the server at the wrong location, and we'll get an ugly 404 error 😳.
 
 Finally, the _HTMLWebpackPlugin_ allows us to customize the _index.html_ file created during the build by pointing to a template.
 
@@ -323,13 +323,36 @@ First, we remove the two page component references in _app.js_. Then, we use asy
 
 Now, our page modules will only be requested from the browser when we navigate to their corresponding page.
 
-Let's check the dev tools again to see our progress:
+Another useful split we can make is at the bundle level. Rather than having to update our app whenever a dependency reaches a new version, we can separate the packages in our node*modules directory into their own bundle that's referenced in \_index.html*. To do this, we add the following to our Webpack config:
+
+_./optimized/webpack.config.js:_
+
+```javascript
+// ... webpack configs ...
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        default: false,
+        vendors: false,
+        vendor: {
+          name: 'vendor',
+          chunks: 'all',
+          test: /node_modules/,
+          priority: 20,
+        },
+      },
+    },
+  },
+  // ... webpack configs ...
+```
+
+With a few areas of our code split out, et's check DevTools again to see our progress:
 
 <div id="img-container">
 <img id="knowledge-img" src="./images/webpack-codesplit.png">
 </div>
 
-Cutting the content delivered down by ~56% (to 34.9 KB) is quite an achievement, but we can still do better. To gain a little more insight, let's head over to another section of the dev tools: the <strong>Audits</strong> tab.
+Cutting the content delivered down by ~56% (to 34.9 KB) from the original size is quite an achievement, but we can still do better. To gain a little more insight, let's head over to another section of Chrome's DevTools: the <strong>Audits</strong> tab.
 
 ### Auditing Performance
 

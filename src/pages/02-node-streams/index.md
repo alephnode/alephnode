@@ -3,6 +3,11 @@ title: The Tranquility of Streams in Node
 date: '2019-01-02'
 ---
 
+<div id="img-container">
+<img id="streams-img" src="./images/streams-article.jpg">
+<div class="src-container"><span class="source">Photo by Karim Sakhibgareev on Unsplash</span></div>
+</div>
+
 It's common for me to make changes to a dataset before using it elsewhere.
 
 One example would be generating reports from log files for internal dashboards and tooling. To keep the hypothetical scenario simple, let's say I just need to convert a UNIX timestamp into a human-readable date and pass it via API. Because log files are usually quite large, Node's core streams module will prove useful.
