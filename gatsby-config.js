@@ -77,5 +77,6 @@ module.exports = {
           'https://alephnode.us20.list-manage.com/subscribe/post?u=6d2b32469f6b52f1d542b9dce&amp;id=269b5c1b1d',
       },
     },
+    'gatsby-plugin-twitter',
   ],
 }

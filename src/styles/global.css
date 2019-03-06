@@ -41,6 +41,10 @@ body.dark #newsletter {
   margin: 2rem auto 2.5rem -1rem;
 }
 
+#twitter-widget-0 {
+  margin: 2rem auto !important;
+}
+
 .gatsby-highlight {
   margin-bottom: 2rem;
 }
