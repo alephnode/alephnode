@@ -96,3 +96,13 @@ To solve this problem, we have the two options summarized above: using _.bind(th
 We've seen examples where both options offer the expected result. So which should you use?
 
 The truth is: the question is misguided. What _matters_ is that you understand why you're binding at all, which problem it's solving, alternative approaches, and how the decision impacts performance.
+
+### Further Resources
+
+If you'd like to read more into lexical _this_ via arrow functions or using _.bind(this)_, the following are a few helpful resources:
+
+- Kyle Simpson (tweet author from above) and his excellent 'You Don't Know JS' Series, specifically <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/this%20&%20object%20prototypes/README.md#you-dont-know-js-this--object-prototypes" target="_blank">'_this_ & Object Prototypes'</a>
+- <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank">Mozilla Docs for .bind()</a>
+- <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">Arrow Functions in Class Properties Might Not Be As Great As We Think</a> (highlights how this topic comes up in React components)
+
+As always, thanks for reading!
