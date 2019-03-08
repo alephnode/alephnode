@@ -8,15 +8,17 @@ date: '2019-03-06'
 <div class="src-container"><span class="source">Photo by Stephen Hickman on Unsplash</span></div>
 </div>
 
-A conversation erupted on Twitter the other day that related directly to what I'd been investigating for work: how best to initialize and destroy event handlers in class methods.
+I spent hours digging into the details of event handlers this week, namely how best to initialize and destroy them within class methods.
+
+In the process, a conversation erupted on Twitter related to my problem.
 
 The tweet that started it all:
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">So... you need a &quot;hard this-bound&quot; method to pass in, like:<br><br>  btn.addEventListener(&quot;click&quot;,x.someMethod.bind(x));<br><br>Or... you can define an arrow function wrapper:<br><br>  btn.addEventListneer(&quot;click&quot;,() =&gt; x.someMethod());</p>&mdash; getify (@getify) <a href="https://twitter.com/getify/status/1102606261462413312?ref_src=twsrc%5Etfw">March 4, 2019</a></blockquote>
 
-The entire thread is worth reading (you can read it by clicking the tweet above). In short, the two main options for binding class methods are:
+The entire thread is worth reading (you can read it by clicking the tweet above). In short, it describes the two common techniques for hard-binding class methods, and the issues that arise as a result.
 
-_manually binding a class method_:
+_Option 1: using .bind(this)_:
 
 ```javascript
 class Bar extends Foo {
@@ -34,7 +36,7 @@ class Bar extends Foo {
 }
 ```
 
-_lexical 'this' binding with arrow function_:
+_Option 2: using an arrow function_:
 
 ```javascript
 class Baz extends Foo {
@@ -49,23 +51,27 @@ class Baz extends Foo {
 }
 ```
 
-All this chatter begs the question: Why is this necessary? Did the creators of JS miss something? The answer, like everything in development, is complicated.
+All this chatter begs the question: Why is binding necessary anyway? Did the creators of JavaScript miss something?
 
-### Why is this Necessary?
+The answer, like everything in development, is complicated.
 
-Before going into the details of the two options presented above, it's important to emphasize why this problem exists.
+### Why is _this_ Necessary?
 
-At the root of the issue is the question of what _this_ actually refers to. Per the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank">MDN documentation</a>: the _this_ keyword refers to the context object in which the current code is executed.
+At the root of the issue is the question of what _this_ actually refers to in JavaScript.
 
-If it's being referenced by itself, like so:
+Per the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank">MDN documentation</a>:
+
+_the 'this' keyword refers to the context object in which the current code is executed._
+
+Let's dig deeper with an example. If _this_ is being referenced outside of an object, like so:
 
 ```javascript
 console.log(this)
 ```
 
-... you'll either get _window_ or _undefined_, depending on whether you're running in strict mode (_undefined_ is strict).
+... it'll be equal to either _window_ or _undefined_, depending on whether you're running in strict mode (_undefined_ in strict mode).
 
-But what's this about a context object? To demonstrate, here's a simple example of predictable _this_ usage in a class:
+The value of _this_ changes when it's referenced within a context object. To demonstrate, here's a simple example of _this_ use in a class:
 
 ```javascript
 class Dog {
@@ -78,9 +84,9 @@ let puppy = new Dog()
 puppy.bark() // woof
 ```
 
-As expected, the _this_ keyword refers to the _sound_ field on the class instance.
+In this example, _this_ refers to the _sound_ field on the class instance, or puppy.
 
-But, in our offensively contrived example, what if we wanted our puppy to bark whenever someone knocked on the door?
+But what if, in our offensively contrived example, we wanted our puppy to bark whenever someone knocked on the door?
 
 ```javascript
 let door = document.createElement('p')
@@ -93,34 +99,96 @@ door.addEventListener('knock', puppy.bark)
 door.dispatchEvent(new CustomEvent('knock'), {}) // undefined
 ```
 
-Without binding, we no longer have a context object. When we pass the function to the event listener method, its context was lost 😱.
+Now, when we pass our class method to the event handler, its context was lost 😱.
 
-This is because the _addEventListener_ method accepts the function as its listener and executes it on its own terms, in the global object implementing the Web API.
+This is because the _addEventListener_ method accepts the function as its callback and executes it on its own terms, in the global object implementing the Web API.
+
+Which brings us back to the techniques mentioned earlier for resolving this issue.
 
 ### Two Solutions, in Detail
 
-To solve this problem, we have the two options summarized above: using _.bind(this)_ or an arrow function.
+To solve this problem, we have two options: using _.bind(this)_ or an arrow function.
 
---- explain what .bind() does ---
+_Option One: .bind(this):_
 
-With the release of ESXXX in XX, retaining context in class methods became much easier with the use of <strong>arrow functions</strong>. This is because arrow functions have no _this_ bound to them, so the value is derived from the enclosing execution context of the function.
+```javascript
+class Dog {
+  sound = 'woof'
+  boundBark = this.bark.bind(this)
+  bark() {
+    console.log(this.sound)
+  }
+}
+
+let puppy = new Dog()
+let door = document.createElement('p')
+let content = document.createTextNode('🚪')
+door.appendChild(content)
+document.body.appendChild(door)
+
+door.addEventListener('knock', puppy.boundBark)
+
+door.dispatchEvent(new CustomEvent('knock'), {}) // 'woof'
+```
+
+With our bound function passed, we hear our familiar sound again.
+
+To explain how this works, we once again return to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank">the MDN documentation</a>:
+
+_The .bind() method creates a new function that, when called, has its this keyword set to the provided value._
+
+When we bound our _this_ to the bark method and passed it to the event handler, it was guaranteeing that we'd still be referring to _Dog_ when the method was called later.
+
+_Option Two: arrow function:_
+
+```javascript
+class Dog {
+  sound = 'woof'
+  boundBark = () => this.bark()
+  bark() {
+    console.log(this.sound)
+  }
+}
+
+let puppy = new Dog()
+let door = document.createElement('p')
+let content = document.createTextNode('🚪')
+door.appendChild(content)
+document.body.appendChild(door)
+
+door.addEventListener('knock', puppy.boundBark)
+
+door.dispatchEvent(new CustomEvent('knock'), {}) // 'woof'
+```
+
+With the advent of arrow functions, retaining context in class methods became much easier. Because the functions have no _this_ context, the value is derived from the enclosing execution context, which is our _Dog_ class.
+
+Now that we have two techniques for solving this problem, it's time to pick one to implement.
 
 ### Which Should I Use?
 
-We've seen examples where both options offer the expected result. So which should you use?
+For some, the question is a matter of preference.
 
-The truth is: the question is a matter of preference. _Sorry, total non-answer_
+What _matters_, they argue, is that you understand why you're binding at all, which problem it's solving, and the alternative approaches to weigh among your team.
 
-What _matters_ is that you understand why you're binding at all, which problem it's solving, and the alternative approaches to weight among your team.
+Then again, there's <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">a growing sense</a> that arrow functions have their drawbacks.
 
-Then again, there's a growing sense that arrow functions have their drawbacks.
+The main arguments against arrow functions for binding equate to:
+
+_Reason No. 1:_ because they're just anonymous function expressions, they're technically _properties_ on the class instance, meaning they're not added to the class prototype. They also can't make use of _super_.
+
+_Reason No. 2:_ because the function is not a part of the object prototype, it's mockability is compromised and changes won't be detected.
+
+_Reason No. 3:_ historically, arrow functions had a <a href="https://jsperf.com/arrow-function-vs-bind-vs-context-argument/6" target="_blannk">greater performance cost</a>.
+
+Although there's still overhead associated with creating separate dedicated 'bound' functions, I ultimately chose to explicitly _.bind()_ my class methods.
 
 ### Further Resources
 
-If you'd like to read more into lexical _this_ via arrow functions or using _.bind(this)_, the following are a few helpful resources:
+If you'd like to read more into _this_ and arrow functions or using _.bind(this)_, the following resources might be helpful:
 
 - Kyle Simpson (tweet author from above) and his excellent 'You Don't Know JS' Series, specifically <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/this%20&%20object%20prototypes/README.md#you-dont-know-js-this--object-prototypes" target="_blank">'_this_ & Object Prototypes'</a>
 - <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank">Mozilla Docs for .bind()</a>
-- <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">Arrow Functions in Class Properties Might Not Be As Great As We Think</a>
+- <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank">Mozilla Docs for _this_</a>
 
 As always, thanks for reading!

@@ -58,7 +58,7 @@ With the DOM constructed and styles identified, all JavaScript logic is executed
 
 As more applications and services move toward web-first delivery, developers are increasingly relying on JavaScript to handle the brunt of the app logic. As such, this is the section that often causes the most bottleneck and is the main area to target when looking to optimize content delivery.
 
-While the second part of this post will detail specifics on how to optimize site performance, it's worth mentioning that several excellent strategies have risen in recent years that profoundly expand the possibilities of what can be done over the web, including code splitting, service workers, tree shaking, and other powerful features.
+While the <a href="/06-optimizing-site-performance">second part of this post</a> details specifics on how to optimize site performance, it's worth mentioning that several excellent strategies have risen in recent years that profoundly expand the possibilities of what can be done over the web, including code splitting, service workers, tree shaking, and other powerful features.
 
 ### Step Three: Scaling the Render Tree
 
@@ -85,8 +85,6 @@ If you've ever noticed the boxy visualization at the bottom-right section of the
 
 After all the hard work mentioned in previous sections is finished, it's finally time for the most straightforward process: converting the encoded information into pixels on the screen. In the last step, known as painting, the render tree and layout information are translated pixel by pixel into the content visible to the human eye.
 
-In the second part of this article, I'll provide a few examples of how different styles affect the efficiency of the painting process. _(Spoiler alert: 200 MB background images with gradient overlays take longer to paint than, say, a white background)_.
-
 ### The Finished Product
 
 To summarize, the five major steps the browser takes to present content are:
@@ -110,7 +108,7 @@ After all these steps are complete, the website is ready for your viewing pleasu
 
 Now that we better understand the process for delivering content on the web, it's worth focusing on opportunities for optimization and enhancement.
 
-In a follow-up post, I'll demonstrate a few best practices when building the modern web with a simple web application in vanilla JavaScript.
+In <a href="/06-optimizing-site-performance">a follow-up post</a>, I demonstrate a few best practices when building the modern web with a simple web application in vanilla JavaScript.
 
 For more helpful resources on the subject, check out the following links.
 
