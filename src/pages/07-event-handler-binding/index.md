@@ -21,7 +21,7 @@ The entire thread is worth reading (you can read it by clicking the tweet above)
 _Option 1: using .bind(this)_:
 
 ```javascript
-class Bar extends Foo {
+class Bar extends HTMLElement {
   constructor() {
     super()
     // here's the manual bind
@@ -39,7 +39,7 @@ class Bar extends Foo {
 _Option 2: using an arrow function_:
 
 ```javascript
-class Baz extends Foo {
+class Baz extends HTMLElement {
   constructor() {
     super()
     // here's the lexical bind
@@ -101,7 +101,7 @@ door.dispatchEvent(new CustomEvent('knock'), {}) // undefined
 
 Now, when we pass our class method to the event handler, its context was lost 😱.
 
-This is because the _addEventListener_ method accepts the function as its callback and executes it on its own terms, in the global object implementing the Web API.
+This is because the _addEventListener_ function accepts the method as its callback and executes it on its own terms, in the global object implementing the Web API. Said another way, we're really passing a _reference_ to the function, and the context changes because the call site is different.
 
 Which brings us back to the techniques mentioned earlier for resolving this issue.
 
@@ -185,17 +185,17 @@ Now that we have two techniques for solving this problem, it's time to pick one 
 
 ### Which Should I Use?
 
-For some, the question is a matter of preference.
+The truth is, the question is a matter of preference.
 
-What _matters_, they argue, is that you understand why you're binding at all, which problem it's solving, and the alternative approaches to weigh among your team.
+What _matters_ is that you understand why you're binding at all, which problem it's solving, and the alternative approaches to weigh among your team.
 
-Then again, there's <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">a growing sense</a> that arrow functions have their drawbacks.
+Then again, there's <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">a growing sense</a> that arrow functions as class methods have their drawbacks (namely because they're not methods at all, but rather converted to class properties).
 
-Regardless of whichever method you pick, neither option will include the bound function in the class instance's prototype. That means the functions are duplicated with each new instance created.
+Regardless of whichever method you pick, neither option will include the bound function in the class prototype. That means the functions are duplicated with each new instance created.
 
-As Kyle <a href="https://twitter.com/getify/status/1102606270102757376" target="_blank">concluded in his tweet thread</a>, hard-bounded functions are "fundamentally incompatible with a prototypal-class system". If possible, avoid referencing _this_ in methods added to event listeners.
+As Kyle <a href="https://twitter.com/getify/status/1102606270102757376" target="_blank">concluded in his tweet thread</a>, hard-bounded functions are "fundamentally incompatible with a prototypal-class system".
 
-Otherwise, understand that maintaining context for events comes with a cost, so do so thoughtfully.
+If possible, avoid referencing _this_ in methods added to event listeners. Otherwise, understand that maintaining context for events comes with a cost, so do so thoughtfully.
 
 ### Further Resources
 
