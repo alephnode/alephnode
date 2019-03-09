@@ -84,7 +84,7 @@ let puppy = new Dog()
 puppy.bark() // woof
 ```
 
-In this example, _this_ refers to the _sound_ field on the class instance, or puppy.
+In this example, _this_ refers to the class instance, puppy, and its sound property.
 
 But what if, in our offensively contrived example, we wanted our puppy to bark whenever someone knocked on the door?
 
@@ -163,6 +163,24 @@ door.dispatchEvent(new CustomEvent('knock'), {}) // 'woof'
 
 With the advent of arrow functions, retaining context in class methods became much easier. Because the functions have no _this_ context, the value is derived from the enclosing execution context, which is our _Dog_ class.
 
+### Why the boundBark Named Function?
+
+Some may be wondering why we wouldn't just perform the bind in the event listener itself, like so:
+
+```javascript
+// ...
+door.addEventListener('knock', puppy.bark.bind(this))
+// ...
+```
+
+Because the above is not a named function, _removeEventListener_ won't be able to properly match with its corresponding _addEventListener_ declaration, and you'll end up attaching multiple events without ever properly collecting your garbage (worst guest ever).
+
+In order for removeEventListener to destroy the events previously added, it requires:
+
+- the type,
+- the listener (need a name!), and
+- same capture/useCapture flag.
+
 Now that we have two techniques for solving this problem, it's time to pick one to implement.
 
 ### Which Should I Use?
@@ -173,15 +191,11 @@ What _matters_, they argue, is that you understand why you're binding at all, wh
 
 Then again, there's <a href="https://medium.com/@charpeni/arrow-functions-in-class-properties-might-not-be-as-great-as-we-think-3b3551c440b1" target="_blank">a growing sense</a> that arrow functions have their drawbacks.
 
-The main arguments against arrow functions for binding equate to:
+Regardless of whichever method you pick, neither option will include the bound function in the class instance's prototype. That means the functions are duplicated with each new instance created.
 
-_Reason No. 1:_ because they're just anonymous function expressions, they're technically _properties_ on the class instance, meaning they're not added to the class prototype. They also can't make use of _super_.
+As Kyle <a href="https://twitter.com/getify/status/1102606270102757376" target="_blank">concluded in his tweet thread</a>, hard-bounded functions are "fundamentally incompatible with a prototypal-class system". If possible, avoid referencing _this_ in methods added to event listeners.
 
-_Reason No. 2:_ because the function is not a part of the object prototype, it's mockability is compromised and changes won't be detected.
-
-_Reason No. 3:_ historically, arrow functions had a <a href="https://jsperf.com/arrow-function-vs-bind-vs-context-argument/6" target="_blannk">greater performance cost</a>.
-
-Although there's still overhead associated with creating separate dedicated 'bound' functions, I ultimately chose to explicitly _.bind()_ my class methods.
+Otherwise, understand that maintaining context for events comes with a cost, so do so thoughtfully.
 
 ### Further Resources
 
