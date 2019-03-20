@@ -1,6 +1,6 @@
 ---
-title: "Code Break: The Power of Benford's Law"
-date: '2019-03-14'
+title: "Visualizing Benford's Law with D3 and Observable"
+date: '2019-03-16'
 ---
 
 <div id="img-container">
@@ -8,19 +8,19 @@ date: '2019-03-14'
 <div class="src-container"><span class="source">Photo by Chris Liverani on Unsplash</span></div>
 </div>
 
-_Note: This is the first post in "Code Break", a series focusing on math rather than any programming language-specific topics._
+During my stint as a journalist, my interests floated toward data visualization and visual storytelling. To me, a dense, detailed graphic could convey information just as efficiently as a verbose write-up.
 
-I'll never forget sitting in my first required math course for computer science and listening in terror as the instructor went over concepts that were _supposed_ to be working knowledge before starting the class.
+Given that a recent goal was to experiment with creating graphics on the web, I naturally gravitated toward d3.js. It's been a popular visualization library for years and has loads of experience supporting other languages.
 
-Topics like matrices, trigonometric identities, and logarithmic functions flew over my head like a fighter jet. Coming from a background in journalism, I felt hopeless.
+It was through that library's documentation that I discovered Observable and was able to build out a few ideas in little time.
 
-You see, for me, math had always been about rote memorization and handling placeholders to predict outcomes. Although I disagree with the notion of "math people" in <a href="https://www.nytimes.com/2017/05/15/well/family/trying-to-add-up-girls-and-math.html" target="_blank">light of recent evidence</a>, topics outside of basic algebra didn't come naturally to me.
+### What is Observable?
 
-This prompted a few weeks of intensive <a href="https://www.mathisfun.com" target="_blank">MathisFun.com</a> and Khan Academy use (much love, <a href="https://twitter.com/sophiebits?lang=en" target="_blank">@sophiebits</a>) and Googling until I couldn't see straight.
+An Observable notebook is an application that lets you run snippets of contained JavaScript code in a series, similar to the popular Jupyter Notebook software from Python land.
 
-It was then that I discovered <a href="https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A" target="_blank">Numpherphile</a>, one of the most enriching channels to ever grace Youtube. If you haven't checked it out, you're playing yourself. The videos take complex topics and reduce them to digestable, engaging snippets.
+The documentation for the service does an excellent job introducing the concept with simple examples, so I'd recommend visiting the page for a more thorough introduction.
 
-While the entire catalog is worth binging, one video topic in particular has resonated with me for years: Benford's Law, or, how I learned to stop worrying and love the ... well-analyzed dataset 🧐.
+For now, I'm interested in experimenting with Observable through exploring one of my favorite topics in Math: Benford's Law.
 
 ### Some Backstory
 
@@ -36,8 +36,6 @@ About 75 years after the bell curve was published by Carl Friedrich Gauss, anoth
 - if newcomb found it, why tf is it named Benford?
 
 ### The Law
-
-- describe it -
 
 - example of its use -
 
