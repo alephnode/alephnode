@@ -10,7 +10,7 @@ date: '2019-03-16'
 
 During my stint as a journalist, my interests floated toward data visualization and visual storytelling. To me, a dense, detailed graphic could convey information just as efficiently as a verbose write-up.
 
-Given that a recent goal was to experiment with creating graphics on the web, I naturally gravitated toward d3.js. It's been a popular visualization library for years and has loads of experience supporting other languages.
+Given that a recent goal was to experiment with creating graphics on the web, I naturally gravitated toward <a href="https://d3js.org/" target="_blank">d3.js</a>. It's been a popular visualization library for years and has loads of experience supporting other languages.
 
 It was through that library's documentation that I discovered Observable and was able to build out a few ideas in little time.
 
@@ -42,3 +42,17 @@ About 75 years after the bell curve was published by Carl Friedrich Gauss, anoth
 ### Wrapping up
 
 - rosetta code or whatever (also learn the word masechtomy while you're there)
+
+uber dataset:
+
+https://movement.uber.com/explore/los_angeles/travel-times/charts?lang=en-US&si=1380&ti=&ag=censustracts&dt[tpb]=ALL_DAY&dt[wd;]=1,2,3,4,5,6,7&dt[dr][sd]=2018-01-01&dt[dr][ed]=2018-01-31&cd=&sa;=&sdn=&lat.=34.0522342&lng.=-118.2846849&z.=12
+
+grab first digit of number: parseInt((''+n)[0]);
+
+https://jsperf.com/get-second-digit (make own with first digit inspired by or just link to)
+
+algorithm in Observable:
+
+- load in dataset
+- convert the distance traveled row to first digit only
+- graph with it as a bar chart
