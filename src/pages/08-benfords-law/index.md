@@ -16,7 +16,9 @@ It was through that library's documentation that I discovered Observable and was
 
 ### What is Observable?
 
-An Observable notebook is an application that lets you run snippets of contained JavaScript code in a series, similar to the popular Jupyter Notebook software from Python land.
+An Observable notebook is an application that lets you run snippets of contained JavaScript code in a series, similar to the popular Jupyter Notebook software from the world of Python.
+
+What's more, JS also has its own data manipulation and analysis library, Zebras.js. If you've used the popular pandas library before, you'll find the API familiar. It's also written on top of Ramda, which means it was built with functional paradigms in mind.
 
 The documentation for the service does an excellent job introducing the concept with simple examples, so I'd recommend visiting the page for a more thorough introduction.
 
@@ -43,11 +45,13 @@ About 75 years after the bell curve was published by Carl Friedrich Gauss, anoth
 
 - rosetta code or whatever (also learn the word masechtomy while you're there)
 
-uber dataset:
+Top 5000 YouTube dataset:
 
-https://movement.uber.com/explore/los_angeles/travel-times/charts?lang=en-US&si=1380&ti=&ag=censustracts&dt[tpb]=ALL_DAY&dt[wd;]=1,2,3,4,5,6,7&dt[dr][sd]=2018-01-01&dt[dr][ed]=2018-01-31&cd=&sa;=&sdn=&lat.=34.0522342&lng.=-118.2846849&z.=12
+https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade
 
-grab first digit of number: parseInt((''+n)[0]);
+Link to notebook: https://observablehq.com/@alephnode/benfords-law-example
+
+<!-- grab first digit of number: parseInt((''+n)[0]); -->
 
 https://jsperf.com/get-second-digit (make own with first digit inspired by or just link to)
 
