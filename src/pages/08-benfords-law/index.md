@@ -22,6 +22,10 @@ The documentation for the service does an excellent job introducing the concept 
 
 For now, I'm interested in experimenting with Observable through exploring one of my favorite topics in Math: Benford's Law.
 
+You can find the notebook associated with this article <a href="https://observablehq.com/@alephnode/benfords-law-top-5000-youtube-channels-edition" target="_blank">here</a>, or keep reading for a walkthrough on creating the visualization.
+
+Before we get started with Observable, it's worth summarizing Benford's law for the unfamiliar.
+
 ### Benford's Law: Description, Backstory
 
 When it comes to pop culture's emanating spotlight, most photons land on the normal distribution. This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this magical formula.
@@ -35,13 +39,11 @@ About 75 years after the bell curve was published by Carl Friedrich Gauss, anoth
 
 - if newcomb found it, why tf is it named Benford?
 
-### Example Project on Observable
+### The Project
 
-Top 5000 YouTube dataset:
+To get started, create a new notebook from the dashboard and give it a name.
 
-https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade
-
-Link to notebook: https://observablehq.com/@alephnode/benfords-law-top-5000-youtube-channels-edition
+My example dataset (spoiler alert, I know it meets the law) is the Top 5000 YouTube dataset via <a href="https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade" target="_blank">Kaggle</a>.
 
 ### Wrapping Up
 
