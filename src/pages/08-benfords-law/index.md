@@ -1,6 +1,6 @@
 ---
 title: "Visualizing Benford's Law with D3 and Observable"
-date: '2019-03-22'
+date: '2019-03-25'
 ---
 
 <div id="img-container">
@@ -51,16 +51,12 @@ Our first order of business is requiring d3, which we'll use to visualize the da
 d3 = require('d3@5')
 ```
 
-_Note that the variable type declaration isn't required in an Observable notebook._
-
-Because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one.
+_Note that the variable type declaration isn't required in an Observable notebook. Alos, because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
 
 In a new cell, we'll pull in the dataset for the project:
 
 ```javascript
-data = d3.csv(
-  'https://s3-us-west-2.amazonaws.com/alphnode-benfords-law-youtube-channel-stats/data.csv'
-)
+data = d3.csv('https://s3-us-west-2.amazonaws.com/alphnode-benfords-law-youtube-channel-stats/data.csv')
 ```
 
 After examining the dataset, I see that the subscribers for each YouTube channel seems to fit the requirements for adhering to Benford's law: large set of numbers that don't have an obvious maxima or anything that would cap/skew the set.
@@ -81,16 +77,65 @@ counts = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => ({
 }))
 ```
 
+Alright, time for the heavy lifting: defining our chart.
+
+```javascript
+chart = {
+  
+  let margin = ({top: 20, right: 0, bottom: 50, left: 35});
+  let width = 900;
+  let  height = 600;
+  
+  let y = d3.scaleLinear()
+    .domain([0, d3.max(counts, d => d.count)]).nice()
+    .range([height - margin.bottom, margin.top]);
+  
+  let x = d3.scaleBand()
+    .domain(counts.map(d => d.name))
+    .range([margin.left, width - margin.right])
+    .padding(0.1);
+  
+  let yAxis = g => g
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y))
+    .call(g => g.select(".domain").remove());
+  
+  let xAxis = g => g
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0));
+  
+  const svg = d3.select(DOM.svg(width, height));
+  
+  svg.append("g")
+      .attr("fill", "#FAE03C")
+    .selectAll("rect")
+    .data(counts)
+    .join("rect")
+      .attr("x", d => x(d.name))
+      .attr("y", d => y(d.count))
+      .attr("height", d => y(0) - y(d.count))
+    .attr("width", x.bandwidth());
+  svg.append("g")
+      .call(xAxis);
+  svg.append("g")
+      .call(yAxis);
+  
+  return svg.node();
+}
+```
+
+There's a lot to unpack here. First, we define some values for presenting the graph: margin, width, and height. 
+
+
+
 ### Wrapping Up
 
+As illustrated above, Observable provides an excellent environment for presenting or exploring datasets on the fly with little to no setup required.
+
+Here are a few additional resources if this topic piqued your interest:
+
 - rosetta code or whatever (also learn the word masechtomy while you're there)
+- intro observable 
+- benfords law page
 
-<!-- grab first digit of number: parseInt((''+n)[0]); -->
-
-https://jsperf.com/get-second-digit (make own with first digit inspired by or just link to)
-
-algorithm in Observable:
-
-- load in dataset
-- convert the distance traveled row to first digit only
-- graph with it as a bar chart
+As always, thanks for reading!
