@@ -28,24 +28,30 @@ Before we jump in, it's worth summarizing Benford's law for the unfamiliar.
 
 ### Benford's Law: Description, Backstory
 
-When it comes to pop culture's emanating spotlight, most photons land on the normal distribution when it comes to statistical models. This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this magical formula.
+When it comes to statistical models, no formula comes close to the popularity and prevalance of the normal distribution. This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
 
-About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist made an intriguing observation: the occurrence of natural numbers in large datasets doesn't follow this pattern.
+About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist noticed an intriguing pattern: the occurrence of natural numbers in large datasets doesn't follow this formula.
 
 <div id="img-container">
 <img id="benford-img" src="./images/benford_example.png">
 <div class="src-container"><span class="source">Example distribution following Benford's law</span></div>
 </div>
 
-- if newcomb found it, why tf is it named Benford?
+In 1881, the Canadian-American mathematician Simon Newcomb observed that the natural numbers appeard in a descending order of commonality (starting at 1) as the first instance of a number. This led him to publish ""Note on the Frequency of Use of the Different Digits in Natural Numbers."
+
+Although Newcomb was the first to observe this pattern, it wasn't until Frank Benford presented a clear formula and several examples in "The Law of Anomalous Numbers" in 1938 that the law took shape.
+
+Today, Benford's law is used across disciplines to check, among other things, the validity of datasets and the prevention of fraud.
 
 ### The Project
 
-To get started, create a new notebook from the dashboard and give it a name.
+Now that we understand a little more about Benford's law, let's find an example of it hiding in a large dataset.
 
-My example dataset (spoiler alert, I know it meets the law) is the Top 5000 YouTube dataset via <a href="https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade" target="_blank">Kaggle</a>.
+I'll start by creating a new notebook from the Observable dashboard.
 
-Our first order of business is requiring d3, which we'll use to visualize the dataset.
+I'm going to use the Top 5000 YouTube dataset via <a href="https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade" target="_blank">Kaggle</a> for this project.
+
+The first order of business is requiring d3, which I'll use to visualize the dataset.
 
 ```javascript
 d3 = require('d3@5')
@@ -56,7 +62,9 @@ _Note that the variable type declaration isn't required in an Observable noteboo
 In a new cell, we'll pull in the dataset for the project:
 
 ```javascript
-data = d3.csv('https://s3-us-west-2.amazonaws.com/alphnode-benfords-law-youtube-channel-stats/data.csv')
+data = d3.csv(
+  'https://s3-us-west-2.amazonaws.com/alphnode-benfords-law-youtube-channel-stats/data.csv'
+)
 ```
 
 After examining the dataset, I see that the subscribers for each YouTube channel seems to fit the requirements for adhering to Benford's law: large set of numbers that don't have an obvious maxima or anything that would cap/skew the set.
@@ -81,31 +89,31 @@ Alright, time for the heavy lifting: defining our chart.
 
 ```javascript
 chart = {
-  
+
   let margin = ({top: 20, right: 0, bottom: 50, left: 35});
   let width = 900;
   let  height = 600;
-  
+
   let y = d3.scaleLinear()
     .domain([0, d3.max(counts, d => d.count)]).nice()
     .range([height - margin.bottom, margin.top]);
-  
+
   let x = d3.scaleBand()
     .domain(counts.map(d => d.name))
     .range([margin.left, width - margin.right])
     .padding(0.1);
-  
+
   let yAxis = g => g
     .attr("transform", `translate(${margin.left},0)`)
     .call(d3.axisLeft(y))
     .call(g => g.select(".domain").remove());
-  
+
   let xAxis = g => g
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .call(d3.axisBottom(x).tickSizeOuter(0));
-  
+
   const svg = d3.select(DOM.svg(width, height));
-  
+
   svg.append("g")
       .attr("fill", "#FAE03C")
     .selectAll("rect")
@@ -119,14 +127,12 @@ chart = {
       .call(xAxis);
   svg.append("g")
       .call(yAxis);
-  
+
   return svg.node();
 }
 ```
 
-There's a lot to unpack here. First, we define some values for presenting the graph: margin, width, and height. 
-
-
+There's a lot to unpack here. First, we define some values for presenting the graph: margin, width, and height.
 
 ### Wrapping Up
 
@@ -135,7 +141,7 @@ As illustrated above, Observable provides an excellent environment for presentin
 Here are a few additional resources if this topic piqued your interest:
 
 - rosetta code or whatever (also learn the word masechtomy while you're there)
-- intro observable 
+- intro observable
 - benfords law page
 
 As always, thanks for reading!
