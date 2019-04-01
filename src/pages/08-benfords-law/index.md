@@ -1,6 +1,6 @@
 ---
 title: "Visualizing Benford's Law with D3 and Observable"
-date: '2019-03-25'
+date: '2019-03-29'
 ---
 
 <div id="img-container">
@@ -28,7 +28,9 @@ Before we jump in, it's worth summarizing Benford's law for the unfamiliar.
 
 ### Benford's Law: Description, Backstory
 
-When it comes to statistical models, no formula comes close to the popularity and prevalance of the normal distribution. This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
+When it comes to statistical models, no formula comes close to the popularity and prevalance of the normal distribution.
+
+This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
 
 About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist noticed an intriguing pattern: the occurrence of natural numbers in large datasets doesn't follow this formula.
 
@@ -57,7 +59,7 @@ The first order of business is requiring d3, which I'll use to visualize the dat
 d3 = require('d3@5')
 ```
 
-_Note that the variable type declaration isn't required in an Observable notebook. Alos, because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
+_Note that the variable type declaration isn't required in an Observable notebook. Also, because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
 
 In a new cell, we'll pull in the dataset for the project:
 
@@ -67,9 +69,9 @@ data = d3.csv(
 )
 ```
 
-After examining the dataset, I see that the subscribers for each YouTube channel seems to fit the requirements for adhering to Benford's law: large set of numbers that don't have an obvious maxima or anything that would cap/skew the set.
+After examining the dataset, I see that the subscription counts for each YouTube channel seem to adhere to Benford's law: a large set of numbers that don't have an obvious minima/maxima or anything that would cap/skew the set.
 
-To get a better sense of the leading digits, I'll write a function that filters through the list, keeping only the cells where the number passed in is the first.
+To get a better sense of the first number of each subscription count, I'll write a function that filters through the list, keeping only the cells where the number passed in is the first.
 
 ```javascript
 getLeadingDigitCount = n =>
@@ -140,8 +142,10 @@ As illustrated above, Observable provides an excellent environment for presentin
 
 Here are a few additional resources if this topic piqued your interest:
 
-- rosetta code or whatever (also learn the word masechtomy while you're there)
-- intro observable
-- benfords law page
+- <a href="http://www.ams.org/publicoutreach/feature-column/fcarc-newcomb" target="_blank">Reference: American Mathematical Society Article on Benford's Law</a>
+- <a href="https://rosettacode.org/wiki/Benford%27s_law" target="_blank">Benford's Law - Rosetta Code Implementations</a>
+- <a href="https://observablehq.com/@observablehq/five-minute-introduction" target="_blank">Observable - Five Minute Introduction</a>
+- <a href="https://www.youtube.com/watch?v=XXjlR2OK1kM" target="_blank">Number 1 and Benford's Law - Numberphile</a>
+- <a href="http://testingbenfordslaw.com/" target="_blank">Testing Benford's Law</a>
 
 As always, thanks for reading!
