@@ -8,58 +8,58 @@ date: '2019-03-29'
 <div class="src-container"><span class="source">Photo by Chris Liverani on Unsplash</span></div>
 </div>
 
-During my stint as a journalist, my interests floated toward data visualization and visual storytelling. To me, a dense, detailed graphic could convey information just as efficiently as a write-up.
+During my stint as a journalist, my interests floated toward data visualization and visual storytelling. To me, a dense, detailed graphic could convey information just as efficiently as the written word.
 
-Given that a recent goal was to experiment with creating graphics on the web, I naturally gravitated toward <a href="https://d3js.org/" target="_blank">d3.js</a>. It's been a popular visualization library for years and has scores of tutorials online.
+Given that a recent goal was to experiment with creating graphics for the web, I dug into the documentation for <a href="https://d3js.org/" target="_blank">d3.js</a>. It's been a popular visualization library for years and has scores of tutorials online.
 
-It was through d3's homepage that I discovered Observable, a new site that enables users to publish self-contained collections of markdown, visualizations, or whatever the heart desires.
+It was through d3's homepage that I discovered Observable, a new site that enables users to publish self-contained collections of code with little effort.
 
 ### What is Observable?
 
-What makes an Observable notebook intriguing is how you can run snippets of JavaScript code in a series, similar to the popular Jupyter Notebook software from the world of Python.
+Per Observable's <a href="https://observablehq.com/@observablehq/introduction-to-notebooks" target="_blank">introduction article</a>, a notebook is: "_an interactive, editable document defined by code._" It can be used to explore data or present new ideas.
 
-The documentation for the service does an excellent job introducing the concept with simple examples, so I'd recommend visiting the page for a more thorough introduction.
+If you've ever worked with the <a href="https://jupyter.org/" target="_blank">Jupyter Notebook</a> software from the world of Python, Observable should feel familiar.
 
-For now, I'm interested in experimenting with Observable through exploring one of my favorite topics in Math: Benford's Law.
+To try out the service, I thought I'd explore one of my favorite topics in Math: Benford's Law.
 
 You can find the notebook associated with this article <a href="https://observablehq.com/@alephnode/benfords-law-top-5000-youtube-channels-edition" target="_blank">here</a>, or keep reading for a walkthrough on creating the visualization.
 
-Before we jump in, it's worth summarizing Benford's law for the unfamiliar.
+Before we start with the notebook, though, it's worth briefly summarizing Benford's law for the unfamiliar.
 
 ### Benford's Law: Description, Backstory
 
-When it comes to statistical models, no formula comes close to the popularity and prevalance of the normal distribution.
+When it comes to statistical models, no formula comes close to the popularity and prevalence of the normal distribution.
 
-This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets relating to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
+This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets related to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
 
-About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist noticed an intriguing pattern: the occurrence of natural numbers in large datasets doesn't follow this formula.
+About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist made a clever observation: the first number in large datasets doesn't follow this formula.
 
 <div id="img-container">
 <img id="benford-img" src="./images/benford_example.png">
 <div class="src-container"><span class="source">Example distribution following Benford's law</span></div>
 </div>
 
-In 1881, the Canadian-American mathematician Simon Newcomb observed that the natural numbers appeard in a descending order of commonality (starting at 1) as the first instance of a number. This led him to publish ""Note on the Frequency of Use of the Different Digits in Natural Numbers."
+In 1881, the Canadian-American mathematician Simon Newcomb observed that the natural numbers appeared in a descending order of commonality (starting at 1) as the first digit in a number. This led him to publish "Note on the Frequency of Use of the Different Digits in Natural Numbers", which highlighted this observation.
 
-Although Newcomb was the first to observe this pattern, it wasn't until Frank Benford presented a clear formula and several examples in "The Law of Anomalous Numbers" in 1938 that the law took shape.
+Although Newcomb was the first to document this pattern, it wasn't until Frank Benford presented a clear formula and several examples in "The Law of Anomalous Numbers" in 1938 that the law took shape.
 
-Today, Benford's law is used across disciplines to check, among other things, the validity of datasets and the prevention of fraud.
+Today, Benford's law is used across disciplines to check, among other things, the validity of datasets and to prevent fraud in finance.
 
 ### The Project
 
-Now that we understand a little more about Benford's law, let's find an example of it hiding in a large dataset.
+Alright, let's find an example of Benford's law out in the wild.
 
-I'll start by creating a new notebook from the Observable dashboard.
+To follow along, create a new notebook from the Observable dashboard.
 
-I'm going to use the Top 5000 YouTube dataset via <a href="https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade" target="_blank">Kaggle</a> for this project.
+I'm going to use the Top 5000 YouTube channels dataset via <a href="https://www.kaggle.com/mdhrumil/top-5000-youtube-channels-data-from-socialblade" target="_blank">Kaggle</a> for my source.
 
-The first order of business is requiring d3, which I'll use to visualize the dataset.
+I'll start the project by importing d3, which will be used to visualize the dataset.
 
 ```javascript
 d3 = require('d3@5')
 ```
 
-_Note that the variable type declaration isn't required in an Observable notebook. Also, because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
+_Note Because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
 
 In a new cell, we'll pull in the dataset for the project:
 
@@ -69,9 +69,9 @@ data = d3.csv(
 )
 ```
 
-After examining the dataset, I see that the subscription counts for each YouTube channel seem to adhere to Benford's law: a large set of numbers that don't have an obvious minima/maxima or anything that would cap/skew the set.
+After examining the dataset, I see that the subscription counts for each YouTube channel qualify to test for Benford's law: a large set of numbers that don't have minimum/maximum limits or anything that would cap or skew the set.
 
-To get a better sense of the first number of each subscription count, I'll write a function that filters through the list, keeping only the cells where the number passed in is the first.
+To retrieve the first digit in each subscriber count, I'll write a function that filters through the list, keeping only the cells where the number passed to the function is the first.
 
 ```javascript
 getLeadingDigitCount = n =>
@@ -134,7 +134,16 @@ chart = {
 }
 ```
 
-There's a lot to unpack here. First, we define some values for presenting the graph: margin, width, and height.
+There's a lot to unpack here. First, we define some values for presenting the graph: margin, width, and height. We then use d3's _scaleLinear()_ method to calculate the x and y ranges of our graph based on the dataset's values, eliminating guesswork.
+
+Next up are functions that'll calculate the transformations to properly display our svg graphic. Once they're defined, we can create a new d3 selection and append the necessary `<g>` elements, iterating through our data's relevant properties to build the bar chart. We finally return _svg.node()_ to display the DOM element created.
+
+Once we have our cells defined, we see the resulting graph that proves our set follows Benford's law:
+
+<div id="img-container">
+<img id="benford-img" src="./images/benford-youtube.png">
+<div class="src-container"><span class="source">Top 5000 YouTube Channel Subscribers - Leading Digit Distribution</span></div>
+</div>
 
 ### Wrapping Up
 
