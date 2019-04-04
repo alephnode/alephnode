@@ -32,7 +32,7 @@ When it comes to statistical models, no formula comes close to the popularity an
 
 This is fair; it uncovers the relationships underlying much of the world around us. Patterns in datasets related to science, economics, and other areas of study are better identified and predicted as a result of this versatile formula.
 
-About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist made a clever observation: the first number in large datasets doesn't follow this pattern.
+About 75 years after the bell curve was published by Carl Friedrich Gauss, another theorist made a clever observation: often, the leading digits of numbers in a set don't follow this pattern.
 
 <div id="img-container">
 <img id="benford-img" src="./images/benford_example.png">
