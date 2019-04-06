@@ -59,7 +59,7 @@ I'll start the project by importing d3, which will be used to visualize the data
 d3 = require('d3@5')
 ```
 
-_Note Because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
+_Note: Because the convention for many notebooks is to lead with the most important information at the top and cascade down, I'm going to add each new cell above the previous one._
 
 In a new cell, we'll pull in the dataset for the project:
 
