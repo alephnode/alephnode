@@ -201,7 +201,6 @@ _datamodel.prisma:_
    id: ID! @unique
    name: String!
    track_no: Int
-   artists: [Artist]
  }
 
  type Category {
@@ -301,7 +300,6 @@ module.exports = `
    id: ID!
    name: String!
    track_no: Int
-   artists: [Artist]
  }
 
  type Category {
