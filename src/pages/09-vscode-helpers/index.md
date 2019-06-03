@@ -1,6 +1,6 @@
 ---
 title: 'Powering up Your Workflow with Visual Studio Code'
-date: '2019-05-28'
+date: '2019-06-01'
 ---
 
 _VSCode meme of night king impervious to dragon fire_
@@ -31,6 +31,8 @@ With more than <a href="https://marketplace.visualstudio.com/search?target=VSCod
 - Prettier + ESLint + Format on save
 - Live Share (beta AF)
 - Slack
+- bracket pair colorizer
+- version lens
 
 ### Custom Snippets
 
@@ -48,8 +50,13 @@ This section is the most recent set of enhancements I've discovered, but they're
 ### TypeScript Support
 
 - TSLint
+- more info: https://code.visualstudio.com/docs/languages/typescript
 
 ### Testing Assistance
+
+- vscode jest
+- https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer
+- https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
 
 ### Conclusion
 
