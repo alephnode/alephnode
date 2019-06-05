@@ -60,13 +60,37 @@ The final extension worth highlighting is Version Lens, which allows you to exam
 - create your own quickly (show example snippet)
   - options to create own for users, but super helpful to check them in alongside projects for team members
 
-### Terminal Hacks
+### Section Three: Terminal Hacks
 
-This section is the most recent set of enhancements I've discovered, but they're by far my favorite on this list.
+This section is the most recent set of enhancements I've discovered, but they're by far my favorite on this list. Aside from advocating that you keep your terminal workflow within the confines of your workspace, here are three tips to enhance the terminal experience:
 
-- naming terminal windows
-- quick create
-- keyboard shortcut to switch between tabs
+#### Named Terminal Windows
+
+For one of my projects, I typically keep three terminal windows open: one for the API server, one for the app server, and one left open for running tests and navigating git branches. Besides staying consistent with which terminal runs what, I've gotten into the habit of naming the windows from within the editor.
+
+To accomplish this, open the command palette (command+shift+p on a Mac) and type in `Terminal: Rename`. This will name the currently active tab whatever you input. Pretty cool trick!
+
+#### Quick Create
+
+A short-but-sweet tip that relates to the previous one: if you want to quickly open a new tab window from an existing one, simply hit (control+shift+~) on your keyboard.
+
+#### Keyboard Shortcut for Switching Tabs
+
+If you get tired of switching between the tabs from the dropdown at the top-right corner of the terminal window, you can always define a keyboard shortcut that implements the desired functionality! This can be accomplished by going to Code->Preferences->Keyboard Shortcuts (command+k, command+s on a Mac) and clicking the curly braces in the top-right corner of the editor. This will open up the _keybindings.json_ file. Here's my configuration for switching between tabs:
+
+_keybindings.json_:
+
+```json
+[
+  { "key": "ctrl+shift+x", "command": "workbench.action.terminal.focusNext" },
+  {
+    "key": "ctrl+shift+z",
+    "command": "workbench.action.terminal.focusPrevious"
+  }
+]
+```
+
+As you can see, I've made it so navigating back and forth between tabs is as easy as (control+shift+z) and (control+shift+x), respectively.
 
 ### TypeScript Support
 
