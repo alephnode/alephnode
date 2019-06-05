@@ -70,9 +70,11 @@ When starting a project with a library, the first task I usually perform before 
 - <a href="https://marketplace.visualstudio.com/items?itemName=bierner.lit-html" target="_blank">lit-html</a>
 - <a href="https://marketplace.visualstudio.com/items?itemName=amandeepmittal.expressjs" target="_blank">Express</a>
 
-Snippets are more than just assistors for templating; they can be used to template out an entire html page (<strong>html:5<strong>) or build out conditionals and code blocks for you as well (<strong>if</strong>).
+Snippets are more than just assistors for templating; they can be used to template out an entire html page (<strong>html:5</strong>) or build out conditionals and code blocks for you as well (<strong>if</strong>).
 
-What's even better, writing your own is as easy as creating your own snippet file or inserting them directly into the editor preferences.
+What's even better, writing your own is as easy as creating your own snippet file named by language (javascript.json) or inserting them directly into the editor preferences (Code->Preferences->User Snippets).
+
+Rather than providing you with copy/pasted bullet points for how to achieve this, Here's the <a href="https://code.visualstudio.com/docs/editor/userdefinedsnippets" target="_blank">thorough documentation page</a> provided by VSCode on how to write your own. Once you start writing your own, you'll never stop 🧟.
 
 ### Section Three: Terminal Hacks
 
@@ -121,9 +123,11 @@ As you can see, I've made it so navigating back and forth between tabs is as eas
 
 ### Conclusion
 
-Hopefully you found _something_ within this list of workflow enhancements that you can use to enhance your development experience.
+Hopefully you found _something_ within this list that you can use to enhance your development experience.
 
-Also, since I love to hear what other developers choose for a theme, here's mine: I use _Verdandi Alter_, which is also available in the marketplace. While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other areas of the code.
+Also, since I love to hear what other developers choose for a theme, here's mine: I use <a href="https://marketplace.visualstudio.com/items?itemName=be5invis.theme-verdandi" target="_blank">_Verdandi Alter_</a>, which is also available in the marketplace.
+
+While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other areas of the code.
 
 Keep in mind that much of what I mentioned today was about JavaScript productivity assistors. If you have suggestions for other languages, feel free to let me know on Twitter, or start your own blog and share the knowledge!
 
