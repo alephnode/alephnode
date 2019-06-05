@@ -27,31 +27,31 @@ Alright, onto the good stuff: a few of the best features available for the produ
 
 With more than <a href="https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Downloads" target="_blank">11,000 extensions available</a>, the VSCode marketplace is as robust as it is overwhelming. To help narrow the choices down, here's a list of some that I use daily:
 
-#### GitLens
+#### <a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens" target="_blank">GitLens</a>
 
 A coworker showed me this and I haven't turned back since. In short, this extension brings a wealth of versioning information to your fingertips. It allows you to view file and line history, compare your current branch with others, search the commit history, and perform numerous other actions to help examine your codebase.
 
-#### Code Spell Checker
+#### <a href="https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker" target="_blank">Code Spell Checker</a>
 
 If you're like me, you constantly flub the spelling of your variables and function names when writing code. With the Code Spell Checker extension, misspelled or unfamiliar words receive green squiggly lines under them until you either correct the blunder or add the word to your workspace or user-defined dictionary. Worry not; it's even smart enough to handle camel case!
 
-#### Prettier
+#### <a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode" target="_blank">Prettier</a>
 
 Although some might consider it a bit too opinionated, I admire the formatting provided by the Prettier extension--so much so that I let it perform its formatting on save! Never worry about curly brace spacing, omitting semicolons, double vs. single quotes, or countless other formatting options ever again. Heck, take it a step further and enforce the style guidelines project-wide with a config file and you're good to go.
 
-#### Live Share (beta AF)
+#### <a href="https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare" target="_blank">Live Share (beta AF)</a>
 
 I preface this suggestion with a warning: this feature is still _very_ much in beta. That said, Live Share is a promising extension for VSCode that lets you share your workspace with team members to collaborate on files or entire projects. Think Google Docs for your code.
 
-#### Slack
+#### <a href="https://marketplace.visualstudio.com/items?itemName=karigari.chat" target="_blank">Team Chat</a>
 
-As a developer, I try to reduce the number of distractions I encounter throughout the workday so I can focus on the abstractions and logic flow for the application at hand. By hooking Slack directly into my IDE, I don't have to context switch as often by jumping back and forth between applications. While it might seem dangerous to keep something like Slack integration in your editor, I've found the experience to be enjoyable and not too distracting.
+As a developer, I try to reduce the number of distractions I encounter throughout the workday so I can focus on the abstractions and logic flow for the application at hand. By hooking Slack directly into my IDE through Team Chat, I don't have to context switch as often by jumping back and forth between applications. While it might seem dangerous to keep something like Slack integration in your editor, I've found the experience to be enjoyable and not too distracting.
 
-#### Bracket Pair Colorizer
+#### <a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer" target="_blank">Bracket Pair Colorizer</a>
 
 Although I stick with a fairly monochromatic theme, I occasionally switch this extension on to double-check my bracket alignment. It's helpful when I'm working with array methods, nested objects, or some complicated logic that I can't quickly settle any open/close problems with.
 
-#### Version Lens
+#### <a href="https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens" target="_blank">Version Lens</a>
 
 The final extension worth highlighting is Version Lens, which allows you to examine your `package.json` file and examine the versions of your project's third-party dependencies. This helps to quickly identify libraries that can be upgraded or modified.
 
