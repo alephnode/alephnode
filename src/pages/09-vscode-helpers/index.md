@@ -9,32 +9,53 @@ Hello again, everyone!
 
 After a few busy weeks of work, personal projects, and _Game of Thrones_ fan theory wormholes, I'm dusting the cobwebs off the blog. If I ever take a break that long again, feel free to feed me to the dragons.
 
-Terrible jokes aside, today's article will be a relatively short dive into productivity hacks available in Visual Studio Code (_VSCode hereafter_).
+Uninspired references aside, today's article will be a relatively short dive into some productivity hacks available in Visual Studio Code (_VSCode hereafter_).
 
 If you're like me, you're constantly looking for ways to improve the development experience. From faster compilation to terminal aliases, anything that cuts precious time is worth considering. What follows are a few of my favorite tricks available in my IDE of choice.
 
 ### Wait, Why VSCode? (In Case You Need Convincing)
 
-Although there are several notable IDEs to choose from, VSCode is the only one that combines all the features I enjoy from different solutions into one -- _for free_, at that.
+Although there are several notable IDEs to choose from, VSCode is the only one that gets it _right_ from my perspective. Among its many benefits are:
 
-- Excellent support
-- Written in JavaScript
-- Open Source
-- Feature list
+- <strong>Excellent support</strong>. With more than 890 contributors and 77,000 stars as of this writing, you know the project is well-maintained.
+- <strong>Written in JavaScript</strong>. Given that I'm primarily a JS developer, it's inspiring to work with software that's written in my preferred language.
+- <strong>Open Source</strong>. Microsoft took one of its flagship products and offered an open-source flavor of it for developers across the world. The fact that you can take a look under the hood at your leisure is a cool added benefit to the project.
 
-### Cool Extensions
+Alright, onto the good stuff: a few of the best features available for the product.
+
+### Section One: Cool Extensions
 
 With more than <a href="https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Downloads" target="_blank">11,000 extensions available</a>, the VSCode marketplace is as robust as it is overwhelming. To help narrow the choices down, here's a list of some that I use daily:
 
-- GitLens: a coworker showed me this and I haven't turned back since
-- Code spell checker
-- Prettier + ESLint + Format on save
-- Live Share (beta AF)
-- Slack
-- bracket pair colorizer
-- version lens
+#### GitLens
 
-### Custom Snippets
+A coworker showed me this and I haven't turned back since. In short, this extension brings a wealth of versioning information to your fingertips. It allows you to view file and line history, compare your current branch with others, search the commit history, and perform numerous other actions to help examine your codebase.
+
+#### Code Spell Checker
+
+If you're like me, you constantly flub the spelling of your variables and function names when writing code. With the Code Spell Checker extension, misspelled or unfamiliar words receive green squiggly lines under them until you either correct the blunder or add the word to your workspace or user-defined dictionary. Worry not; it's even smart enough to handle camel case!
+
+#### Prettier
+
+Although some might consider it a bit too opinionated, I admire the formatting provided by the Prettier extension--so much so that I let it perform its formatting on save! Never worry about curly brace spacing, omitting semicolons, double vs. single quotes, or countless other formatting options ever again. Heck, take it a step further and enforce the style guidelines project-wide with a config file and you're good to go.
+
+#### Live Share (beta AF)
+
+I preface this suggestion with a warning: this feature is still _very_ much in beta. That said, Live Share is a promising extension for VSCode that lets you share your workspace with team members to collaborate on files or entire projects. Think Google Docs for your code.
+
+#### Slack
+
+As a developer, I try to reduce the number of distractions I encounter throughout the workday so I can focus on the abstractions and logic flow for the application at hand. By hooking Slack directly into my IDE, I don't have to context switch as often by jumping back and forth between applications. While it might seem dangerous to keep something like Slack integration in your editor, I've found the experience to be enjoyable and not too distracting.
+
+#### Bracket Pair Colorizer
+
+Although I stick with a fairly monochromatic theme, I occasionally switch this extension on to double-check my bracket alignment. It's helpful when I'm working with array methods, nested objects, or some complicated logic that I can't quickly settle any open/close problems with.
+
+#### Version Lens
+
+The final extension worth highlighting is Version Lens, which allows you to examine your `package.json` file and examine the versions of your project's third-party dependencies. This helps to quickly identify libraries that can be upgraded or modified.
+
+### Section Two: Custom Snippets
 
 - create your own quickly (show example snippet)
   - options to create own for users, but super helpful to check them in alongside projects for team members
