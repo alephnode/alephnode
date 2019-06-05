@@ -15,11 +15,15 @@ If you're like me, you're constantly looking for ways to improve the development
 
 ### Wait, Why VSCode? (In Case You Need Convincing)
 
-Although there are several notable IDEs to choose from, VSCode is the only one that gets it _right_ from my perspective. Among its many benefits are:
+Although there are several notable IDEs to choose from, VSCode is the only one that bundles everything I want into one cohesive, community-backed unit. Among its many benefits are:
 
 - <strong>Excellent support</strong>. With more than 890 contributors and 77,000 stars as of this writing, you know the project is well-maintained.
 - <strong>Written in JavaScript</strong>. Given that I'm primarily a JS developer, it's inspiring to work with software that's written in my preferred language.
 - <strong>Open Source</strong>. Microsoft took one of its flagship products and offered an open-source flavor of it for developers across the world. The fact that you can take a look under the hood at your leisure is a cool added benefit to the project.
+- <strong>Strong IntelliSense</strong>: From code completion to class introspection, VSCode's IntelliSense constantly saves me from having to double-check references to properties, function signatures, and other cross-module relations.
+- <strong>Fantastic git integration</strong>: Its out-of-the-box conflict resolution viewer has removed my need for a standalone version control app altogether.
+
+Granted, many editors offer the same benefits listed above. If you're happy with your current IDE, approach this article as offering suggestions for tools and extensions you should look for in your existing app.
 
 Alright, onto the good stuff: a few of the best features available for the product.
 
@@ -55,10 +59,20 @@ Although I stick with a fairly monochromatic theme, I occasionally switch this e
 
 The final extension worth highlighting is Version Lens, which allows you to examine your `package.json` file and examine the versions of your project's third-party dependencies. This helps to quickly identify libraries that can be upgraded or modified.
 
-### Section Two: Custom Snippets
+### Section Two: Snippets
 
-- create your own quickly (show example snippet)
-  - options to create own for users, but super helpful to check them in alongside projects for team members
+Another helpful feature of VSCode is the concept of snippets, or templates of reusable code segments that remove the redundancy from common tasks.
+
+When starting a project with a library, the first task I usually perform before writing code is making sure I have the library's snippet extension installed in my editor. Here are a few common ones:
+
+- <a href="https://marketplace.visualstudio.com/items?itemName=xabikos.ReactSnippets" target="_blank">React</a>
+- <a href="https://marketplace.visualstudio.com/items?itemName=sdras.vue-vscode-snippets" target="_blank">Vue</a>
+- <a href="https://marketplace.visualstudio.com/items?itemName=bierner.lit-html" target="_blank">lit-html</a>
+- <a href="https://marketplace.visualstudio.com/items?itemName=amandeepmittal.expressjs" target="_blank">Express</a>
+
+Snippets are more than just assistors for templating; they can be used to template out an entire html page (<strong>html:5<strong>) or build out conditionals and code blocks for you as well (<strong>if</strong>).
+
+What's even better, writing your own is as easy as creating your own snippet file or inserting them directly into the editor preferences.
 
 ### Section Three: Terminal Hacks
 
@@ -76,7 +90,9 @@ A short-but-sweet tip that relates to the previous one: if you want to quickly o
 
 #### Keyboard Shortcut for Switching Tabs
 
-If you get tired of switching between the tabs from the dropdown at the top-right corner of the terminal window, you can always define a keyboard shortcut that implements the desired functionality! This can be accomplished by going to Code->Preferences->Keyboard Shortcuts (command+k, command+s on a Mac) and clicking the curly braces in the top-right corner of the editor. This will open up the _keybindings.json_ file. Here's my configuration for switching between tabs:
+If you get tired of switching between the tabs from the dropdown at the top-right corner of the terminal window, you can always define a keyboard shortcut that implements the desired functionality!
+
+This can be accomplished by going to Code->Preferences->Keyboard Shortcuts (command+k, command+s on a Mac) and clicking the curly braces in the top-right corner of the editor. This will open up the _keybindings.json_ file. Here's my configuration for switching between tabs:
 
 _keybindings.json_:
 
@@ -105,7 +121,9 @@ As you can see, I've made it so navigating back and forth between tabs is as eas
 
 ### Conclusion
 
-If you're curious, I use the _Verdandi Alter_ theme available in the marketplace. While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other code areas.
+Hopefully you found _something_ within this list of workflow enhancements that you can use to enhance your development experience.
+
+Also, since I love to hear what other developers choose for a theme, here's mine: I use _Verdandi Alter_, which is also available in the marketplace. While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other areas of the code.
 
 Keep in mind that much of what I mentioned today was about JavaScript productivity assistors. If you have suggestions for other languages, feel free to let me know on Twitter, or start your own blog and share the knowledge!
 
