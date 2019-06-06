@@ -59,6 +59,8 @@ Although I stick with a fairly monochromatic theme, I occasionally switch this e
 
 The final extension worth highlighting is Version Lens, which allows you to examine your `package.json` file and examine the versions of your project's third-party dependencies. This helps to quickly identify libraries that can be upgraded or modified.
 
+_Note: You don't have to go to the web to download extensions. If you'd prefer, navigate to (Code->Preferences->Extensions) or type (command+shift+x) on a Mac to open the extensions sidebar within the editor._
+
 ### Section Two: Snippets
 
 Another helpful feature of VSCode is the concept of snippets, or templates of reusable code segments that remove the redundancy from common tasks.
@@ -110,24 +112,56 @@ _keybindings.json_:
 
 As you can see, I've made it so navigating back and forth between tabs is as easy as (control+shift+z) and (control+shift+x), respectively.
 
-### TypeScript Support
+### Section Four: TypeScript Support
 
-- TSLint
-- more info: https://code.visualstudio.com/docs/languages/typescript
+One unexpected benefit I've discovered within VSCode is how easy it makes learning and exploring TypeScript. From enhanced IntelliSense and object introspection to better import organization and code navigation, the IDE makes using the JavaScript superset a divine experience. What's more, there are additional tweaks you can make to feel truly enlightened.
 
-### Testing Assistance
+The first suggestion I'd offer is downloading the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin" target="_blank">TSLint extension</a>. This helps identify issues much faster and will allow you to fix problems in real-time as opposed to batching when compiling manually.
 
-- vscode jest
-- https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer
-- https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+Then, if you're working primarily with _.ts_ files and miss the days of auto-compiling and "watch" support, you're in luck: there's a command to auto-compile your files on save!
+
+In order to get auto-compile to work, first make sure you have a _ts.config.json_ file in your project root. You can create one easily by installing the _tsc_ package globally and then running `tsc --init` in the command line.
+
+_Note: it goes without saying that you'll need the typescript package installed globally as well. `npm install -g typescript`, if needed._
+
+Next, type (command+shift+b) on a Mac (or control+shift+b on a Windows platform) and type `tsc: watch - tsconfig.json`. After this step, your project will compile TypeScript files on every save.
+
+Pair this with a watch command from your favorite development server (I dig _nodemon_) and you're good to go.
+
+### Section Five: Testing Assistance
+
+No development experience would be complete without a solid testing workflow. Whether it be unit testing or full-on end-to-end checks, there are a few extensions and features that'll supplement the IDE to help you catch bugs faster.
+
+#### Jest Integration
+
+Although I've used AVA on the last few project, Jest has caught my eye recently with its robust community advocation and extensive tooling. One of the coolest integrartions I've found is the <a href="https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest" target="_blank">Jest extension</a>. Among its many benefits, per their GitHub page:
+
+- Automatically starts Jest when it's installed and you're in the project root
+- Shows test results inline
+- Syntax highlighting in snapshot files
+- One button update for failed snapshots
+
+There's even a configuration for displaying code coverage within your project. In short, the extension gives you a trove of information about your project with little effort on your part.
+
+There are extensions that offer similar functionality if you don't use Jest, namely the <a href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer" target="_blank">Test Explorer UI</a> extension.
+
+#### Debugging
+
+As for troubleshooting problems, VSCode also has debug tools baked right into the application. If you're running a Node-based project, it'll work right out of the box. If you're developing client-side, you'll need to install _one more_ extension: the <a href="https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome" target="_blank">Debugger for Chrome</a>.
+
+For more info on debugging with VScode, the team has published a <a href="https://code.visualstudio.com/docs/editor/debugging" target="_blank">helpful article</a>.
+
+### Bonus: Theme Suggestion
+
+Since I love to hear what other developers choose for a theme, here's mine: <a href="https://marketplace.visualstudio.com/items?itemName=be5invis.theme-verdandi" target="_blank">_Verdandi Alter_</a>.
+
+While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other areas of the code.
+
+One more optional preference; I keep my sidebar on the right-hand side so it doesn't move the code in my open file when expanding/collapsing it.
 
 ### Conclusion
 
 Hopefully you found _something_ within this list that you can use to enhance your development experience.
-
-Also, since I love to hear what other developers choose for a theme, here's mine: I use <a href="https://marketplace.visualstudio.com/items?itemName=be5invis.theme-verdandi" target="_blank">_Verdandi Alter_</a>, which is also available in the marketplace.
-
-While the monochromatic color scheme might seem jarring to some, I appreciate the subtlety it commands with different font treatment to distinguish keywords, strings, and other areas of the code.
 
 Keep in mind that much of what I mentioned today was about JavaScript productivity assistors. If you have suggestions for other languages, feel free to let me know on Twitter, or start your own blog and share the knowledge!
 
