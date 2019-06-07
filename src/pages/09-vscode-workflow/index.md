@@ -3,7 +3,9 @@ title: 'Powering up Your Workflow with Visual Studio Code'
 date: '2019-06-01'
 ---
 
-_VSCode meme of night king impervious to dragon fire_
+<div id="img-container">
+<img id="stats-img" src="./images/vs.png">
+</div>
 
 Hello again, everyone!
 
@@ -122,7 +124,7 @@ Then, if you're working primarily with _.ts_ files and miss the days of auto-com
 
 In order to get auto-compile to work, first make sure you have a _ts.config.json_ file in your project root. You can create one easily by installing the _tsc_ package globally and then running `tsc --init` in the command line.
 
-_Note: it goes without saying that you'll need the typescript package installed globally as well. `npm install -g typescript`, if needed._
+_Note: it goes without saying that you'll need the TypeScript package installed globally as well. `npm install -g typescript`, if needed._
 
 Next, type (command+shift+b) on a Mac (or control+shift+b on a Windows platform) and type `tsc: watch - tsconfig.json`. After this step, your project will compile TypeScript files on every save.
 
@@ -134,7 +136,7 @@ No development experience would be complete without a solid testing workflow. Wh
 
 #### Jest Integration
 
-Although I've used AVA on the last few project, Jest has caught my eye recently with its robust community advocation and extensive tooling. One of the coolest integrartions I've found is the <a href="https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest" target="_blank">Jest extension</a>. Among its many benefits, per their GitHub page:
+Although I've used <a href="https://github.com/avajs/ava" target="_blank">AVA</a> on the last few projects, Jest has caught my eye recently with its robust community advocation and extensive tooling. One of the coolest integrartions I've found is the <a href="https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest" target="_blank">Jest extension</a>. Among its many benefits, per their GitHub page:
 
 - Automatically starts Jest when it's installed and you're in the project root
 - Shows test results inline
