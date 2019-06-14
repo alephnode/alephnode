@@ -57,11 +57,13 @@ First, a look at the project structure:
 └── yarn.lock
 ```
 
-The two root-level modules of note are _tsconfig.json_ and _tslint.json_. The former configures all TypeScript settings associated with the project, and the latter sets defaults for the linting that occurs during the TypeScript compilation process. The mock directory houses data to seed into a MongoDB database.
+The two root-level modules of note are _tsconfig.json_ and _tslint.json_. The former configures all TypeScript settings associated with the project, and the latter sets defaults for the linting that occurs during the TypeScript compilation process.
+
+The mock directory houses data to seed into a MongoDB database.
 
 ### Building the Interface
 
-With config files out of the way, the next step is defining and including the interfaces and types used in the project. This is accomplished in two steps:
+With config files out of the way, the next step is defining and including the interfaces and types used in the project. This is accomplished in two main processes:
 
 - defining your own types, and
 - installing third-party dependency types
@@ -77,3 +79,15 @@ yarn add .....
 ### Deployment
 
 ### Verdict
+
+As I mentioned earlier, TypeScript enhanced the safety and clarity of my API throughout development. What's more, VSCode's built-in intelliSense was supercharged because of my use of the language.
+
+After being a hater for years, I'd say now's the time to reconsider aversion to TypeScript. The tooling alone makes for a compelling case to incorporate it into projects, both new and old.
+
+If you'd like to learn more about TypeScript-focused projects, check out the following resources:
+
+- Microsoft Node Starter Kit
+- Stencil
+- something else
+
+As always, thanks for reading.
