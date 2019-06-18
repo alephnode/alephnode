@@ -78,7 +78,7 @@ yarn add .....
 
 ### Deployment
 
-### Verdict
+### Conclusion
 
 As I mentioned earlier, TypeScript enhanced the safety and clarity of my API throughout development. What's more, VSCode's built-in intelliSense was supercharged because of my use of the language.
 
