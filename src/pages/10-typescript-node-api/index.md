@@ -1,6 +1,6 @@
 ---
 title: 'Writing a RESTful API in TypeScript: A Review'
-date: '2019-06-12'
+date: '2019-06-22'
 ---
 
 If you've followed JavaScript trends in recent months, you've undoubtedly witnessed the meteoric rise of TypeScript.
@@ -135,11 +135,48 @@ With config files out of the way, the next step is defining and including the in
 - defining your own types, and
 - installing third-party dependency types
 
-Most libraries publish their types in a similar convention on NPM: with the @types/ prefix. In our project's case, we use the types of XXXXXXXX.
+Most libraries publish their types in a similar convention on NPM: with the @types/ prefix. In our project's case, we use the types for Lusca, Mongoose, and other third-party dependencies.
 
 ```bash
-yarn add .....
+yarn add --dev @types/body-parser @types/express @types/compression @types/lusca @types/node @types/dotenv @types/mongodb
 ```
+
+With our types installed, we're ready to build our own types, or _interfaces_, to describe the structure of the data used in our project. For my inventory app, there'll only be one type: boxes. Each box will have a guid and a string summary of all the items in the box.
+
+We define our interface in src/types/IBoxModel.d.ts.
+
+_src/types/IBoxModel.d.ts_:
+
+```javascript
+import { Document } from 'mongoose'
+
+export default interface IBoxModel extends Document {
+  box: string
+  items: string
+}
+```
+
+The one thing to note is that we're extending the Document class from the _mongoose_ library since we'll eventually persist this in the NoSQL database we connect.
+
+Since we're working with MongoDB through Mongoose, the next step is to define our schema.
+
+_src/models/Box.ts_:
+
+```javascript
+import { Schema, model } from 'mongoose'
+import IBoxModel from '../types/IBoxModel'
+
+const BoxSchema = new Schema({
+  box: String,
+  items: String,
+})
+
+export default model < IBoxModel > ('Box', BoxSchema, 'boxes')
+```
+
+If you've ever worked with Mongoose, the above should look familiar. In short, we're building the object representation of our data that'll be used in the project.
+
+### Bootstrapping the API
 
 ### Wiring Up the Controller
 
