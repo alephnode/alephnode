@@ -15,7 +15,7 @@ To be transparent, I've been skeptical of TypeScript since hearing about it in 2
 
 In simpler terms, statically-typed variables felt like a step back into a bulkier language such as C++ or Java, which aren't as flexible as JavaScript.
 
-Although it's true that TypeScript slows development time compared with vanilla JS, the types of questions it forces one to answer about an implementation ends up making the solution stronger overall. What will the data look like for this abstraction? What are its default values? What are the expectations when mutating it? All are concerns considered earlier in a TypeScript-based project.
+Although it's true that TypeScript slows development time compared with vanilla JS, the types of questions it forces the developer to answer about an implementation ends up making the solution stronger overall. What will the data look like for this abstraction? What are its default values? What are the expectations when mutating it? All are concerns considered earlier in a TypeScript-based project.
 
 Adopting TypeScript also offers many tangible benefits. Among them include:
 
@@ -126,24 +126,21 @@ _tslint.json_:
 }
 ```
 
-The mock directory houses data to seed into a MongoDB database.
+The mock directory houses data to seed into a MongoDB database. For detailed instructions, refer the project's README.md (you'll need MongoDB installed to run the scrirpt).
 
 ### Building the Interface
 
-With config files out of the way, the next step is defining and including the interfaces and types used in the project. This is accomplished in two main processes:
+With config files out of the way, the next step is defining the interfaces used in the project. This is accomplished by building custom types as well as consuming packages provided by third-party dependencies.
 
-- defining your own types, and
-- installing third-party dependency types
-
-Most libraries publish their types in a similar convention on NPM: with the @types/ prefix. In our project's case, we use the types for Lusca, Mongoose, and other third-party dependencies.
+Most libraries publish their types in a similar convention on NPM: with the @types/ prefix. For our project, we'll use those published by Lusca, Mongoose, and a few others:
 
 ```bash
 yarn add --dev @types/body-parser @types/express @types/compression @types/lusca @types/node @types/dotenv @types/mongodb
 ```
 
-With our types installed, we're ready to build our own types, or _interfaces_, to describe the structure of the data used in our project. For my inventory app, there'll only be one type: boxes. Each box will have a guid and a string summary of all the items in the box.
+With our dependencies installed, we're ready to build our own types, or _interfaces_, to describe the structure of the data used in our project. For my inventory app, there'll only be one type: boxes. Each box will have a guid and a summary of all the items in the box.
 
-We define our interface in src/types/IBoxModel.d.ts.
+We define our interface in src/types/IBoxModel.d.ts. _(d.ts is a popular convention in TypeScript denoting a file declaring a type)_
 
 _src/types/IBoxModel.d.ts_:
 
@@ -176,7 +173,35 @@ export default model < IBoxModel > ('Box', BoxSchema, 'boxes')
 
 If you've ever worked with Mongoose, the above should look familiar. In short, we're building the object representation of our data that'll be used in the project.
 
+### possible blurb about types in TypeScrript
+
 ### Bootstrapping the API
+
+The next phase of the project is setting up the server logic and routes available from the API.
+
+Let's start with the simpler module to implement, _server.js_:
+
+```javascript
+import app from './app'
+
+/**
+ * Start Express server.
+ */
+const server = app.listen(app.get('port'), () => {
+  console.log(
+    '  App is running at http://localhost:%d in %s mode',
+    app.get('port'),
+    app.get('env')
+  )
+  console.log('  Press CTRL-C to stop\n')
+})
+
+export default server
+```
+
+As you can see, we're just starting a process on the port specified in a config file. Once this is written, we're ready to start on the actual API logic with _app.ts_.
+
+_Note: App.ts is by far the most detailed module in our project. To help study it, I'll post segments of the file before dumping the entire module at the end of the section._
 
 ### Wiring Up the Controller
 
