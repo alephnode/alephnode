@@ -128,19 +128,29 @@ _tslint.json_:
 
 The mock directory houses data to seed into a MongoDB database. For detailed instructions, refer to <a href="https://github.com/alephnode/inventory-app" target="_blank">the project's README.md</a> (you'll need MongoDB installed to run the script).
 
-### Building the Interface
+Now would be a good time to install the dependencies we'll use in the project. To do so, we run the install command in the project's root directory:
 
-With config files out of the way, the next step is defining the interfaces used in the project. This is accomplished by building custom types as well as consuming packages provided by third-party dependencies.
+```bash
+yarn add body-parser compression cors dotenv express lusca mongoose nodemon tslint typescript
+```
+
+We also need to handle the types of the libraries we include. This is accomplished by installing the packages provided by each respective project.
 
 Most libraries publish their types in a similar convention on NPM: with the @types/ prefix. For our project, we'll use those published by Lusca, Mongoose, and a few others:
+
+Again, we run a command from the project root:
 
 ```bash
 yarn add --dev @types/body-parser @types/express @types/compression @types/lusca @types/node @types/dotenv @types/mongodb
 ```
 
-With our dependencies installed, we're ready to build our own types, or _interfaces_, to describe the structure of the data used in our project. For my inventory app, there'll only be one type: boxes. Each box will have a <a href="https://www.guidgenerator.com/" target="_blank">GUID</a> and a summary of all the items in the box.
+### Building the Interface
 
-We define our interface in _src/types/IBoxModel.d.ts._ (d.ts is a popular convention in TypeScript denoting a file declaring a type)
+With config files out of the way, the next step is to model the data items used in the project. In TypeScript, it's common to define the shape of your data through an _interface_.
+
+For my inventory app, there will only be one interface: IBoxModel.d.ts. Each box will have a <a href="https://www.guidgenerator.com/" target="_blank">GUID</a> and a summary of all the items in the box.
+
+We define our interface in _src/types/IBoxModel.d.ts._ (d.ts is a popular convention in TypeScript denoting a declaration file)
 
 _src/types/IBoxModel.d.ts_:
 
@@ -153,7 +163,7 @@ export default interface IBoxModel extends Document {
 }
 ```
 
-The one thing to note is that we're extending the Document class from the Mongoose library since we'll eventually persist this in the NoSQL database we connect.
+Note that we're extending the Document class from the Mongoose library since we'll eventually persist this in the NoSQL database we connect.
 
 Since we're working with MongoDB through Mongoose, the next step is to define our schema.
 
@@ -171,13 +181,11 @@ const BoxSchema = new Schema({
 export default model < IBoxModel > ('Box', BoxSchema, 'boxes')
 ```
 
-If you've ever worked with Mongoose, the above should look familiar. In short, we're building the object representation of our data that'll be used in the project.
-
-### blurb about types in TypeScrript
+If you've ever worked with Mongoose, the above should look familiar. In short, we're building the object representation of the data model used in the project.
 
 ### Bootstrapping the API
 
-The next phase of the project is setting up the server logic and routes available from the API.
+The next phase of the project is setting up the server logic and routes we want to make available.
 
 To start, we'll create the _app.ts_ file that'll do most of the groundwork for the project.
 
@@ -223,6 +231,17 @@ app.delete('/boxes/:id', boxController.deleteBox)
 export default app
 ```
 
+First we import all our dependencies:
+
+- Express: handles web server logic
+- compression: assists with optimizing the delivery of our API
+- body-parser: helps with parsing request body info
+- lusca: support with app security
+- cors: for helping to define CORS policy
+- mongoose: used as the ODM
+
+After including our supporting libraries, we pull in the MongoDB URI environment variable from our secrets module, as well as all controllers to connect them to our desired routes.
+
 To launch the server, we just need to write some code that opens a socket and listens for requests. We'll define that logic in our _server.ts_ file.
 
 _server.ts_:
@@ -247,9 +266,9 @@ export default server
 
 As you can see, we're just starting a process on the port specified in our _app.ts_ file in the previous step.
 
-Once these two modules are complete, we're ready to jump into our controller logic.
+Once these two modules are set up, we're ready to jump into our controller logic.
 
-### Wiring Up the Controller
+### Wiring Up the Controllers
 
 ### Deployment
 
