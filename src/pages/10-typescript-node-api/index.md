@@ -49,7 +49,7 @@ First, a look at the project structure (jumping into the _/backend_ directory, t
 │   │   └── Box.ts
 │   ├── server.ts
 │   ├── types
-│   │   └── IBoxModel.d.ts
+│   │   └── IBoxModel.ts
 │   └── util
 │       └── secrets.ts
 ├── tsconfig.json
@@ -148,13 +148,11 @@ yarn add --dev @types/body-parser @types/express @types/compression @types/lusca
 
 With config files out of the way, the next step is to model the data items used in the project. In TypeScript, it's common to define the shape of your data through an _interface_.
 
-For my inventory app, there will only be one interface: IBoxModel.d.ts. Each box will have a <a href="https://www.guidgenerator.com/" target="_blank">GUID</a> and a summary of all the items in the box.
+For my inventory app, there will only be one interface: IBoxModel.ts. Each box will have a <a href="https://www.guidgenerator.com/" target="_blank">GUID</a> and a summary of all the items in the box.
 
-We define our interface in _src/types/IBoxModel.d.ts._ (d.ts is a popular convention in TypeScript denoting a declaration file)
+We define our interface in _src/types/IBoxModel.ts:_
 
-_src/types/IBoxModel.d.ts_:
-
-```javascript
+```typescript
 import { Document } from 'mongoose'
 
 export default interface IBoxModel extends Document {
@@ -169,7 +167,7 @@ Since we're working with MongoDB through Mongoose, the next step is to define ou
 
 _src/models/Box.ts_:
 
-```javascript
+```typescript
 import { Schema, model } from 'mongoose'
 import IBoxModel from '../types/IBoxModel'
 
@@ -178,7 +176,7 @@ const BoxSchema = new Schema({
   items: String,
 })
 
-export default model < IBoxModel > ('Box', BoxSchema, 'boxes')
+export default model<IBoxModel>('Box', BoxSchema, 'boxes')
 ```
 
 If you've ever worked with Mongoose, the above should look familiar. In short, we're building the object representation of the data model used in the project.
@@ -191,7 +189,7 @@ To start, we'll create the _app.ts_ file that'll do most of the groundwork for t
 
 _app.ts:_
 
-```javascript
+```typescript
 import express from 'express'
 import compression from 'compression'
 import bodyParser from 'body-parser'
@@ -246,7 +244,7 @@ To launch the server, we just need to write some code that opens a socket and li
 
 _server.ts_:
 
-```javascript
+```typescript
 import app from './app'
 
 /**
@@ -270,7 +268,65 @@ Once these two modules are set up, we're ready to jump into our controller logic
 
 ### Wiring Up the Controllers
 
-### Deployment
+Although it might seem unnecessary for this project, I like to declare a home controller for my APIs. To do so, I'll just declare a simple HomeController module.
+
+_backend/src/controllers/home.ts:_
+
+```typescript
+import { Request, Response } from 'express'
+
+/**
+ * GET /
+ * Base route
+ */
+export const index = (req: Request, res: Response) =>
+  res.send('Inventory API - sward move June 2019 🌲')
+```
+
+A controller declared using TypeScript is practically identical to one in vanilla JS, with the exception that the request and response parameters are bound to the respective types exposed by express's types library.
+
+With our first controller out of the way, let's dig into the main logic involved in the app: the boxes for in my storage unit.
+
+_backend/src/controllers/home.ts:_
+
+```typescript
+import { Request, Response } from 'express'
+import Box from '../models/Box'
+import IBoxModel from '../types/IBoxModel'
+
+const stripLetters = (w: String) => parseInt(w.replace(/\D/g, ''))
+
+export const getBoxes = (_1: Request, res: Response) =>
+  Box.find((err: Error, doc: IBoxModel[]) =>
+    res.send(
+      doc.sort(
+        (a: IBoxModel, b: IBoxModel) =>
+          stripLetters(a.box) - stripLetters(b.box)
+      )
+    )
+  )
+
+export const addBox = (req: Request, res: Response) => {
+  const newBox = new Box(req.body)
+  return newBox.save((err: Error, doc: IBoxModel) => res.send(doc))
+}
+
+export const updateBox = (req: Request, res: Response) =>
+  Box.findByIdAndUpdate(
+    <String>req.params.id,
+    { $set: req.body },
+    (err: Error) => res.send(err ? err : {})
+  )
+
+export const deleteBox = (req: Request, res: Response) =>
+  Box.findByIdAndRemove(<String>req.params.id, (err: Error) =>
+    res.send(err ? err : {})
+  )
+```
+
+After our controller logic is defined and referenced in our entry file, the API is ready to serve. Congrats! If you made it this far, you should have a barebones functioning inventory API written with TypeScript.
+
+To test it out yourself, run the migration script or seed some data with the API yourself using the _/boxes_ routes.
 
 ### Conclusion
 
