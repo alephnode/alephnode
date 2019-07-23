@@ -300,7 +300,7 @@ export const index = (req: Request, res: Response) =>
 
 A controller declared using TypeScript is practically identical to one in vanilla JS, with the exception that the request and response parameters are bound to the respective types exposed by Express's types library.
 
-With our first controller out of the way, let's dig into the main logic involved in the app: the boxes for in my storage unit.
+With our first controller out of the way, let's dig into the main logic involved in the app: the boxes in my storage unit.
 
 _backend/src/controllers/home.ts:_
 
@@ -341,21 +341,21 @@ export const deleteBox = (req: Request, res: Response) =>
 
 First, I declare a utility function I'll use to help sort the boxes returned (my boxes are named alphanumerically because I'm a nerd). Next, I write the actual handlers that'll process the requests for the API.
 
-Notice I'm still typing my requests and responses to the types exposed by Express's library. I'm also pulling in the interface I defined earlier to declare the type of data being returned in the JSON response: an array of boxes.
+Notice I'm still binding my requests and responses to the types exposed by Express's library. I'm also pulling in the interface I defined earlier to declare the type of data being returned in the JSON response: an array of boxes.
 
-After our controller logic is defined and referenced in our entry file, the API is ready to build. Assuming yo have the compiler installed globally using `tsc`, go ahead and run the npm script provided to build the project:
+After our controller logic is defined, the API is ready to build. Assuming you have the compiler installed globally using `tsc`, run the npm script provided to build the project:
 
 ```bash
 yarn build
 ```
 
-If everything goes well, you should have a compiled project ready for deployment. To verify, go ahead and run:
+If everything goes well, the compiled project should be ready for deployment. To verify, go ahead and run:
 
 ```bash
 yarn start
 ```
 
-If everything worked out, the API should be live on http://localhost:8811.
+If everything works, the API should be live on http://localhost:8811.
 
 You can also spin up the frontend I attached to the project using the same command in the _frontend/_ directory (be warned; as of this writing it's still a WIP).
 
