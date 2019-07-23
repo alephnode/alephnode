@@ -1,36 +1,45 @@
 ---
-title: 'Writing a RESTful API in TypeScript: A Review'
-date: '2019-07-05'
+title: 'Writing a RESTful API with TypeScript'
+date: '2019-07-10'
 ---
+
+<div id="img-container">
+<img id="ts-img" src="./images/ts.png">
+</div>
 
 If you've followed JavaScript trends in recent months, you've undoubtedly witnessed the meteoric rise of TypeScript.
 
 With <a href="https://github.com/pikapkg/web" target="_blank">top</a> <a href="https://github.com/microsoft/vscode" target="_blank">open-source</a> <a href="https://github.com/angular/angular" target="_blank">projects</a> deployed or <a href="https://news.ycombinator.com/item?id=17467141" target="_blank">rewritten</a> in the language and a growing call for adoption from <a href="" target="_blank">community luminaries</a>, embracing a new, more type-conscious JavaScript seems inevitable.
 
-But it doesn't have to be grueling. I'm here to report back from the field having just built my first API in the language. My verdict? In short: it's worthwhile for the value it returns and the planning it requires.
+For the unsure, the transition doesn't have to be grueling. I'm here to report back from having just built an inventory API in the language. In short: it's worthwhile for the value it returns and the planning it requires.
 
 ### Why TypeScript?
 
-To be transparent, I've been skeptical of TypeScript since hearing about it in 2016. The most convincing criticism I heard was by EE, who said "quote".
+To be transparent, I've been skeptical of TypeScript since hearing about it in 2016. The most convincing criticism came from JavaScript thought leader Eric Elliott, who in his viral blog post dubbed <a href="https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b" target="_blank">"The TypeScript Tax"</a> argued that:
 
-In simpler terms, declaring types felt like a step back into a bulkier, strongly typed language such as C++ or Java, which didn't seem as flexible as JavaScript's on-the-fly assignment.
+_"Type correctness does not guarantee program correctness."_
 
-Although it's true that TypeScript slows development time compared with vanilla JS (source?), the questions it forces the developer to answer end up making the solution stronger overall. What will the data look like for this abstraction? What are its default values? What are the expectations when mutating it? All are concerns considered earlier in a TypeScript-based project.
+Citing several case studies of major businesses and their code bases, Elliott argues that the cost of adopting TypeScript isn't worth the benefit it brings in deflecting bugs.
 
-Adopting TypeScript also offers many tangible benefits. Among them include:
+After using the superset in a few recent projects, I've found that the questions it forces the developer to answer end up making the solution stronger overall. What will the data look like for this abstraction? What are its default values? What are the expectations when mutating it? All are concerns considered earlier in a TypeScript-based project.
 
-- better introspection
-- better imports
-- compile-time errors caught
-- other stuff
+TypeScript has also offered several workflow-related benefits. Among them include:
 
-Now that we've addressed why TypeScript is worth considering for projects, let's look at an example of its use in one.
+- better introspection, debugging, and code completion (_especially in VSCode_)
+- compile-time errors caught faster
+- powerful bindings to GraphQL schemas for more concise, error-averse code (<a href="https://medium.com/@pie6k/graphql-typescript-best-way-to-write-type-safe-schema-88d3c302ad19" target="_blank">example</a>)
+
+Don't just take it from me: <a href="https://www.upwork.com/hiring/community/the-advantages-of-typescript/" target="_blank">Upwork</a>, <a href="https://www.appdynamics.com/blog/engineering/the-benefits-of-migrating-from-javascript-to-typescript/" target="_blank">AppDynamics</a>, <a href="https://ionicframework.com/docs/v3/developer-resources/typescript/">Ionic</a>, and other companies are voicing their support.
+
+Since we've determined that TypeScript is worth considering for projects, let's look at an example of its use in one.
 
 ### Getting Started - Project Overview
 
-For my first TypeScript project, I built an inventory API to stay organized during my imminent move across Las Vegas. By labeling my boxes and writing detailed descriptions of what's in each container, I'm hoping to reduce time and stress from the usual relocation process.
+For my TypeScript app, I built an inventory API to stay organized during my imminent move across Las Vegas. By labeling my boxes and writing detailed descriptions of what's in each container, I'm hoping to reduce time and stress from the usual relocation process.
 
 You can check out the current state of the project on its <a href="https://github.com/alephnode/inventory-app" target="_blank">GitHub repository</a>, or follow along below for a walkthrough on setting up the project.
+
+It's worth mentioning that the <a href="https://github.com/microsoft/TypeScript-Node-Starter" target="_blank">Microsoft Node Starter Kit</a> served as the inspiration for this project. Give it a glance when you have time, or if you want a more robust example involving user authentication.
 
 First, a look at the project structure (jumping into the _/backend_ directory, that is):
 
@@ -57,7 +66,7 @@ First, a look at the project structure (jumping into the _/backend_ directory, t
 └── yarn.lock
 ```
 
-The two root-level modules of note are _tsconfig.json_ and _tslint.json_. The former configures all TypeScript settings associated with the project, and the latter sets defaults for the linting that occurs during the TypeScript compilation process.
+The two root-level files of note are _tsconfig.json_ and _tslint.json_. The former configures all TypeScript settings associated with the project, and the latter sets defaults for the linting that occurs during the TypeScript compilation process.
 
 _tsconfig.json_:
 
@@ -79,6 +88,8 @@ _tsconfig.json_:
   "include": ["src/**/*"]
 }
 ```
+
+For a full list of compiler options, check out the handy <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html" target="_blank">TypeScript compiler option documentation</a>.
 
 _tslint.json_:
 
@@ -126,9 +137,11 @@ _tslint.json_:
 }
 ```
 
-The mock directory houses data to seed into a MongoDB database. For detailed instructions, refer to <a href="https://github.com/alephnode/inventory-app" target="_blank">the project's README.md</a> (you'll need MongoDB installed to run the script).
+For the most part, I accepted the defaults of the previously mentioned Microsoft Node Starter Kit.
 
-Now would be a good time to install the dependencies we'll use in the project. To do so, we run the install command in the project's root directory:
+Next is the mock directory, which houses data to seed into a MongoDB database. For detailed instructions, refer to <a href="https://github.com/alephnode/inventory-app" target="_blank">the project's README.md</a> (you'll need MongoDB installed to run the script).
+
+Now would be a good time to install the dependencies we'll use in the project. To do so, we run the install command in the backend project's root directory:
 
 ```bash
 yarn add body-parser compression cors dotenv express lusca mongoose nodemon tslint typescript
@@ -231,14 +244,16 @@ export default app
 
 First we import all our dependencies:
 
-- Express: handles web server logic
-- compression: assists with optimizing the delivery of our API
-- body-parser: helps with parsing request body info
-- lusca: support with app security
-- cors: for helping to define CORS policy
-- mongoose: used as the ODM
+- `express`: handles web server logic
+- `compression`: assists with optimizing the delivery of our API
+- `body-parser`: helps with parsing request body info
+- `lusca`: support with app security
+- `cors`: for helping to define CORS policy
+- `mongoose`: used as the ODM, or <a href="https://devcenter.heroku.com/articles/nodejs-mongoose" target="_blank">_object-data modeling_</a> library
 
-After including our supporting libraries, we pull in the MongoDB URI environment variable from our secrets module, as well as all controllers to connect them to our desired routes.
+After including our supporting libraries, we pull in the MongoDB URI environment variable from our secrets module and establish the connection. We also include our middleware for CORS policy, xss protection, compression, and other useful presets.
+
+Finally, we hook in our controllers and connect them to our desired routes. We'll define the details of the handlers in the next section.
 
 To launch the server, we just need to write some code that opens a socket and listens for requests. We'll define that logic in our _server.ts_ file.
 
@@ -283,7 +298,7 @@ export const index = (req: Request, res: Response) =>
   res.send('Inventory API - sward move June 2019 🌲')
 ```
 
-A controller declared using TypeScript is practically identical to one in vanilla JS, with the exception that the request and response parameters are bound to the respective types exposed by express's types library.
+A controller declared using TypeScript is practically identical to one in vanilla JS, with the exception that the request and response parameters are bound to the respective types exposed by Express's types library.
 
 With our first controller out of the way, let's dig into the main logic involved in the app: the boxes for in my storage unit.
 
@@ -324,20 +339,40 @@ export const deleteBox = (req: Request, res: Response) =>
   )
 ```
 
-After our controller logic is defined and referenced in our entry file, the API is ready to serve. Congrats! If you made it this far, you should have a barebones functioning inventory API written with TypeScript.
+First, I declare a utility function I'll use to help sort the boxes returned (my boxes are named alphanumerically because I'm a nerd). Next, I write the actual handlers that'll process the requests for the API.
 
-To test it out yourself, run the migration script or seed some data with the API yourself using the _/boxes_ routes.
+Notice I'm still typing my requests and responses to the types exposed by Express's library. I'm also pulling in the interface I defined earlier to declare the type of data being returned in the JSON response: an array of boxes.
+
+After our controller logic is defined and referenced in our entry file, the API is ready to build. Assuming yo have the compiler installed globally using `tsc`, go ahead and run the npm script provided to build the project:
+
+```bash
+yarn build
+```
+
+If everything goes well, you should have a compiled project ready for deployment. To verify, go ahead and run:
+
+```bash
+yarn start
+```
+
+If everything worked out, the API should be live on http://localhost:8811.
+
+You can also spin up the frontend I attached to the project using the same command in the _frontend/_ directory (be warned; as of this writing it's still a WIP).
+
+<div id="img-container">
+<img id="app-img" src="./images/app.png">
+</div>
 
 ### Conclusion
 
-As I mentioned earlier, TypeScript enhanced the clarity of my API throughout development. What's more, VSCode's built-in intelliSense was supercharged by using it.
+Congrats! If you made it this far, you should have a barebones functioning inventory API written with TypeScript.
 
-After being a hater for years, I'd say now's the time to reconsider any aversion to TypeScript. The tooling alone makes for a compelling case to incorporate it into projects, both new and old.
+As I mentioned earlier, TypeScript enhanced the clarity of my API throughout the development process. Incorrect object property references were caught immediately, and exported module methods and functions were displayed in my editor inline.
 
 If you'd like to learn more about TypeScript-focused projects, check out the following resources:
 
-- Microsoft Node Starter Kit
-- Stencil
-- something else
+- <a href="https://github.com/microsoft/TypeScript-Node-Starter" target="_blank">Microsoft Node Starter Kit</a>
+- <a href="https://stenciljs.com/" target="_blank">StencilJS, a cool library for building design systems in TypeScript</a>
+- <a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank">TypeScript in 5 Minutes by the TS team</a>
 
 As always, thanks for reading.
