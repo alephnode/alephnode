@@ -26,3 +26,7 @@ I'm not here to imply that tensors are the natural evolution of data structures 
 - Explain what it _would_ be good at and implement
 - Follow up with Python examples (?)
 - Kaggle reference
+- https://codelabs.developers.google.com/codelabs/tfjs-training-regression/ <-- google course on it!
+
+Google best practice: shuffling/normalizing data
+Also Google: batch sizes tend to be between 32-512
