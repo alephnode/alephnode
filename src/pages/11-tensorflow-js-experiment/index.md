@@ -1,7 +1,9 @@
 ---
-title: 'Dabbling in Machine Learning with TensorFlowJS'
-date: '2019-07-31'
+title: 'Predicting XX Using TensorFlowJS'
+date: '2019-07-30'
 ---
+
+--- Find cool dataset, linear regression example
 
 - best way to define a tensor: it's the representation of all the data we've compiled about the thing we want to predict. It's the weight, make, horsepower, price, and other factors that we use to predict mileage.
 
