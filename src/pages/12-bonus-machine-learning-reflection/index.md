@@ -17,4 +17,6 @@ If we reflect this model back onto ourselves, concerns emerge. Where's the bluep
 
 The immediate response would be morals.
 
+- Nils Nilsson summary here.
+
 - detail the differences

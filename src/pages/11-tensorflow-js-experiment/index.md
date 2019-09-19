@@ -32,3 +32,19 @@ I'm not here to imply that tensors are the natural evolution of data structures 
 
 Google best practice: shuffling/normalizing data
 Also Google: batch sizes tend to be between 32-512
+
+NEED TO DETERMINE SCOPE OF ARTICLE
+
+- not everything I know about ML needs to be included
+- intro to ML
+- difference between linear and logistical regression, how example will be linnear
+- explain difference between what's available in Python and what's good with the JS port
+- introduce project specifics, explain dataset
+- outline the basic pattern for machine learning
+- carry out that pattern with the data example
+- find some way to visualize or store result of project somewhere
+- summary with numerous links for education, possibly plug additional examples in a series once I get more familiar with material
+
+Better article first: normal forms, explained in XXX (gimicky but fuck it)
+
+- possibly another article on clojurescript experimentation if its faster than wrapping this bigger project up
