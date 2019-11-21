@@ -39,7 +39,25 @@ The TDD part refers not to the technology used but in the development process em
 
 Here's a tree of the project structure:
 
-<tree>
+```
+.
+├── Dockerfile
+├── README.md
+├── dist
+│   ├── index.js
+│   ├── index.js.map
+│   ├── index.test.js
+│   └── index.test.js.map
+├── docker-compose.yml
+├── jest.config.js
+├── package.json
+├── src
+│   ├── index.test.ts
+│   └── index.ts
+├── tsconfig.json
+├── tslint.json
+└── yarn.lock
+```
 
 As you can see, it's a lightweight starting point.
 
