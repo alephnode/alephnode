@@ -9,10 +9,6 @@ date: '2019-06-01'
 
 Hello again, everyone!
 
-After a few busy weeks of work, personal projects, and _Game of Thrones_ fan theory wormholes, I'm dusting the cobwebs off the blog. If I ever take a break that long again, feel free to feed me to the dragons.
-
-Uninspired references aside, today's article will be a relatively short dive into some productivity hacks available in Visual Studio Code (_VSCode hereafter_).
-
 If you're like me, you're constantly looking for ways to improve the development experience. From faster compilation to terminal aliases, anything that cuts precious time is worth considering. What follows are a few of my favorite tricks available in my IDE of choice.
 
 ### Wait, Why VSCode? (In Case You Need Convincing)
