@@ -61,7 +61,12 @@ Alright, let's jump into it. Here's a tree of the project structure:
 
 As you can see, it's a lightweight starting point.
 
+- Make note of helpfulness in dev environment for for testing in env that matches lambda prod 
+
 ### Final Stage: Deploy in single node kube cluster
+
+
+- highlight simplicity of deployment, benefits of k8s
 
 ### Reading More
 
