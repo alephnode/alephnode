@@ -3,6 +3,10 @@ title: 'Inching Toward Dev/Prod Parity with Containerization'
 date: '2019-10-28'
 ---
 
+<div id="img-container">
+<img id="docker-img" src="./images/docker-logo.png">
+</div>
+
 A few months ago, I moved 1,000 miles away from home to the Pacific Northwest. I've plotted my escape from the sweltering Mojave Desert for close to a decade, so the migration has felt more like a victory lap of sorts.
 
 With the new location came a new job, which exposed me to new methods for solving old problems. 
@@ -28,7 +32,9 @@ In recent years, I've gone almost exclusively serverless for projects. It's been
 
 I've also stuck to serverless since my initial investigation of scaling Docker in 2017 found it to involve more manual toil than I was willing to invest. (Well, on AWS, anyway, which was the cloud provider for my work at the time.) 
 
-In the vast, expansive future of 2019, this is no longer the case. Management solutions like Kubernetes leverage the power of containerization—which enables developers to strictly define the components that constitute their applications—to manage all networking and infrastructure concerns in a concise, declarative way. 
+In the vast, expansive future of 2019, this is no longer the case. 
+
+Management solutions like Kubernetes leverage the power of containerization—which enables developers to strictly define the components that constitute their applications—to manage all networking and infrastructure concerns in a concise, declarative way. 
 
 This added level of control imbues developers with confidence in their services due to _dev/prod parity_.
 
@@ -37,8 +43,6 @@ The idea is that, in development, you're running a dev server that's running on 
 Even if the OS is the same, perhaps you're making assumptions about what's already installed on the server, or certain environment variables that are already set on your machine.
 
 Containerization seeks to reduce this problem space. With all dependencies, commands, and environment workflows detailed in a _Dockerfile_, the Docker daemon can pull from common repositories and run identical versions of services on local dev machines and production servers alike. 
-
-_For more details on the core concepts of images, containers, and other Docker-related terms, check out this helpful guide._
 
 After experimenting with different defaults on a few projects, I've formulated some opinions and generated a template for future projects.
 
@@ -155,7 +159,9 @@ With just three simple files, my development and production workflows are clearl
 
 ### Next Steps
 
-This post was admittedly less ambitious than previous articles. It served more to catalog promising development experiments rather than pass along bulletproof information. It's a topic I wanted to explore but also hope to enhance my understanding of in months to come. Look for a report on my experience deploying a Docker-based project on a few providers in the coming posts.
+This post was admittedly less ambitious than previous articles. It served more to catalog promising development experiments rather than pass along bulletproof information. 
+
+It's a topic I wanted to explore but also hope to enhance my understanding of in months to come. Look for a report on my experience deploying a Docker-based project on a few providers in the coming posts.
 
 Until then, here are a few of the most fruitful references I encountered in my studies:
 
@@ -163,6 +169,6 @@ Until then, here are a few of the most fruitful references I encountered in my s
 - <a href="https://docs.docker.com/get-started/" target="_blank">Docker Getting Started</a>
 - <a href="https://aws.amazon.com/eks/" target="_blank">AWS EKS Services</a>
 
-Please note that, unlike previous posts, this one is more exploratory than expository. If you see issues with my approach for Docker in development, please feel free to open an issue on the repo linked so we can discuss. The goal is to find the optimal DX with the greatest benefits.
+If you see issues with my approach for Docker in development, please feel free to open an issue on the repo linked so we can discuss. The goal is to find the optimal development experience with the greatest benefits.
 
 As always, thanks for reading!
