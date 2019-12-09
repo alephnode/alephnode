@@ -9,7 +9,7 @@ With the new location came a new job, which exposed me to new methods for solvin
 
 Specifically, conversations with colleagues have nudged me toward containerization rather than working with dev servers and/or serverless deployment targets.
 
-Why I've been entertaining the idea: 
+Why I'm entertaining the idea: 
 1. reduced environment- and infrastructure-specific bugs, and 
 2. have granular control over the scalability, latency, and other important aspects of my services
 
@@ -17,11 +17,11 @@ Let's unpack these benefits a bit.
 
 ### Incentives and Rationale
 
-In recent years, I've gone almost exclusively serverless for my deployments. It's been a good fit given the quick app-to-deployment pipeline and lack of server maintenance.
+In recent years, I've gone almost exclusively serverless for deployments. It's been efficient given the quick app-to-deployment pipeline and lack of server maintenance.
 
-I also stuck to serverless since scaling Docker was a tedious, manual process when I first researched methods in 2017. (Well, on AWS, anyway, which was the cloud provider where I worked at the time.) 
+I've also stuck to serverless since my initial investigation of scaling Docker in 2017 found it to involve more manual toil than I was willing to invest. (Well, on AWS, anyway, which was the cloud provider for my work at the time.) 
 
-In the vast, expansive future of 2019, this is no longer the case. Management solutions like Kubernetes leverage the power of containerization—which allows developers to strictly define the platform and services that constitute their applications—to manage all networking and infrastructure concerns in a concise, declarative way. 
+In the vast, expansive future of 2019, this is no longer the case. Management solutions like Kubernetes leverage the power of containerization—which enables developers to strictly define the pieces that constitute their applications—to manage all networking and infrastructure concerns in a concise, declarative way. 
 
 This added level of control increases confidence in the reliability of services due to something called _dev/prod parity_.
 
@@ -33,9 +33,13 @@ Containerization reduces this problem space. With all dependencies, commands, an
 
 _For more details on the core concepts of images, containers, and other Docker-related terms, check out this helpful guide._
 
+After experimenting with different defaults on a few projects, I've formulated some opinions and generated a template for future projects.
+
 ### Starter Kit Walkthrough
 
-After experimenting with different defaults on a few projects, I've formulated some opinions and generated a template for future projects. You can see the repo here <link>. It consists of:
+If you'd like to skip the explanation, you can see the finished repo <a href="https://github.com/alephnode/tdd-ts-docker-starter" target="_blank">here</a>. 
+
+As for the opinions/assumptions being made, it consists of:
 
 - Node for backend
 - Express for my RESTful endpoints
@@ -43,7 +47,9 @@ After experimenting with different defaults on a few projects, I've formulated s
 - Jest for testing all the things 
 - Docker for development and deployment
 
-Alright, let's jump into it. Here's a tree of the project structure:
+Alright, let's jump into it!
+
+First, here's the tree structure for the project:
 
 ```
 .
