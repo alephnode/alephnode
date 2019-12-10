@@ -46,7 +46,7 @@ Once the DOM object is created, the browser needs to gather the object's style p
 
 What is CSSOM? Well, most websites have styles associated with their markup. Just how the lines in the HTML file were parsed and converted into a node-ripe tree structure, the styles related to the asset are given the same treatment. The resulting object is known as the CSSOM.
 
-When the browser encounters a linked stylesheet or any other asset, it sends the request for said asset back to the server. During this time, its blocked from rendering the page until the response is returned. This is why CSS is commonly referred to as <b>render-blocking</b>.
+When the browser encounters a linked stylesheet or any other asset, it sends the request for said asset back to the server. During this time, it's blocked from rendering the page until the response is returned. This is why CSS is commonly referred to as <b>render-blocking</b>.
 
 If you think about it, this makes sense. The browser is aware that styles matter to the rendering process ahead, and it needs to interpret the information received as a whole due to the cascading nature of styles (hence the name, CSS).
 
@@ -54,7 +54,7 @@ Once the styles are received, interpreted, and applied, the JavaScript fetched b
 
 ### Step Two: JavaScript Execution
 
-With the DOM constructed and styles identified, all JavaScript logic is executed. The modifying of content, styles, and other information needed to properly display the resource is done at this stage.
+With the DOM constructed and styles identified, all JavaScript logic is executed. The modification of content, styles, and other information needed to properly display the resource is done at this stage.
 
 As more applications and services move toward web-first delivery, developers are increasingly relying on JavaScript to handle the brunt of the app logic. As such, this is the section that often causes the most bottleneck and is the main area to target when looking to optimize content delivery.
 
