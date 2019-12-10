@@ -50,7 +50,7 @@ After experimenting with different defaults on a few projects, I've formulated s
 
 If you'd like to skip the explanation, you can see the finished repo <a href="https://github.com/alephnode/tdd-ts-docker-starter" target="_blank">here</a>. 
 
-As for the opinions/assumptions being made, it consists of:
+Assumptions made:
 
 - Node for backend
 - Express for my RESTful endpoints
@@ -97,9 +97,9 @@ EXPOSE 8000
 CMD ["yarn", "start"]
 ```
 
-If you've used Docker before, the above should look like a typical NodeJS-based deployment. We copy over files, install our dependencies, and start the server. 
+If you've used Docker before, the above should look like a typical NodeJS-based deployment. We copy files, install our dependencies, and specify the command to start the server. 
 
-This would give us a server to spin up, but we have bigger plans for our project. 
+Next, we create a file that configures how we'll develop locally.
 
 _docker-compose.yml_:
 
@@ -129,7 +129,7 @@ services:
       - tdd-ts-docker-starter
 ```
 
-The _docker-compose.yml_ file's purpose is to run the development server alongside a testing server in watch mode. This way, I'm alerted of breaking changes instantaneously. 
+The _docker-compose.yml_ file's purpose in this project is to run the development server alongside a testing server in watch mode. This way, I'm alerted of breaking changes instantaneously. 
 
 The full documentation for the YAML file's syntax is available <a href="https://docs.docker.com/compose/compose-file/" target="_blank">here</a>, but a few call-outs are:
 
@@ -137,9 +137,9 @@ The full documentation for the YAML file's syntax is available <a href="https://
 - the Docker socket is mounted for the two services to communicate. Note to <a href="https://stackoverflow.com/questions/40844197/what-is-the-docker-security-risk-of-var-run-docker-sock" target="_blank">not do this in production</a>
 - the test server is watching for changes to the mounted src/ directory in order to know when to restart
 
-_Note: This file is specific to my development workflow. If I were to deploy this service, I'd do so as a single-node Kubernetes cluster or as a standalone container hosted on a virtual box through a cloud provider. For that reason, only the Dockerfile would be used._
+_Note: Againn, this file is specific to my development workflow. If I were to deploy this service, I'd do so as a single-node Kubernetes cluster or as a standalone container hosted on a virtual box through a cloud provider. For that reason, only the Dockerfile would be used._
 
-For the final piece, we'll take a look at the _package.json_ scripts that make all this configuration come together:
+For the final piece, we'll take a look at the _package.json_ scripts that make these pieces come together:
 
 _package.json_:
 
@@ -153,22 +153,18 @@ _package.json_:
 // ...
 ```
 
-Of the three commands listed, `dev` is the most interesting. In it, we run the Typescript compiler to build our project, then spin up our docker-comopse project (the dev and test servers). The `start` command is what the dev server will run, which just launches a server via the awesome nodemon library. Obviously, `test` runs our Jest test suite.
+Of the three commands listed, `dev` is the most interesting. In it, we run the TypeScript compiler to build our project, then spin up our docker-comopse project (the dev and test servers). The `start` command is what the dev server will run, which just launches a server via the awesome nodemon library. Obviously, `test` runs our Jest test suite.
 
 With just three simple files, my development and production workflows are clearly defined. No lambda-specific function signatures or boilerplate means I can switch cloud providers overnight and be back in business within hours. Not bad!
 
 ### Next Steps
 
-This post was admittedly less ambitious than previous articles. It served more to catalog promising development experiments rather than pass along bulletproof information. 
+This repo is admittedly less bulletproof than previous efforts. That's the beauty of development—there's always more to learn. 
 
-It's a topic I wanted to explore but also hope to enhance my understanding of in months to come. Look for a report on my experience deploying a Docker-based project on a few providers in the coming posts.
-
-Until then, here are a few of the most fruitful references I encountered in my studies:
+Go ahead and build your own starter kit to streamline your devops story. When considering next steps, include the following resources:
 
 - <a href="https://learning.oreilly.com/library/view/kubernetes-in-action/9781617293726/" target="_blank">Kubernetes in Action</a>
 - <a href="https://docs.docker.com/get-started/" target="_blank">Docker Getting Started</a>
 - <a href="https://aws.amazon.com/eks/" target="_blank">AWS EKS Services</a>
-
-If you see issues with my approach for Docker in development, please feel free to open an issue on the repo linked so we can discuss. The goal is to find the optimal development experience with the greatest benefits.
 
 As always, thanks for reading!
