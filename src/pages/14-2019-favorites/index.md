@@ -53,6 +53,15 @@ If you're on Apple Music, I publish an ambient music playlist that's fun to code
 
 ### Articles, News/Scientific
 
+### Books
+- first, shout out to O'Reilly
+- Designing Data-Intesive Applications
+- Google SRE Book
+- Grokking Algorithms
+- TypeScript Book
+- Rust Programming Language
+- Clojure for the brave and true <----- so damn good
+- maybe shout out to that design one
 
 ### Lessons learned
 
