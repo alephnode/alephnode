@@ -7,7 +7,7 @@ date: '2019-10-28'
 <img id="docker-img" src="./images/docker-logo.png">
 </div>
 
-A few months ago, I moved 1,000 miles away from home to the Pacific Northwest. I've plotted my escape from the sweltering Mojave Desert for close to a decade, so the migration has felt more like a victory lap of sorts.
+A few months ago, I moved 1,000 miles from home to the Pacific Northwest. I've plotted my escape from the sweltering Mojave Desert for close to a decade, so the migration felt like a victory lap of sorts.
 
 With the new location came a new job, which exposed me to new methods for solving old problems. 
 
