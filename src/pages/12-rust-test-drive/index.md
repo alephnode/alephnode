@@ -24,6 +24,9 @@ Talk about reasons why I learned
 - also kinda related; discuss safety and efficiency, how it interests you since deal with high-traffic workloads and would like to introduce at work in some way 
 - web assembly
 
+Before we get started: Yes, I know this could be a two-line bash script. (I know this because I wrote one to get that number.) Still, I'd rather learn Rust 😏🦀, so stick around for the joy of exploration.
+
+Alright, let's get started.
 
 # Scaffolding the Project
 

@@ -55,7 +55,7 @@ If you're on Apple Music, I publish an ambient music playlist that's fun to code
 
 ### Books
 - first, shout out to O'Reilly
-- Designing Data-Intesive Applications
+- Designing Data-Intensive Applications
 - Google SRE Book
 - Grokking Algorithms
 - TypeScript Book
@@ -72,4 +72,4 @@ If you're on Apple Music, I publish an ambient music playlist that's fun to code
 - recipes 
 - restaurants in portland and vegas
 
-- taking strongn liberty with what my audience likes, but shrug
+- taking strong liberty with what my audience likes, but shrug
