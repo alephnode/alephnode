@@ -5,16 +5,11 @@ date: '2019-10-28'
 
 # Background
 
-- reducing toil and Google SRE pitch, why I wanted to automate the boilerplate away while also learning Rust.
+It's been said that learning a new language each year helps engineers stay on their feet.
 
-Seemed like a good use case for the task. Figured after building I'd know:
+I don't formally prescribe to this mode of thinking, but I _do_ experiment with new libraries, languages, and tooling every so often in order to glean new practices and ideas. 
 
-- working with different data types 
-- handling IO operations
-- writing to a file
-- designing project structure through a few different modules (io handler, template builder, main program)
-- writing tests
-- wiring it to the cli
+One topic that's interested me during the last few years is web assembly. I'm intrigued specifically by its use cases, performance benefits, and influence over the future of the web. 
 
 # Why Rust?
 
@@ -23,6 +18,17 @@ Talk about reasons why I learned
 - related, the polls showing it as the most developer happiness
 - also kinda related; discuss safety and efficiency, how it interests you since deal with high-traffic workloads and would like to introduce at work in some way 
 - web assembly
+
+Once I decided to write some Rust, my next order of business was determining a use case for writing a new app.
+
+After mulling my personal backlog for a day, I decided that a simple blog page scaffolding script would suffice. After all, it seems like a good excuse to learn a language. Building a program that generates files has to do many things, including: 
+
+- work with different data types 
+- handle IO operations
+- write to a file
+- have a project structure with +1 module
+- write tests
+- wire it to the cli
 
 Before we get started: Yes, I know this could be a two-line bash script. (I know this because I wrote one to get that number.) Still, I'd rather learn Rust 😏🦀, so stick around for the joy of exploration.
 
