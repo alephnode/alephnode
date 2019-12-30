@@ -13,7 +13,7 @@ One topic that's interested me during the last few years is web assembly. I'm in
 
 # Why Rust?
 
-For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been repeatedly touted as the most enjoyable language to write, and it's being adopted by companines like XXX and XXX. 
+For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been repeatedly touted as the most enjoyable language to write, and it's being adopted by companies like XXX and XXX. 
 
 Microsoft has even spent months experimenting with core system rewrites with the language, which they've deemed to be going "mostly positive". 
 
@@ -270,3 +270,7 @@ You should now be able to run the command and see the program kick off!
 Look out for an article on merging Rust work with Web Assembly to deliver something fun over the web. Until then, here are a few resources I found helpful throughout my spike:
 
 - official rust docs. talk about being one of the advantages of the language 
+- web assembly docs 
+- ffsend - firefox send client
+- alacrity - terminal written in rust
+- spotify terminal - coolest rust project ever
