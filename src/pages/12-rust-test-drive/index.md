@@ -13,13 +13,13 @@ One topic that's interested me during the last few years is web assembly. I'm in
 
 # Why Rust?
 
-Talk about reasons why I learned
-- coworkers cited as an example for a better language to write in than JS
-- related, the polls showing it as the most developer happiness
-- also kinda related; discuss safety and efficiency, how it interests you since deal with high-traffic workloads and would like to introduce at work in some way 
-- web assembly
+For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been repeatedly touted as the most enjoyable language to write, and it's being adopted by companines like XXX and XXX. 
 
-Once I decided to write some Rust, my next order of business was determining a use case for writing a new app.
+Microsoft has even spent months experimenting with core system rewrites with the language, which they've deemed to be going "mostly positive". 
+
+Finally, it's being used to optimize the delivery of robust experiences over the web through its use in web assembly. 
+
+Alright, enough pitching. Since I decided to write some Rust, my next order of business was determining a use case for writing a new app.
 
 After mulling my personal backlog for a day, I decided that a simple blog page scaffolding script would suffice. After all, it seems like a good excuse to learn a language. Building a program that generates files has to do many things, including: 
 
@@ -34,7 +34,7 @@ Before we get started: Yes, I know this could be a two-line bash script. (I know
 
 On the subject of exploration: if you prefer the path of self discovery, here's a <a href="https://github.com/alephnode/rust-sandbox/tree/master/generate_blog_template" target="_blank">link to the GitHub repo</a> for this project.
 
-Also, if you haven't already done so, install the rust compiler and package manager by following the instructions in the <a href="https://doc.rust-lang.org/book/title-page.html" target="_blank">Rustlang documentation.</a>
+Also, if you haven't already done so, install the Rust compiler and package manager by following the instructions in the <a href="https://doc.rust-lang.org/book/title-page.html" target="_blank">Rustlang documentation.</a>
 
 Alright, let's dive in.
 
@@ -55,7 +55,7 @@ The final tree structure for the project looks like this:
 
 Most of these files were generated from the `cargo new <project>` command (recall that Cargo is the package manager for Rust). If you want, give it a shot on your local machine to explore the project it creates.
 
-The `cargo.lock` file helps Cargo manage dependencies and versions. The `cargo.toml` file is where packages used and other instructions for the compiler are defined, as well as metadata about the project.
+The `cargo.lock` file helps Cargo manage dependencies and versions. The `cargo.toml` file is where packages used and other instructions for Cargo are defined, as well as metadata about the project.
 
 Next, let's take a look at `main.rs`. This is the file that Cargo assumes is the entry point for our Rust application. Examining this file often provides a general overview of a program's workflow.
 
@@ -75,7 +75,7 @@ First, we bring two modules into scope: reader and template. We'll dig into thos
 
 In our `main` function, we store the result of a `handle_input` function from the reader module in a template (judging from the variable name). Next, we generate a template, passing the template info to the necessary builder. Looks easy enough.
 
-For better context, let's walk through some of the functions we see called. This brings us first to the reader module.
+For better context, let's step into some of the functions called.
 
 # Reading User Input: Module One
 
@@ -155,21 +155,23 @@ mod tests {
 
 There's considerably more going on in this file 😰. Fear not, brave rustaceans: all can be explained.
 
-What is this module doing? In short, it's implementing the functionality for reading user input. 
+In short, this file is implementing the functionality for reading user input. 
 
-At the top of the file we bring all libraries used into scope. In this case, I'm leaning on the standard library's io interface. 
+At the top of the file we bring all libraries used into scope. In this case, I'm leaning on the standard library's IO interface. 
 
-Next we find the only public function in this module: `handle_input`, which we saw referenced in the `main.rs` file. 
+Next we find the only public function in this module: `handle_input`, which was referenced in the `main.rs` file earlier. 
 
-Because Rust is a statically typed language, the intention and flow of functions are often expressed in its signature. `handle_input`'s looks like this:
+Because Rust is a statically typed language, the intention and flow of functions are often expressed in their signatures. `handle_input`'s looks like this:
 
 ```rust
 pub fn handle_input() -> Vec<String>
 ```
 
-The function reads in and stores info about the new template (file name and entry title), validates the input with the user, and returns an array containing the two values back to the caller.
+We can see the function takes no input and returns an array containing the two values back to the caller. 
 
-If you step further into the file, you'll see the actual io handling implementation:
+As for the body, we see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is desired.
+
+If you step further into the file, you'll see the actual IO handling implementation:
 
 ```rust
   io::stdin()
