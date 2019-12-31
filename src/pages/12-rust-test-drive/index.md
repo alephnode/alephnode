@@ -5,13 +5,11 @@ date: '2019-10-28'
 
 It's considered sage advice by many a developer: learn a new programming language each year.
 
-The adage is most commonly attributed to the seminal work <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X" target="_blank">The Pragmatic Programmer</a>, but the phrase seems impossible to avoid during each year's end.
+The adage is most commonly attributed to the seminal work <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X" target="_blank">The Pragmatic Programmer</a>, but it seems impossible to avoid during each year's end.
 
-I don't formally prescribe to this mode of thinking, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices, ideas, and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
+I don't formally adhere to this directive, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices, ideas, and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
 
-Something that's filled that time most recently for me has been Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
-
-After spending time exploring the documentation and community, I've enjoyed the experience enough to bother you about it. 
+Something that's filled that time most recently has been Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
 
 # Why Rust?
 
@@ -23,7 +21,7 @@ Finally, it's being used to optimize the delivery of robust experiences over the
 
 Alright, enough pitching. Since I decided to write some Rust, my next order of business was determining a use case for creating a new app.
 
-After mulling my personal backlog for a bit, I decided a simple blog page scaffolder would suffice. This seemed like a reasonable choice; building a file-generating program has to do many things. Some of these include: 
+After mulling my personal backlog for a bit, I decided a simple blog page scaffolder would suffice. This seemed like a reasonable choice; building a file-generating program involves many things. Some of these include: 
 
 - work with different data types 
 - handle IO operations
@@ -75,11 +73,13 @@ fn main() {
 
 First, we bring two modules into scope: reader and template. We'll dig into those files in a moment.
 
-In our `main` function, we store the result of a `handle_input` function from the reader module in a template (judging from the variable name). Next, we generate a template, passing the template info to the necessary builder. Looks easy enough.
+In `main`, we store the result of a `handle_input` function from the reader module in a template (judging from the variable name). Next, we generate a template, passing the template info to the necessary builder. Looks easy enough.
 
 For better context, let's step into some of the functions called.
 
 # Reading User Input: Module One
+
+Here's our first stop—the reader module.
 
 _reader.rs_:
 
@@ -155,7 +155,7 @@ mod tests {
 }
 ```
 
-There's considerably more going on in this file 😰. Fear not, brave rustaceans: all can be explained.
+There's considerably more going on in this file 😰. Fear not, brave Rustaceans: all can be explained.
 
 In short, this file is implementing the functionality for reading user input. 
 
@@ -169,9 +169,23 @@ Because Rust is a statically typed language, the intention and flow of functions
 pub fn handle_input() -> Vec<String>
 ```
 
-We can see the function takes no input and returns an array containing the two values back to the caller. 
+We can see the function takes no input and returns an array of string values back to the caller. 
 
-As for the body, we see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is desired.
+Now for the body:
+
+```rust
+  let article_name = String::from(get_file_name());
+  let article_title = String::from(get_article_title());
+  let mut res = confirm(&article_name, &article_title);
+
+  res.pop();
+  while res != "y" {
+    return handle_input();
+  }
+  vec![article_name, article_title]
+```
+
+We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my res variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level :)
 
 If you step further into the file, you'll see the actual IO handling implementation:
 
@@ -191,7 +205,7 @@ Worry not, astute reader; this project is covered in them, they're just easy to 
 
 You see, in something that has taken a bit of getting used to, unit tests are kept in the same file as the source code in Rust. I guess scrolling isn't considered a DX downside in systems programming :)
 
-Joking aside, you can return to the previous `reader.rs` module above and see the tests defined in beneath the `#[cfg(test)]` macro:
+Joking aside, you can return to the previous `reader.rs` module above and see the tests defined beneath the `#[cfg(test)]` macro:
 
 _reader.rs_:
 
@@ -225,7 +239,9 @@ cargo test
 
 If you're working in VSCode, I noticed a sweet tooltip to run the tests from the file itself:
 
-<screenshot of running tests inline>
+<div id="img-container">
+<img id="cli-test-img" src="./images/rust-test-cli.png">
+</div>
 
 Something I also do when writing Rust is occasionally verify my code's still compiling:
 
