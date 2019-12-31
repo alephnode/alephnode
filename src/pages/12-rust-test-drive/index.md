@@ -7,7 +7,7 @@ It's considered sage advice by many a developer: learn a new programming languag
 
 The adage is most commonly attributed to the seminal work <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X" target="_blank">The Pragmatic Programmer</a>, but it seems impossible to avoid during each year's end.
 
-I don't formally adhere to this directive, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices, ideas, and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
+I don't formally adhere to this directive, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
 
 Something that's filled that time most recently has been Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
 
@@ -159,7 +159,7 @@ There's considerably more going on in this file 😰. Fear not, brave Rustaceans
 
 In short, this file is implementing the functionality for reading user input. 
 
-At the top of the file we bring all libraries used into scope. In this case, I'm leaning on the standard library's IO interface. 
+At the top we bring all libraries used into scope. In this case, I'm leaning on the standard library's IO interface. 
 
 Next we find the only public function in this module: `handle_input`, which was referenced in the `main.rs` file earlier. 
 
@@ -186,6 +186,12 @@ Now for the body:
 ```
 
 We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my res variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level :)
+
+Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out in this file:
+
+- functions return implicitly when an expression ends without a semicolon
+- something else
+- rule of threes
 
 If you step further into the file, you'll see the actual IO handling implementation:
 
@@ -243,19 +249,15 @@ If you're working in VSCode, I noticed a sweet tooltip to run the tests from the
 <img id="cli-test-img" src="./images/rust-test-cli.png">
 </div>
 
-Something I also do when writing Rust is occasionally verify my code's still compiling:
+And with that, we have functioning tests. 
+
+Oh, yeah—something I do when writing Rust is occasionally verify my code's still compiling. Let's do that now while we're still young:
 
 ```bash
 cargo check
 ```
 
-And with that, we have functioning tests. 
-
-What should we tackle next? Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out:
-
-- functions return implicitly when an expression ends without a semicolon
-- something else
-- rule of threes
+Phew, we're good. (At least you _better_ be. Go ahead and double-check your work or refer to the repo if it's not compiling for you.)
 
 Alright, on to the second half of this service: actually _creating_ the blog template.
 
@@ -318,9 +320,9 @@ mod tests {
 }
 ```
 
-The primary responsibility of this module, as evidenced by its small number of functions, is to generate the blog file based on the input provided in the previous step.
+The sole purpose of this file, as its name suggests, is to generate the blog file based on the input provided in the previous step.
 
-At the top of the file is the first example of importing an *external* module into the project. In this case, we're bringing in chrono, a Rust lib for handling time formats. We also bring a few of its classes into scope through the `use` keyword. 
+At the top of the module is the first example of how to import an *external* library into the project. In this case, we're bringing in chrono, a Rust lib for handling time formats. We also bring a few of its classes into scope through the `use` keyword. 
 
 To wrap up the include statements, we pull in the filesystem class from the standard library. The last line is a bit different from the other files in that we're telling the compiler to prelude, or prefix everything, with a specific namespace. This makes it so we don't have to explicitly write it out with each function called. 
 
@@ -344,9 +346,6 @@ cargo run
 If it worked, you should see a new file in your directory like moi: 
 
 <screenshot of new file created>
-
-With each new blog post, I've given myself five precious minutes back. I think I'll spend them <tie in to beginning somehow>
-
 
 # Final Step: Creating a CLI Command
 
