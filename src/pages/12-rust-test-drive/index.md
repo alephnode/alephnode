@@ -9,15 +9,15 @@ The adage is most commonly attributed to the seminal work <a href="https://www.a
 
 I don't formally prescribe to this mode of thinking, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices, ideas, and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
 
-Something that's filled that time most recently has been Rust. I'm intrigued specifically by its niche use cases, performance benefits, and influence over the future of the web through its strong adoption by the web assembly crowd. 
+Something that's filled that time most recently for me has been Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
 
 After spending time exploring the documentation and community, I've enjoyed the experience enough to bother you about it. 
 
 # Why Rust?
 
-For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been repeatedly touted as the most enjoyable language to write, and it's being adopted by companies like XXX and XXX. 
+For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been tirelessly touted as the most enjoyable language to write, and it's being adopted by companies like Mozilla, Cloudflare, and Atlassian. 
 
-Microsoft has even spent months experimenting with core system rewrites with the language, which they've deemed to be going "mostly positive". 
+Microsoft has even spent months experimenting with low-level system rewrites with the language, which they've <a href="https://msrc-blog.microsoft.com/2019/11/07/using-rust-in-windows/" target="_blank">deemed to be going "mostly positive"</a>. 
 
 Finally, it's being used to optimize the delivery of robust experiences over the web through its use in web assembly. 
 
