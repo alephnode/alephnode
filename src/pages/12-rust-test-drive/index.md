@@ -3,13 +3,15 @@ title: 'Automating Workflows: a Dead Simple Exploration of Rust'
 date: '2019-10-28'
 ---
 
-# Background
+It's considered sage advice by many a developer: learn a new programming language each year.
 
-It's been said that learning a new language each year helps engineers stay on their feet.
+The adage is most commonly attributed to the seminal work <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X" target="_blank">The Pragmatic Programmer</a>, but the phrase seems impossible to avoid during each year's end.
 
-I don't formally prescribe to this mode of thinking, but I _do_ experiment with new libraries, languages, and tooling every so often in order to glean new practices and ideas. 
+I don't formally prescribe to this mode of thinking, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices, ideas, and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
 
-One topic that's interested me during the last few years is web assembly. I'm intrigued specifically by its use cases, performance benefits, and influence over the future of the web. 
+Something that's filled that time most recently has been Rust. I'm intrigued specifically by its niche use cases, performance benefits, and influence over the future of the web through its strong adoption by the web assembly crowd. 
+
+After spending time exploring the documentation and community, I've enjoyed the experience enough to bother you about it. 
 
 # Why Rust?
 
@@ -19,9 +21,9 @@ Microsoft has even spent months experimenting with core system rewrites with the
 
 Finally, it's being used to optimize the delivery of robust experiences over the web through its use in web assembly. 
 
-Alright, enough pitching. Since I decided to write some Rust, my next order of business was determining a use case for writing a new app.
+Alright, enough pitching. Since I decided to write some Rust, my next order of business was determining a use case for creating a new app.
 
-After mulling my personal backlog for a day, I decided that a simple blog page scaffolding script would suffice. After all, it seems like a good excuse to learn a language. Building a program that generates files has to do many things, including: 
+After mulling my personal backlog for a bit, I decided a simple blog page scaffolder would suffice. This seemed like a reasonable choice; building a file-generating program has to do many things. Some of these include: 
 
 - work with different data types 
 - handle IO operations
@@ -30,9 +32,9 @@ After mulling my personal backlog for a day, I decided that a simple blog page s
 - write tests
 - wire it to the cli
 
-Before we get started: Yes, I know this could be a two-line bash script. (I know this because I wrote one to get that number.) Still, I'd rather learn Rust 😏🦀, so stick around for the joy of exploration.
+Before we get started: Yes, I know this could be a two-line bash script. (I know because I wrote one to verify this point.) Still, I'd rather learn Rust 😏🦀, and I like the idea of never copy-pasting a previous blog article's first 7 lines into a new markdown file ever again.
 
-On the subject of exploration: if you prefer the path of self discovery, here's a <a href="https://github.com/alephnode/rust-sandbox/tree/master/generate_blog_template" target="_blank">link to the GitHub repo</a> for this project.
+If you prefer the path of self discovery, here's the <a href="https://github.com/alephnode/rust-sandbox/tree/master/generate_blog_template" target="_blank">link to the GitHub repo</a> for this project.
 
 Also, if you haven't already done so, install the Rust compiler and package manager by following the instructions in the <a href="https://doc.rust-lang.org/book/title-page.html" target="_blank">Rustlang documentation.</a>
 
@@ -231,15 +233,104 @@ Something I also do when writing Rust is occasionally verify my code's still com
 cargo check
 ```
 
-OK, what should we tackle next? Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out:
+And with that, we have functioning tests. 
+
+What should we tackle next? Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out:
 
 - functions return implicitly when an expression ends without a semicolon
 - something else
 - rule of threes
 
-Alright, on to the second half of this service: actually _creating_ the blog template!
+Alright, on to the second half of this service: actually _creating_ the blog template.
 
 # Creating the Blog Template: Module Two
+
+Below lies the contents of my template module.
+
+_src/template.rs:_
+
+```rust
+extern crate chrono;
+use chrono::{DateTime, Utc};
+use std::fs;
+use std::io::prelude::*;
+
+pub fn generate(article_info: &Vec<String>) {
+  let name = &article_info[0];
+  let title = &article_info[1];
+  println!("Got it. Generating template now ...");
+  create_file(&name, &title).expect("Issue generating template.");
+}
+
+fn create_file(name: &str, title: &str) -> std::io::Result<()> {
+  let filename = format!("{}.md", name);
+  let now: DateTime<Utc> = Utc::now();
+  let mut file = fs::File::create(filename)?;
+  file.write_all(
+    format!(
+      "
+  ---
+  title: {}
+  date: {}
+  ---
+  ",
+      title,
+      now.format("%b %e %Y")
+    )
+    .as_bytes(),
+  )?;
+  Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+  use std::env;
+
+  #[test]
+  fn generate_works() {
+    let project_dir: Result<std::path::PathBuf, std::path::PathBuf> =
+      Ok(env::current_dir().expect("whoops"));
+    let path = format!(
+      "{}/test.md",
+      project_dir.unwrap().to_str().unwrap().to_string()
+    );
+    let example_article = vec!["test".to_string(), "test me".to_string()];
+    assert_eq!((), generate(&example_article));
+    assert_eq!(true, fs::metadata(path).is_ok());
+  }
+}
+```
+
+The primary responsibility of this module, as evidenced by its small number of functions, is to generate the blog file based on the input provided in the previous step.
+
+At the top of the file is the first example of importing an *external* module into the project. In this case, we're bringing in chrono, a Rust lib for handling time formats. We also bring a few of its classes into scope through the `use` keyword. 
+
+To wrap up the include statements, we pull in the filesystem class from the standard library. The last line is a bit different from the other files in that we're telling the compiler to prelude, or prefix everything, with a specific namespace. This makes it so we don't have to explicitly write it out with each function called. 
+
+Anyhow, into the guts of the module. The publicly exposed function just extracts the template info passed in and calls a private `generate` function to handle the job. 
+
+In that function, we perform the following tasks:
+- create the dynamic filename based on user input
+- actually *create* the file
+- write the necessary data into the file
+
+As with the previous section, there are a few syntax-related points to make in this section.
+
+<points, including test section unwrapping>
+
+With this module complete, we should have a fully functioning Rust application that creates a file based on input. Give it a try yourself:
+
+```bash
+cargo run
+```
+
+If it worked, you should see a new file in your directory like moi: 
+
+<screenshot of new file created>
+
+With each new blog post, I've given myself five precious minutes back. I think I'll spend them <tie in to beginning somehow>
+
 
 # Final Step: Creating a CLI Command
 
