@@ -3,6 +3,10 @@ title: 'Automating Workflows: a Dead Simple Exploration of Rust'
 date: '2019-12-18'
 ---
 
+<div id="img-container">
+<img id="rust-logo" src="./images/rust-logo.png">
+</div>
+
 It's considered sage advice by many a developer: learn a new programming language each year.
 
 The adage is most commonly attributed to the seminal work <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X" target="_blank">The Pragmatic Programmer</a>, but it seems impossible to avoid during each year's end.
@@ -75,7 +79,7 @@ First, we bring two modules into scope: reader and template. We'll dig into thos
 
 In `main`, we store the result of a `handle_input` function from the reader module in a template (judging from the variable name). Next, we generate a template, passing the template info to the necessary builder. Looks easy enough.
 
-For better context, let's step into some of the functions called.
+For better context, let's step into the other files.
 
 # Reading User Input: Module One
 
@@ -185,7 +189,7 @@ Now for the body:
   vec![article_name, article_title]
 ```
 
-We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my `res` variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level :)
+We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my `res` variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level 🙃
 
 If you step further into the file, you'll see the actual IO handling implementation:
 
@@ -209,7 +213,7 @@ By now, the austere, wise developer in you should be asking an important questio
 
 Worry not, astute reader; this project is covered in them, they're just easy to miss.
 
-You see, in something that has taken a bit of getting used to, unit tests are kept in the same file as the source code in Rust. I guess scrolling isn't considered a DX downside in systems programming :)
+You see, in something that has taken a bit of getting used to, unit tests are kept in the same file as the source code in Rust. I guess scrolling isn't considered a DX downside in systems programming 😏
 
 Joking aside, you can return to the previous `reader.rs` module above and see the tests defined beneath the `#[cfg(test)]` attribute:
 
@@ -237,7 +241,7 @@ mod tests {
 
 Ah, we haven't discussed attributes yet. In short, they're metadata that provide special instructions to the compiler. In this context, it's telling the compiler to treat the resulting lines as test functions (which they are).
 
-Another call-out would be the `use super::*` statement. Because tests are inside a separate, inner module within the file, it requires us to bring the code from the outer module into the test module. The wildcard ensures we catch everything and bring it in. The rest of the code is basic assertion boilerplate.
+Another call-out would be the `use super::*` statement. Because tests are inside a separate, inner module within the file, it requires us to bring the code from the outer module into the test module. The wildcard ensures we catch all the functions defined above and bring them in. The rest of the code is basic assertion boilerplate.
 
 To run the tests, simply bang this into the command line: 
 
@@ -267,7 +271,7 @@ Alright, on to the second half of this service: actually _creating_ the blog tem
 
 Below lies the contents of my template module.
 
-_src/template.rs:_
+_template.rs:_
 
 ```rust
 extern crate chrono;
@@ -337,7 +341,9 @@ In that function, we perform the following tasks:
 
 As with the previous section, there are a few syntax-related points to make in this section.
 
-<points, including test section unwrapping>
+- the `format!` macro returns a string value that allows for interpolation, or passing variables into string literals. 
+- the `mut` keyword prefaces variables that I intend to change. Specifically, writing to a file variable after creating it based on the filename. 
+- the `?` at the end of some functions is shorthand for handling `Result` value types. It basically tells the compiler to either unwrap a variable and give its inner value or return from the function you're currently in, handling the error upstream.
 
 With this module complete, we should have a fully functioning Rust application that creates a file based on input. Give it a try yourself:
 
