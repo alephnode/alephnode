@@ -211,7 +211,7 @@ Worry not, astute reader; this project is covered in them, they're just easy to 
 
 You see, in something that has taken a bit of getting used to, unit tests are kept in the same file as the source code in Rust. I guess scrolling isn't considered a DX downside in systems programming :)
 
-Joking aside, you can return to the previous `reader.rs` module above and see the tests defined beneath the `#[cfg(test)]` macro:
+Joking aside, you can return to the previous `reader.rs` module above and see the tests defined beneath the `#[cfg(test)]` attribute:
 
 _reader.rs_:
 
@@ -235,7 +235,9 @@ mod tests {
 }
 ```
 
-<explain tests format here>
+Ah, we haven't discussed attributes yet. In short, they're metadata that provide special instructions to the compiler. In this context, it's telling the compiler to treat the resulting lines as test functions (which they are).
+
+Another call-out would be the `use super::*` statement. Because tests are inside a separate, inner module within the file, it requires us to bring the code from the outer module into the test module. The wildcard ensures we catch everything and bring it in. The rest of the code is basic assertion boilerplate.
 
 To run the tests, simply bang this into the command line: 
 
