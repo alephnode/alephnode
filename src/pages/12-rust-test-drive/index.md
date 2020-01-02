@@ -1,6 +1,6 @@
 ---
 title: 'Automating Workflows: a Dead Simple Exploration of Rust'
-date: '2019-10-28'
+date: '2019-12-18'
 ---
 
 It's considered sage advice by many a developer: learn a new programming language each year.
@@ -9,17 +9,17 @@ The adage is most commonly attributed to the seminal work <a href="https://www.a
 
 I don't formally adhere to this directive, but I _do_ see the value in its intent. Tinkering with new libraries, languages, and/or tooling often helps me gather new practices and patterns I was less likely to encounter in my existing process. It's good to explore outside your workflow from time to time. 
 
-Something that's filled that time most recently has been Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
+What's filled that time most recently is Rust. I'm intrigued specifically by its extensive use cases, performance benefits, and influence over the web's future through its adoption by the web assembly crowd. 
 
 # Why Rust?
 
-For the unfamiliar, Rust is a statically typed systems programming language that emphasizes speed and security. It's been tirelessly touted as the most enjoyable language to write, and it's being adopted by companies like Mozilla, Cloudflare, and Atlassian. 
+For the unfamiliar, Rust is a compiled, system programming language that emphasizes speed and memory security. Its key pitch is a notion of _empowerment_, or enabling developers to code with confidence in their implementations. It's also been tirelessly touted as the <a href="https://stackoverflow.blog/2019/04/09/the-2019-stack-overflow-developer-survey-results-are-in/" target="_blank">most enjoyable language to write</a>, and it's being adopted by companies like Mozilla, Cloudflare, and Atlassian. 
 
 Microsoft has even spent months experimenting with low-level system rewrites with the language, which they've <a href="https://msrc-blog.microsoft.com/2019/11/07/using-rust-in-windows/" target="_blank">deemed to be going "mostly positive"</a>. 
 
-Finally, it's being used to optimize the delivery of robust experiences over the web through its use in web assembly. 
+Finally, it's being used to optimize performance and experiences over the web through its potential compilation to web assembly. 
 
-Alright, enough pitching. Since I decided to write some Rust, my next order of business was determining a use case for creating a new app.
+Alright, enough pitching. Let's dig into the language with an example.
 
 After mulling my personal backlog for a bit, I decided a simple blog page scaffolder would suffice. This seemed like a reasonable choice; building a file-generating program involves many things. Some of these include: 
 
@@ -79,7 +79,7 @@ For better context, let's step into some of the functions called.
 
 # Reading User Input: Module One
 
-Here's our first stop—the reader module.
+Here's our first stop: the reader module.
 
 _reader.rs_:
 
@@ -373,10 +373,12 @@ You should now be able to run the command and see the program kick off!
 
 # What Lies Ahead
 
-Look out for an article on merging Rust work with Web Assembly to deliver something fun over the web. Until then, here are a few resources I found helpful throughout my spike:
+Look out for an article about Web Assembly and Rust in the near future. Until then, here are a few resources I found helpful throughout my journey:
 
-- official rust docs. talk about being one of the advantages of the language 
-- web assembly docs 
-- ffsend - firefox send client
-- alacrity - terminal written in rust
-- spotify terminal - coolest rust project ever
+- <a href="https://doc.rust-lang.org/1.30.0/book/first-edition/README.html" target="_blank">Official Rust Language Book</a>. This thing _slays_>
+- <a href="https://rustwasm.github.io/book/" target="_blank">Rust Web Assembly Book</a>
+- <a href="https://github.com/timvisee/ffsend" target="_blank">ffsend</a> (Firefox send client)
+- <a href="https://github.com/jwilm/alacritty" target="_blank">Alacritty</a> (terminal written in Rust)
+- <a href="https://github.com/Rigellute/spotify-tui" target="_blank">Spotify TUI</a> (Spotify app that runs in terminal written in Rust 🤤)
+
+As always, thanks for reading!
