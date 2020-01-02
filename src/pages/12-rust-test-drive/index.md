@@ -375,7 +375,7 @@ You should now be able to run the command and see the program kick off!
 
 Look out for an article about Web Assembly and Rust in the near future. Until then, here are a few resources I found helpful throughout my journey:
 
-- <a href="https://doc.rust-lang.org/1.30.0/book/first-edition/README.html" target="_blank">Official Rust Language Book</a>. This thing _slays_>
+- <a href="https://doc.rust-lang.org/1.30.0/book/2018-edition/index.html" target="_blank">Official Rust Language Book</a>. This thing _slays_>
 - <a href="https://rustwasm.github.io/book/" target="_blank">Rust Web Assembly Book</a>
 - <a href="https://github.com/timvisee/ffsend" target="_blank">ffsend</a> (Firefox send client)
 - <a href="https://github.com/jwilm/alacritty" target="_blank">Alacritty</a> (terminal written in Rust)
