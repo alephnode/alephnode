@@ -34,7 +34,7 @@ After mulling my personal backlog for a bit, I've decided a simple blog page sca
 - write tests
 - wire it to the cli
 
-_Before we get started: Yes, I know this could be a two-line bash script. (I know because I wrote one to verify this point.) Still, I'd rather learn Rust 😏🦀, and I like the idea of never copy-pasting a previous blog article's first 7 lines into a new markdown file ever again._
+Before we get started: Yes, I know this could be a two-line bash script. (I know because I wrote one to verify this point.) Still, I'd rather learn Rust 😏🦀, and I like the idea of never copy-pasting a previous blog article's first 7 lines into a new markdown file ever again.
 
 If you prefer the path of self discovery, here's the <a href="https://github.com/alephnode/rust-sandbox/tree/master/generate_blog_template" target="_blank">link to the GitHub repo</a> for this project.
 
