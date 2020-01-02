@@ -19,9 +19,9 @@ Microsoft has even spent months experimenting with low-level system rewrites wit
 
 Finally, it's being used to optimize performance and experiences over the web through its potential compilation to web assembly. 
 
-Alright, enough pitching. Let's dig into the language with an example.
+Alright, enough pitching. Let's dig into the language and build something.
 
-After mulling my personal backlog for a bit, I decided a simple blog page scaffolder would suffice. This seemed like a reasonable choice; building a file-generating program involves many things. Some of these include: 
+After mulling my personal backlog for a bit, I've decided a simple blog page scaffolder will suffice. It seems like a reasonable choice; building a file-generating program involves many things, including: 
 
 - work with different data types 
 - handle IO operations
@@ -30,7 +30,7 @@ After mulling my personal backlog for a bit, I decided a simple blog page scaffo
 - write tests
 - wire it to the cli
 
-Before we get started: Yes, I know this could be a two-line bash script. (I know because I wrote one to verify this point.) Still, I'd rather learn Rust 😏🦀, and I like the idea of never copy-pasting a previous blog article's first 7 lines into a new markdown file ever again.
+_Before we get started: Yes, I know this could be a two-line bash script. (I know because I wrote one to verify this point.) Still, I'd rather learn Rust 😏🦀, and I like the idea of never copy-pasting a previous blog article's first 7 lines into a new markdown file ever again._
 
 If you prefer the path of self discovery, here's the <a href="https://github.com/alephnode/rust-sandbox/tree/master/generate_blog_template" target="_blank">link to the GitHub repo</a> for this project.
 
@@ -67,7 +67,7 @@ mod template;
 
 fn main() {
     let template_info = reader::handle_input();
-    template::generate(&template_info);
+    template::generate(template_info);
 }
 ```
 
@@ -185,13 +185,7 @@ Now for the body:
   vec![article_name, article_title]
 ```
 
-We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my res variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level :)
-
-Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out in this file:
-
-- functions return implicitly when an expression ends without a semicolon
-- something else
-- rule of threes
+We see it calls some internal functions and stores their result in variables named after the info collected. It also does this recursively until we receive confirmation from the user that the input is valid. Note that the `pop()` on my `res` variable is to remove the newline (\n) character for easy comparison on the next line. Yeah, Rust is that low-level :)
 
 If you step further into the file, you'll see the actual IO handling implementation:
 
@@ -203,9 +197,15 @@ If you step further into the file, you'll see the actual IO handling implementat
 
 One of the more impressive features I discovered with Rust was its Result type, which is returned from a function that suspects a recoverable error could happen. Such is the case in the example above with `read_line` from Rust's standard lib. In addition to calling the function to grab user input, I appended an exception handler (`except`) in case the operation failed.  
 
+Because this was my first real foray into Rust territory, there are a few additional syntax-related points to call out in this file:
+
+- functions return implicitly when an expression ends without a semicolon
+- by default, variables are immutable in Rust. This is how the language enforces type safety
+- Because there's no runtime (!), Rust relies on a concept of _ownership_ to handle variables falling out of scope. This is considerably different from JavaScript and other languages, and it was the biggest hurdle to get passed when learning. In short, once a variable is assigned to another variable or passed to a function, it no longer holds the value it once did. This is why you see the ampersand used in some parts of the code examples; I'm passing variables to functions by _reference_ so that their value isn't lost.
+
 # Writing Tests
 
-On the subject of safety, the austere, wise developer in you should be asking an important question by now: _where are the tests for these modules?_
+By now, the austere, wise developer in you should be asking an important question: _where are the tests for these modules?_
 
 Worry not, astute reader; this project is covered in them, they're just easy to miss.
 
@@ -273,7 +273,7 @@ use chrono::{DateTime, Utc};
 use std::fs;
 use std::io::prelude::*;
 
-pub fn generate(article_info: &Vec<String>) {
+pub fn generate(article_info: Vec<String>) {
   let name = &article_info[0];
   let title = &article_info[1];
   println!("Got it. Generating template now ...");
@@ -314,7 +314,7 @@ mod tests {
       project_dir.unwrap().to_str().unwrap().to_string()
     );
     let example_article = vec!["test".to_string(), "test me".to_string()];
-    assert_eq!((), generate(&example_article));
+    assert_eq!((), generate(example_article));
     assert_eq!(true, fs::metadata(path).is_ok());
   }
 }
@@ -345,7 +345,9 @@ cargo run
 
 If it worked, you should see a new file in your directory like moi: 
 
-<screenshot of new file created>
+<div id="img-container">
+<img id="cli-file-img" src="./images/new_file.png">
+</div>
 
 # Final Step: Creating a CLI Command
 
