@@ -1,6 +1,6 @@
 ---
-title: 'Automating Workflows: a Dead Simple Exploration of Rust'
-date: '2019-12-18'
+title: 'Automating Workflows: A Fulfilling Exploration of Rust'
+date: '2019-12-16'
 ---
 
 <div id="img-container">
