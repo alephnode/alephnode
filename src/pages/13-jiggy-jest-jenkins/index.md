@@ -17,15 +17,58 @@ OK, we'll do it this way. Intro will present itself once other parts are more fl
 - NOTE: when settinng up the lambda, you have to grant the lambda Comprehend permission. I do full access
 - https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
 
-## AWS Comprehend Section
+### Getting Started: Tests First
 
-### Tests First
+Rather than using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a methodology I've practiced regularly in recent months, and I don't plan to stray from its noble path anytime soon.
 
-Rather than the results-first flow of previous articles on this site, we're going to incrementally build the project with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a methodology I've practiced regularly over the last few months, and I don't plan to stray from its noble path anytime soon.
+Before we jump in, here's the tree structure for the project:
 
-Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serve as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot individual pieces incrementally if anything goes wrong.
+```
+.
+├── Jenkinsfile
+├── README.md
+├── deploy.sh
+├── jest.config.js
+├── package.json
+├── src
+│   ├── __mocks__
+│   │   ├── aws-sdk.ts
+│   │   └── mockAWSResponse.ts
+│   ├── __tests__
+│   │   ├── getSentiment.test.ts
+│   │   ├── index.test.ts
+│   │   └── sanity.test.ts
+│   ├── getSentiment.ts
+│   ├── index.ts
+│   ├── responses
+│   │   └── invalidDataSupplied.ts
+│   ├── sanity.ts
+│   └── validators
+│       └── isValidEvent.ts
+├── tsconfig.json
+└── yarn.lock
+```
 
-Implementing my canary module will start with a test. Because the purpose is for the file to be simple, I'll test that the sanity module simply returns a "Hello, World!" response.
+We'll cover most of the config-related files in later sections, but it's worth popping open _jest.config.js_ to see how our project's test suite will behave.
+
+_jest.config.js_:
+
+```javascript
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['src', 'dist'],
+  collectCoverage: true,
+}
+```
+
+Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using Typescript, and also specifying root directories and that I'm using Node. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
+
+Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serves as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot base integrations if anything goes awry.
+
+Implementing my canary module will start with a test. Because the purpose is for the file to be simple, I'll assert that the sanity module returns a simple "Hello, World!" response.
+
+_src/\_\_tests\_\_/sanity.test.ts_:
 
 ```typescript
 import { handler, SanityResponse } from '../sanity'
@@ -39,9 +82,35 @@ describe('Sanity tests', () => {
 })
 ```
 
-Note that Jest provides test running methods as well as assertion methods out of the gate. This is convenient for those who don't want to import a library at the top or download two separate ones to handle testing (I'm looking at you, `mocha` and `chai`).
+Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate ones to handle testing (I'm looking at you, `mocha` and `chai`).
 
-Since our deploy target is a lambda function, my app's entrypoint will need to be a file with an exported handler function. Let's start with writing the test file for this module.
+OK, let's implement this simple case and make the test pass.
+
+_src/sanity.ts_:
+
+```typescript
+import { Handler, Context, Callback } from 'aws-lambda'
+
+interface SanityResponse {
+  statusCode: number
+  body: string
+}
+
+const handler: Handler = (event, context: Context, cb: Callback) => {
+  const response: SanityResponse = {
+    statusCode: 200,
+    body: 'Hello World!',
+  }
+
+  cb(null, response)
+}
+
+export { handler, SanityResponse }
+```
+
+Alright, onto our _actual_ project logic.
+
+Since our deploy target is a lambda function, my app's entry point will need to be a file with an exported handler function. Let's start with writing the test file for this module.
 
 _src/\_\_tests\_\_/index.test.ts_:
 
@@ -61,7 +130,7 @@ describe('Index tests', () => {
 })
 ```
 
-Again, we use some Jest-specific syntax for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing.
+Again, we use some Jest-specific functions for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing.
 
 _src/index.ts:_
 
@@ -117,3 +186,11 @@ Now that we've implemented the core logic of our application, it's time to run t
 Hooray, looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
 
 ### Hooking Into a Build Process
+
+There are several options in the market for implementing a CI/CD pipeline, and they've edged closer to feature parity among most of them. Among the options include:
+
+- CircleCI
+- Travis
+- Buddy (?)
+
+None dominate the market, however, like Jenkins<link>. And, while it might not be the edgiest contestant in the field, it's something the average developer will undoubtedly run into at work and thus deserves a good understanding.
