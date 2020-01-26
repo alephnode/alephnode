@@ -17,9 +17,7 @@ OK, we'll do it this way. Intro will present itself once other parts are more fl
 - NOTE: when settinng up the lambda, you have to grant the lambda Comprehend permission. I do full access
 - https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
 
-### Getting Started: Tests First
-
-Rather than using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a methodology I've practiced regularly in recent months, and I don't plan to stray from its noble path anytime soon.
+### High-Level Project Overview
 
 Before we jump in, here's the tree structure for the project:
 
@@ -62,9 +60,48 @@ module.exports = {
 }
 ```
 
-Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using Typescript, and also specifying root directories and that I'm using Node. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
+Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using Typescript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
 
-Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serves as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot base integrations if anything goes awry.
+Finally, have a look at my _package.json_ file to see what's installed:
+
+```json
+{
+  "name": "get-sentiment-score",
+  "version": "1.0.21",
+  "description": "",
+  "main": "dist/index.js",
+  "dependencies": {
+    "aws-sdk": "^2.601.0",
+    "nodemon": "^1.19.4"
+  },
+  "scripts": {
+    "test": "jest -i",
+    "build": "tsc",
+    "start": "npx nodemon --watch 'src/**/*' --exec 'ts-node' src/index.ts",
+    "deploy": "./deploy.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.39",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.6.9",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
+```
+
+Not much to include with this project aside from the AWS SDK, Jest, and project-specific utilities (config presets and the types for our external libraries).
+
+### Getting Started: Tests First
+
+Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a methodology I've practiced regularly in recent months, and I don't plan to stray from its noble path anytime soon.
+
+Let's create our first test file. Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serves as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot base integrations if anything goes awry.
 
 Implementing my canary module will start with a test. Because the purpose is for the file to be simple, I'll assert that the sanity module returns a simple "Hello, World!" response.
 
@@ -82,7 +119,7 @@ describe('Sanity tests', () => {
 })
 ```
 
-Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate ones to handle testing (I'm looking at you, `mocha` and `chai`).
+Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate libs for test handling (I'm looking at you, `mocha` and `chai`).
 
 OK, let's implement this simple case and make the test pass.
 
@@ -108,6 +145,8 @@ const handler: Handler = (event, context: Context, cb: Callback) => {
 export { handler, SanityResponse }
 ```
 
+The exported handler in this module returns a response body with the payload expected in our test.
+
 Alright, onto our _actual_ project logic.
 
 Since our deploy target is a lambda function, my app's entry point will need to be a file with an exported handler function. Let's start with writing the test file for this module.
@@ -130,7 +169,9 @@ describe('Index tests', () => {
 })
 ```
 
-Again, we use some Jest-specific functions for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing.
+Again, we use some Jest-specific functions for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing. One thing to note is that each test written can be expressed as having three distinct sections: <strong>arranging </strong>the data and functions needed, <strong>acting</strong>, or performing the operation you're wanting to test, and <strong>asserting</strong> the expected value or effect of the operation. As it turns out, these three A's are a common mnemonic device in the TDD community.
+
+Anyhow, onto the implementation of our root handler.
 
 _src/index.ts:_
 
