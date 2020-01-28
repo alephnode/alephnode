@@ -3,6 +3,9 @@ title: 'Getting Jiggy with Jest and Jenkins'
 date: '2020-01-12'
 ---
 
+TODO break this into submodules and sub submodules
+TODO include a step about breaking project down afterward
+
 OK, we'll do it this way. Intro will present itself once other parts are more fleshed out, personal touches are considered. For now, let's create an outline.
 
 - Importance of testing, emphasis on code you inherit. Make comparison of reason, too. Constantly be challenging assumptions while allowing them to establish a foundation for critical thought.
@@ -99,7 +102,7 @@ Not much to include with this project aside from the AWS SDK, Jest, and project-
 
 ### Getting Started: Tests First
 
-Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a methodology I've practiced regularly in recent months, and I don't plan to stray from its noble path anytime soon.
+Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
 Let's create our first test file. Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serves as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot base integrations if anything goes awry.
 
@@ -235,3 +238,30 @@ There are several options in the market for implementing a CI/CD pipeline, and t
 - Buddy (?)
 
 None dominate the market, however, like Jenkins<link>. And, while it might not be the edgiest contestant in the field, it's something the average developer will undoubtedly run into at work and thus deserves a good understanding.
+
+The downside of Jenkins is that it's not a hosted service. Rather, users are expected to install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
+
+For this project, I'm going to run a Jenkins server in a Docker container on an EC2 instance on Amazon Web Services (AWS). There are admittedly countless permutations of different stacks and services I could've chosen to host this service. Ultimately, I chose the Docker route because Jenkins provides the images. This seemed easier than writing or following a script that had me install Java, Jenkins, and other utilities from scratch. I also chose an EC2 instance instead of a more integrated service like ECS or EKS for two reasons:
+
+1. I'll only need one build server, so task definitions and services felt like overkill
+2. Keeping it on a VPS with Docker installed is easily repeatable across cloud providers
+
+Let's dive in.
+
+_Note: If you're following along, you'll want to <link>create an AWS account</link> for this next part of the article._
+
+### Creating the EC2 Instance
+
+First, log onto the AWS Console and navigate to the EC2 dashboard. There, you should be able to launch a new instance.
+
+<screen></screen>
+
+The wizard will walk you through creating a new instance. Below are the details for each section.
+
+1. Instance Type
+
+- Select XXXX size. This is due to an issue with Jest \*explain how jest is a resource hog.
+- walk through creating security group with inbound rules necessary
+- launch the instance
+
+Cool, we're now ready to ssh into the server and install Docker. Here are the <link>blessed steps</link> to installing.
