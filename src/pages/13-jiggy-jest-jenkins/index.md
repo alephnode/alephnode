@@ -10,6 +10,7 @@ OK, we'll do it this way. Intro will present itself once other parts are more fl
 
 - Importance of testing, emphasis on code you inherit. Make comparison of reason, too. Constantly be challenging assumptions while allowing them to establish a foundation for critical thought.
 
+- XP, extreme programming intro, refer to Accelerate book
 - Stack of choice. Test and CICD, importance of both
 - also explain example project, TDD approach taken
 - walk through project !
@@ -17,7 +18,7 @@ OK, we'll do it this way. Intro will present itself once other parts are more fl
 - hook it up to jenkins
 - find a way to wrap it up in a cool way
 - conclusion, referral to books
-- NOTE: when settinng up the lambda, you have to grant the lambda Comprehend permission. I do full access
+- NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
 - https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
 
 ### High-Level Project Overview
@@ -265,3 +266,16 @@ The wizard will walk you through creating a new instance. Below are the details 
 - launch the instance
 
 Cool, we're now ready to ssh into the server and install Docker. Here are the <link>blessed steps</link> to installing.
+
+- link to docker images available
+- recap of the process (creating the network, running the containers)
+- fetching the link from the cli, sneak of exec
+- link to common docker cli usage (?) or steps to learn more about it (?)
+- github integration
+
+- final step would be creating a new implementation
+
+  - implementing actual reading from the filesystem in a final section, pushing and watching the build succeed/lambda update!
+
+- in closing
+  - links for more info
