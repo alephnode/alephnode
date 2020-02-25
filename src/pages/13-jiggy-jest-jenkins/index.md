@@ -173,7 +173,13 @@ describe('Index tests', () => {
 })
 ```
 
-Again, we use some Jest-specific functions for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing. One thing to note is that each test written can be expressed as having three distinct sections: <strong>arranging </strong>the data and functions needed, <strong>acting</strong>, or performing the operation you're wanting to test, and <strong>asserting</strong> the expected value or effect of the operation. As it turns out, these three A's are a common mnemonic device in the TDD community.
+Again, we use some Jest-specific functions for describing our tests, breaking them into separate units, and asserting the value of the functions we're testing. One thing to note is that each test written can be expressed as having three distinct sections:
+
+- <strong>arranging </strong>the data and functions needed
+- <strong>acting</strong>, or performing the operation being tested, and
+- <strong>asserting</strong> the expected value or effect of the operation
+
+This is considered the AAA pattern and is common in the TDD community. Check out an <a href="https://docs.microsoft.com/en-us/visualstudio/test/unit-test-basics?view=vs-2019" target="_blank">exploration of the concept</a> if you're curious.
 
 Anyhow, onto the implementation of our root handler.
 
@@ -228,24 +234,26 @@ As we see in the file, we're importing the AWS sdk to utilize its services in ou
 
 Now that we've implemented the core logic of our application, it's time to run them against the tests that we wrote earlier. If everything goes well, they should all pass.
 
-Hooray, looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
+<screen of tests passing>
+
+Looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
 
 ### Hooking Into a Build Process
 
-There are several options in the market for implementing a CI/CD pipeline, and they've edged closer to feature parity among most of them. Among the options include:
+There are several options in the market for implementing a CI/CD pipeline, and they've edged closer to feature parity over the years. Among the options include:
 
 - CircleCI
 - Travis
 - Buddy (?)
 
-None dominate the market, however, like Jenkins<link>. And, while it might not be the edgiest contestant in the field, it's something the average developer will undoubtedly run into at work and thus deserves a good understanding.
+Although I'd probably select CircleCI if it were my project to own, none dominate the market like Jenkins<link>. Since it's a technology the average developer will undoubtedly run into at work, it thus deserves a good understanding.
 
 The downside of Jenkins is that it's not a hosted service. Rather, users are expected to install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
 
 For this project, I'm going to run a Jenkins server in a Docker container on an EC2 instance on Amazon Web Services (AWS). There are admittedly countless permutations of different stacks and services I could've chosen to host this service. Ultimately, I chose the Docker route because Jenkins provides the images. This seemed easier than writing or following a script that had me install Java, Jenkins, and other utilities from scratch. I also chose an EC2 instance instead of a more integrated service like ECS or EKS for two reasons:
 
 1. I'll only need one build server, so task definitions and services felt like overkill
-2. Keeping it on a VPS with Docker installed is easily repeatable across cloud providers
+2. Keeping it on a VPS with Docker installed is easily repeatable across cloud providers (well, I'm using the Amazon Linux AMI for its CLI helpers, but the lock-in is still loose)
 
 Let's dive in.
 
@@ -272,6 +280,10 @@ Cool, we're now ready to ssh into the server and install Docker. Here are the <l
 - fetching the link from the cli, sneak of exec
 - link to common docker cli usage (?) or steps to learn more about it (?)
 - github integration
+
+### Watching the Magic Happen
+
+Now that we have a fully functional CI/CD pipeline, let's update the codebase and watch the process kick off.
 
 - final step would be creating a new implementation
 
