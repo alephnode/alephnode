@@ -1,6 +1,6 @@
 ---
 title: 'Getting Jiggy with Jest and Jenkins'
-date: '2020-01-12'
+date: '2020-03-15'
 ---
 
 TODO break this into submodules and sub submodules
@@ -206,7 +206,7 @@ const handler: Handler = async (event: SentimentEvent) => {
 export { handler, SentimentEvent }
 ```
 
-The module's responsibility is simple: it evokes the sentiment function with the event details and returns the result.
+The module's responsibility is simple: it invokes the sentiment function with the event details and returns the result.
 
 For a better understanding of what's _actually_ happening, let's examine the getSentiment declaration.
 
@@ -267,16 +267,14 @@ First, log onto the AWS Console and navigate to the EC2 dashboard. There, you sh
 
 The wizard will walk you through creating a new instance. Below are the details for each section.
 
-1. Instance Type
-
-- Select XXXX size. This is due to an issue with Jest \*explain how jest is a resource hog.
+- For instance type, select t2.large size. This is due to Jest crashing earlier attempts at smaller sizes. (yes, even with the `runInBand` flag)
 - walk through creating security group with inbound rules necessary
 - launch the instance
 
-Cool, we're now ready to ssh into the server and install Docker. Here are the <link>blessed steps</link> to installing.
+Cool, we're now ready to SSH into the server and install Docker. Here are the <a href="https://jenkins.io/doc/tutorials/create-a-pipeline-in-blue-ocean/" target="_blank">blessed steps</a> to installing.
 
-- link to docker images available
-- recap of the process (creating the network, running the containers)
+Once you're installed, you'll need to get comfortable interacting with your Docker container via the shell in order to complete the security and config steps.
+
 - fetching the link from the cli, sneak of exec
 - link to common docker cli usage (?) or steps to learn more about it (?)
 - github integration
