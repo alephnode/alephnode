@@ -1,23 +1,20 @@
 ---
-title: 'Getting Jiggy with Jest and Jenkins'
+title: 'Getting Jiggy with Jenkins and Jest'
 date: '2020-03-15'
 ---
 
 TODO break this into submodules and sub submodules
 TODO include a step about breaking project down afterward
 
-OK, we'll do it this way. Intro will present itself once other parts are more fleshed out, personal touches are considered. For now, let's create an outline.
+<intro to maintainability>
+<Graph on how google measures>
+<blurb no accelerate also describing software performance>
+<key points in commonn (TDD, CI/CD)>
+<also this makes sense graph (code you inherit, want coverage so can change with confidence)>
+<what I did as a starter project graph>
+<technology choices/intro>
+<also warning about how AWS resources cost money, section on breaking down>
 
-- Importance of testing, emphasis on code you inherit. Make comparison of reason, too. Constantly be challenging assumptions while allowing them to establish a foundation for critical thought.
-
-- XP, extreme programming intro, refer to Accelerate book
-- Stack of choice. Test and CICD, importance of both
-- also explain example project, TDD approach taken
-- walk through project !
-- pick a domain/deployment TARGET
-- hook it up to jenkins
-- find a way to wrap it up in a cool way
-- conclusion, referral to books
 - NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
 - https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
 
@@ -287,5 +284,18 @@ Now that we have a fully functional CI/CD pipeline, let's update the codebase an
 
   - implementing actual reading from the filesystem in a final section, pushing and watching the build succeed/lambda update!
 
-- in closing
-  - links for more info
+### Conclusion
+
+With a personal Jenkins server, I can push changes with stronger confidence. My tests ensure I haven't made breaking edits, and the deploy step pushes my updates live automatically.
+
+There's still more to explore in the maintainability space. Establishing health checks, writing infrastructure as code with tools like Terraform, and being able to A/B test and replay traffic are all enhancements that could build from this solution. For now, I'm just happy to spend less time in the AWS dashboard :).
+
+If you're interested in learning more, here's the usual list of great resources:
+
+- Google SRE Book
+- Accelerate on Amazon
+- Test-driving JavaScript applications
+- 12-factor app guidelines
+- Terraform/Infra as Code
+
+As always, thanks for reading.
