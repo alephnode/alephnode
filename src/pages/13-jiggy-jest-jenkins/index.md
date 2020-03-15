@@ -292,10 +292,10 @@ There's still more to explore in the maintainability space. Establishing health 
 
 If you're interested in learning more, here's the usual list of great resources:
 
-- Google SRE Book
-- Accelerate on Amazon
-- Test-driving JavaScript applications
-- 12-factor app guidelines
-- Terraform/Infra as Code
+- <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">Google SRE Book</a>
+- <a href="https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339" target="_blank">Accelerate</a> (DevOps book)
+- <a href="https://pragprog.com/book/vsjavas/test-driving-javascript-applications" target="_blank">Test-Driving JavaScript Applications</a> (code examples are a bit dated)
+- <a href="https://12factor.net/" target="_blank">12-factor app guidelines</a>
+- <a href="https://www.terraform.io/" target="_blank">Terraform</a> (infrastructure as code)
 
 As always, thanks for reading.
