@@ -3,22 +3,22 @@ title: 'Getting Jiggy with Jenkins and Jest'
 date: '2020-03-15'
 ---
 
-<intro to maintainability>
-A well-defined, well-architected, and well-executed application is worthless if it's not maintainable.
+A well-defined, well-designed, and well-executed application is worthless if it's not maintainable.
 
 I write this not from my hike down Mount Sinai, but rather from the end seat of a desolate, dimly lit bar, with a stiff drink and a cold stare.
 
-Said a different way, I've _seen_ some shit. From startups to Fortune list companies, I've experienced continuous deployment as well as copy/pasting directories through virtual machine UIs in my early years. I prefer the "automagic" route.
+Said a different way, I've _seen_ some shit. From startups to Fortune list companies, I've experienced continuous deployment as well as copy/paste jobs through virtual machine UIs in my early years. My experience has shown me how fruitful investing in build processes can be. When given the choice, I prefer the automated route every time.
 
 ## The Quest to Optimize Software Delivery Performance
 
-I'm not the only one who feels this way. In fact, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called Site Reliability Engineers, and their noble work is outlined in a <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">book on the subject</a> (also linked at the end).
+I'm not the only one who feels this way. In fact, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called SREs (site reliability engineers), and their noble work is outlined in an <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">O'Reilly book on the subject</a> (also linked at the end).
 
-One of the immediate takeaways from the book is about reducing toil among engineers. The term is defined as being:
+One of the key takeaways from the text is the team's insistence on reducing "toil" among its engineers. The term is defined as:
 
 _"...work tied to running a production service that tends to be manual, repetitive, automatable, tactical, devoid of enduring value, and that scales linearly as a service grows."_
 
-<blurb no accelerate also describing software performance>
+Google is not the only group preaching this gospel. In 2018, a group of researchers and industry professionals published the polemical work "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations" that outlined how software companies can optimize delivery performance.
+
 <key points in commonn (TDD, CI/CD)>
 
 <also this makes sense graph (code you inherit, want coverage so can change with confidence)>
@@ -297,9 +297,9 @@ Now that we have a fully functional CI/CD pipeline, let's update the codebase an
 
 ### Conclusion
 
-With a personal Jenkins server, I can push changes with stronger confidence. My tests ensure I haven't made breaking edits, and the deploy step pushes my updates live automatically.
+With my own personal build server, I can push updates to my apps with greater confidence. My tests ensure I haven't made breaking changes, and the deploy step pushes my revisions live safely and quickly.
 
-There's still more to explore in the maintainability space. Establishing health checks, writing infrastructure as code with tools like Terraform, and being able to A/B test and replay traffic are all enhancements that could build from this solution. For now, I'm just happy to spend less time in the AWS dashboard :).
+Despite all the steps outlined above, there's still more to explore in the maintainability space. Establishing health checks, writing infrastructure as code with tools like Terraform, and being able to A/B test and replay traffic are all enhancements that could build from this solution. For now, I'm just happy to spend less time in the AWS dashboard :).
 
 If you're interested in learning more, here's the usual list of great resources:
 
