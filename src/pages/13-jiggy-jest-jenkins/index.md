@@ -7,9 +7,9 @@ A well-defined, well-designed, and well-executed application is worthless if it'
 
 I write this not from my hike down Mount Sinai, but rather from the end seat of a desolate, dimly lit bar, with a stiff drink and a cold stare.
 
-Said a different way, I've _seen_ some shit. From startups to Fortune list companies, I've experienced continuous deployment as well as copy/paste jobs through virtual machine UIs in my early years. My experience has shown me how fruitful investing in build processes can be. When given the choice, I prefer the automated route every time.
+Said a different way, I've _seen_ some shit. From startups to Fortune-ranked companies, I've witnessed sound continuous deployment strategies as well as copy/paste-across-virtual-server jobs throughout my early years. My experience has informed me of how fruitful build processes can be. Now that I've seen the light, there's no going back.
 
-## The Quest to Optimize Software Delivery Performance
+### The Quest to Optimize Software Delivery Performance
 
 I'm not the only one who feels this way. In fact, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called SREs (site reliability engineers), and their noble work is outlined in an <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">O'Reilly book on the subject</a> (also linked at the end).
 
@@ -19,9 +19,24 @@ _"...work tied to running a production service that tends to be manual, repetiti
 
 Google is not the only group preaching this gospel. In 2018, a group of researchers and industry professionals published the polemical work "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations" that outlined how software companies can optimize delivery performance.
 
-<key points in commonn (TDD, CI/CD)>
+In short, the research identified several important qualities for successful engineering teams:
 
-<also this makes sense graph (code you inherit, want coverage so can change with confidence)>
+- building quality in
+- having frequent releases and short-lived branches
+- automating repetitive tasks
+- implementing infrastructure as code (checked into version control)
+- constantly running tests and enforcing coverage (!)
+
+So how exactly do we as developers reduce toil and automate as many concerns as possible?
+
+With a CI/CD workflow, of course!
+
+Among other things, a CI/CD layer will serve as a quality guard that runs tests and handles the deployment/infrastructure of our services, all triggered by events we define (usually a push to a branch in version control).
+
+<code coverage and gain in confidence when having it, inheriting>
+
+### Creating a Personal Build Server
+
 <what I did as a starter project graph>
 <technology choices/intro>
 <also warning about how AWS resources cost money, section on breaking down>
