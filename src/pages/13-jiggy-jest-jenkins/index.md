@@ -299,9 +299,17 @@ Now that we have a fully functional CI/CD pipeline, let's update the codebase an
 
 With my own personal build server, I can push updates to my apps with greater confidence. My tests ensure I haven't made breaking changes, and the deploy step pushes my revisions live safely and quickly.
 
-Despite all the steps outlined above, there's still more to explore in the maintainability space. Establishing health checks, writing infrastructure as code with tools like Terraform, and being able to A/B test and replay traffic are all enhancements that could build from this solution. For now, I'm just happy to spend less time in the AWS dashboard :).
+Despite all the steps outlined above, there's still more to explore in the maintainability space. To name a few:
 
-If you're interested in learning more, here's the usual list of great resources:
+- Establishing health checks
+- Aggregating logs
+- Enabling distributed tracing
+- Writing infrastructure as code with tools like Terraform
+- A/B testing and replaying traffic
+
+For now, I'm just happy to spend less time in the AWS dashboard :).
+
+If you're interested in learning more, here's the usual list of recommended follow-up resources:
 
 - <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">Google SRE Book</a>
 - <a href="https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339" target="_blank">Accelerate</a> (DevOps book)
