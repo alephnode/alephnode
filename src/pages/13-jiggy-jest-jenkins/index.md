@@ -3,13 +3,24 @@ title: 'Getting Jiggy with Jenkins and Jest'
 date: '2020-03-15'
 ---
 
-TODO break this into submodules and sub submodules
-TODO include a step about breaking project down afterward
-
 <intro to maintainability>
-<Graph on how google measures>
+A well-defined, well-architected, and well-executed application is worthless if it's not maintainable.
+
+I write this not from my hike down Mount Sinai, but rather from the end seat of a desolate, dimly lit bar, with a stiff drink and a cold stare.
+
+Said a different way, I've _seen_ some shit. From startups to Fortune list companies, I've experienced continuous deployment as well as copy/pasting directories through virtual machine UIs in my early years. I prefer the "automagic" route.
+
+## The Quest to Optimize Software Delivery Performance
+
+I'm not the only one who feels this way. In fact, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called Site Reliability Engineers, and their noble work is outlined in a <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">book on the subject</a> (also linked at the end).
+
+One of the immediate takeaways from the book is about reducing toil among engineers. The term is defined as being:
+
+_"...work tied to running a production service that tends to be manual, repetitive, automatable, tactical, devoid of enduring value, and that scales linearly as a service grows."_
+
 <blurb no accelerate also describing software performance>
 <key points in commonn (TDD, CI/CD)>
+
 <also this makes sense graph (code you inherit, want coverage so can change with confidence)>
 <what I did as a starter project graph>
 <technology choices/intro>
