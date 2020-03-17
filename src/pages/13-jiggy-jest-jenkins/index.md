@@ -27,20 +27,28 @@ In short, the research identified several important qualities for successful eng
 - implementing infrastructure as code (checked into version control)
 - constantly running tests and enforcing coverage
 
-So how do we reduce toil and automate our concerns away? With a CI/CD workflow, of course!
+While we could probably identify several viable options for the items in this list, one idea comes to mind that would quickly satisfy them all: a CI/CD workflow, of course!
 
 _Note: I'm assuming readers are aware of what "CI/CD" (continuous integration, continuous delivery) entails. If you're unfamiliar with the term, here's a <a href="https://stackify.com/what-is-cicd-whats-important-and-how-to-get-it-right/" target="_blank">brief overview</a> of the topic._
 
-Among other things, a CI/CD layer will serve as a quality guard that runs tests and handles the deployment/infrastructure of our services, all triggered by events we define (usually a push to a branch in version control).
+Among other things, a CI/CD layer will serve as a quality guard that runs tests and handles the deployment/infrastructure of our services, all triggered by events we define (usually a push to a branch in version control). If set up correctly, the manual toil of many QA steps and deployment script runs disappear altogether.
 
-For some teams, continuous integration pipelines at their best will nudge the group to have a suite of tests to run in the first place. That way, there's criteria for what should _pass_ or _fail_ in a given build.
+For some process-malnourished teams, continuous integration pipelines will nudge the group to have a suite of tests to run in the first place. That way, there's criteria for what should _pass_ or _fail_ in a given build.
 
 This is something you want. More code coverage means more lines being tested, which catches regressions faster than the manual testing you'd otherwise have to do. This is also something experienced developers know to ask about when considering joining a new team, so it's worth keeping your services in proper shape to attract talent.
 
 ### Creating a Personal Build Server
 
-<what I did as a starter project graph>
-<technology choices/intro>
+Now that we've decided to create a CI/CD pipeline, it's time to select one of the options available for implementing one. The good news is that most offerings have edged closer to feature parity over the years. Among the top solutions include:
+
+- <a href="https://circleci.com/" target="_blank">CircleCI</a>
+- <a href="https://travis-ci.com/" target="_blank">Travis</a>
+- <a href="https://buddy.works/" target="_blank">Buddy</a>
+
+Although I'd probably select CircleCI if it were my project to own, none dominate the market like <a href="https://jenkins.io/" target="_blank">Jenkins</a>. Since it's a technology the average developer will undoubtedly run into at work, it thus deserves a good understanding.
+
+As an example project to show the flow of the pipeline, I built a quick Node-based service that uses AWS Comprehend to perform sentiment analysis on my personal journal entries. Sorry if that's weird. I just wanted a way to experiment with ML-as-a-service.
+
 <also warning about how AWS resources cost money, section on breaking down>
 
 - NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
@@ -264,14 +272,6 @@ Now that we've implemented the core logic of our application, it's time to run t
 Looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
 
 ### Hooking Into a Build Process
-
-There are several options in the market for implementing a CI/CD pipeline, and they've edged closer to feature parity over the years. Among the options include:
-
-- CircleCI
-- Travis
-- Buddy (?)
-
-Although I'd probably select CircleCI if it were my project to own, none dominate the market like Jenkins<link>. Since it's a technology the average developer will undoubtedly run into at work, it thus deserves a good understanding.
 
 The downside of Jenkins is that it's not a hosted service. Rather, users are expected to install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
 
