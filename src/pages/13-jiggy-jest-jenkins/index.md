@@ -5,9 +5,9 @@ date: '2020-03-15'
 
 A well-defined, well-designed, and well-executed application is worthless if it's not maintainable.
 
-I write this not from my hike down Mount Sinai, but rather from the end seat of a desolate, dimly lit bar, with a stiff drink and a cold stare.
+I write this not from my hike down Mount Sinai, but rather from the "Recovery Room of Projects Past", where features scaled too quickly and product owners traded upfront cost for maintenance cost.
 
-Said a different way, I've _seen_ some shit. From startups to Fortune-ranked companies, I've witnessed sound continuous deployment strategies as well as copy/paste-across-virtual-server jobs throughout my early years. My experience has informed me of how fruitful build processes can be. Now that I've seen the light, there's no going back.
+Said a different way, I've _seen_ some shit. From startups to Fortune-ranked companies, I've witnessed efficient continuous deployment strategies as well as shameless copy/paste-across-virtual-server-UI-displays jobs. These experiences have taught me how fruitful build processes can be. Now that I've seen the light, there's no going back.
 
 ### The Quest to Optimize Software Delivery Performance
 
@@ -25,15 +25,17 @@ In short, the research identified several important qualities for successful eng
 - having frequent releases and short-lived branches
 - automating repetitive tasks
 - implementing infrastructure as code (checked into version control)
-- constantly running tests and enforcing coverage (!)
+- constantly running tests and enforcing coverage
 
-So how exactly do we as developers reduce toil and automate as many concerns as possible?
+So how do we reduce toil and automate our concerns away? With a CI/CD workflow, of course!
 
-With a CI/CD workflow, of course!
+_Note: I'm assuming readers are aware of what "CI/CD" (continuous integration, continuous delivery) entails. If you're unfamiliar with the term, here's a <a href="https://stackify.com/what-is-cicd-whats-important-and-how-to-get-it-right/" target="_blank">brief overview</a> of the topic._
 
 Among other things, a CI/CD layer will serve as a quality guard that runs tests and handles the deployment/infrastructure of our services, all triggered by events we define (usually a push to a branch in version control).
 
-<code coverage and gain in confidence when having it, inheriting>
+For some teams, continuous integration pipelines at their best will nudge the group to have a suite of tests to run in the first place. That way, there's criteria for what should _pass_ or _fail_ in a given build.
+
+This is something you want. More code coverage means more lines being tested, which catches regressions faster than the manual testing you'd otherwise have to do. This is also something experienced developers know to ask about when considering joining a new team, so it's worth keeping your services in proper shape to attract talent.
 
 ### Creating a Personal Build Server
 
