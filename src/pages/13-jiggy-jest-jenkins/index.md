@@ -11,7 +11,7 @@ Said a different way, I've _seen_ some shit. From startups to Fortune-ranked com
 
 ### The Quest to Optimize Software Delivery Performance
 
-I'm not the only one who feels this way. In fact, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called SREs (site reliability engineers), and their noble work is outlined in an <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">O'Reilly book on the subject</a> (also linked at the end).
+On the subject of efficient workflows, Google has an entire team of engineers dedicated to maintaining and optimizing the delivery of software. They're called SREs (site reliability engineers), and their noble work is outlined in an <a href="https://landing.google.com/sre/sre-book/toc/index.html" target="_blank">O'Reilly book on the subject</a> (also linked at the end).
 
 One of the key takeaways from the text is the team's insistence on reducing "toil" among its engineers. The term is defined as:
 
@@ -155,7 +155,7 @@ describe('Sanity tests', () => {
 })
 ```
 
-Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate libs for test handling (I'm looking at you, `mocha` and `chai`).
+Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate libs for test handling (I'm looking at you, `mocha` and `chai`). It's conveniences such as this, as well as it auto-mocking third-party dependencies, that make it my go-to testing suite for JS projects.
 
 OK, let's implement this simple case and make the test pass.
 
@@ -256,6 +256,32 @@ describe('Index tests', () => {
 })
 ```
 
+In the test, we're currently invoking the function to reach out to AWS with the static sample text hard-coded in the function (you'll see that soon). In general, though, we see it calling the function and comparing its response with something predefined in a different file. Here's that, for the curious:
+
+_src\/\_\_mocks\_\_\/mockAWSResonpse.ts:_
+
+```typescript
+export default {
+  ErrorList: [],
+  ResultList: [
+    {
+      Index: 0,
+      Sentiment: 'NEGATIVE',
+      SentimentScore: {
+        Mixed: 8.582701980230922e-7,
+        Negative: 0.9986988306045532,
+        Neutral: 0.001219981350004673,
+        Positive: 0.00008040780085138977,
+      },
+    },
+  ],
+}
+```
+
+Clearly whatever I'm sending at the moment is a negative sentiment. We'll have to fix that.
+
+Alright, enough suspense. Here's the _actual_ implementation.
+
 _src/getSentiment:_
 
 ```typescript
@@ -276,17 +302,21 @@ export const getSentiment = () => {
 }
 ```
 
-As we see in the file, we're importing the AWS sdk to utilize its services in our application. Specifically, we're consuming the Comprehend API. If you're not familiar, think of it as Amazon's ML-as-a-service, with it offering APIs for sentiment analysis and natural language processing.
+Quite the sentiment indeed! Glad to see it's working. We live to trust AWS Comprehend another day.
+
+Back to the code. As we see in the file, we're importing the AWS sdk to utilize its services in our application. Specifically, we're consuming the Comprehend API. If you're not familiar, think of it as Amazon's ML-as-a-service, with it offering APIs for sentiment analysis and natural language processing.
 
 Now that we've implemented the core logic of our application, it's time to run them against the tests that we wrote earlier. If everything goes well, they should all pass.
 
-<screen of tests passing>
+<div id="img-container">
+  <img id="jest-run" src="./images/jest-screen.png">
+</div>
 
 Looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
 
 ### Hooking Into a Build Process
 
-The downside of Jenkins is that it's not a hosted service. Rather, users are expected to install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
+The downside of Jenkins is that it's not a hosted service. Rather, users must install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
 
 For this project, I'm going to run a Jenkins server in a Docker container on an EC2 instance on Amazon Web Services (AWS). There are admittedly countless permutations of different stacks and services I could've chosen to host this service. Ultimately, I chose the Docker route because Jenkins provides the images. This seemed easier than writing or following a script that had me install Java, Jenkins, and other utilities from scratch. I also chose an EC2 instance instead of a more integrated service like ECS or EKS for two reasons:
 
@@ -294,8 +324,6 @@ For this project, I'm going to run a Jenkins server in a Docker container on an 
 2. Keeping it on a VPS with Docker installed is easily repeatable across cloud providers (well, I'm using the Amazon Linux AMI for its CLI helpers, but the lock-in is still loose)
 
 Let's dive in.
-
-_Note: If you're following along, you'll want to <link>create an AWS account</link> for this next part of the article._
 
 ### Creating the EC2 Instance
 
