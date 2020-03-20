@@ -7,7 +7,7 @@ A well-defined, well-designed, and well-executed application is worthless if it'
 
 I write this not from my hike down Mount Sinai, but rather from the "Recovery Room of Projects Past", where features scaled too quickly and product owners traded upfront cost for maintenance cost.
 
-Said a different way, I've _seen_ some shit. From startups to Fortune-ranked companies, I've witnessed efficient continuous deployment strategies as well as shameless copy/paste-across-virtual-server-UI-displays jobs. These experiences have taught me how fruitful build processes can be. Now that I've seen the light, there's no going back.
+Said a different way, I've _seen_ some shit. From startups to Fortune-ranked companies, I've witnessed efficient continuous deployment strategies as well as shameless copy/paste-across-virtual-server-UI-display jobs. These experiences have taught me how fruitful build processes can be. Now that I've seen the light, there's no going back.
 
 ### The Quest to Optimize Software Delivery Performance
 
@@ -17,7 +17,7 @@ One of the key takeaways from the text is the team's insistence on reducing "toi
 
 _"...work tied to running a production service that tends to be manual, repetitive, automatable, tactical, devoid of enduring value, and that scales linearly as a service grows."_
 
-Google is not the only group preaching this gospel. In 2018, a group of researchers and industry professionals published the polemical work "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations" that outlined how software companies can optimize delivery performance.
+Google isn't the only team interested in efficiencies. In 2018, a group of researchers and industry professionals published the polemical work "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations" that outlined how software companies can optimize delivery performance.
 
 In short, the research identified several important qualities for successful engineering teams:
 
@@ -47,16 +47,15 @@ Now that we've decided to create a CI/CD pipeline, it's time to select one of th
 
 Although I'd probably select CircleCI if it were my project to own, none dominate the market like <a href="https://jenkins.io/" target="_blank">Jenkins</a>. Since it's a technology the average developer will undoubtedly run into at work, it thus deserves a good understanding.
 
-As an example project to show the flow of the pipeline, I built a quick Node-based service that uses AWS Comprehend to perform sentiment analysis on my personal journal entries. Sorry if that's weird. I just wanted a way to experiment with ML-as-a-service.
+To better show the flow of the CI/CD pipeline, I built a quick Node-based service that uses AWS Comprehend to perform sentiment analysis on my personal journal entries. (I just wanted a way to experiment with machine learning since the algorithms are interesting.)
 
-<also warning about how AWS resources cost money, section on breaking down>
+If you'd like to follow along, you'll need an AWS account. Also note that you'll have to destroy all resources you created during the tutorial, otherwise you'll be charged for them. Don't worry: there's a section on that at the end 🧙.
 
-- NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
-- https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
+Alright, let's jump into the project.
 
 ### High-Level Project Overview
 
-Before we jump in, here's the tree structure for the project:
+Before we start, have a look at the tree structure for the project:
 
 ```
 .
@@ -84,22 +83,7 @@ Before we jump in, here's the tree structure for the project:
 └── yarn.lock
 ```
 
-We'll cover most of the config-related files in later sections, but it's worth popping open _jest.config.js_ to see how our project's test suite will behave.
-
-_jest.config.js_:
-
-```javascript
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  roots: ['src', 'dist'],
-  collectCoverage: true,
-}
-```
-
-Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using Typescript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
-
-Finally, have a look at my _package.json_ file to see what's installed:
+Let's also have a look at the _package.json_ file to see what's installed:
 
 ```json
 {
@@ -132,7 +116,22 @@ Finally, have a look at my _package.json_ file to see what's installed:
 }
 ```
 
-Not much to include with this project aside from the AWS SDK, Jest, and project-specific utilities (config presets and the types for our external libraries).
+Not much to include with this project aside from the AWS SDK, Jest as my test suite (more on that in a minute), and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
+
+It's worth popping open _jest.config.js_ to see how our project's test suite will behave.
+
+_jest.config.js_:
+
+```javascript
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['src', 'dist'],
+  collectCoverage: true,
+}
+```
+
+Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using TypeScript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
 
 ### Getting Started: Tests First
 
@@ -241,7 +240,21 @@ export { handler, SentimentEvent }
 
 The module's responsibility is simple: it invokes the sentiment function with the event details and returns the result.
 
-For a better understanding of what's _actually_ happening, let's examine the getSentiment declaration.
+For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the getSentiment test file first.
+
+_src\/\_\_tests\_\_\/getSentiment.test.ts:_
+
+```typescript
+import { getSentiment } from '../getSentiment'
+import expectedResponse from '../__mocks__/mockAWSResponse'
+
+describe('Index tests', () => {
+  it('responds with expected string with valid params', async () => {
+    const res = await getSentiment()
+    expect(res).toEqual(expectedResponse)
+  })
+})
+```
 
 _src/getSentiment:_
 
@@ -335,3 +348,6 @@ If you're interested in learning more, here's the usual list of recommended foll
 - <a href="https://www.terraform.io/" target="_blank">Terraform</a> (infrastructure as code)
 
 As always, thanks for reading.
+
+- NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
+- https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
