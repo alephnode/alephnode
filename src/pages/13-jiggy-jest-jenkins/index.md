@@ -19,7 +19,7 @@ _"...work tied to running a production service that tends to be manual, repetiti
 
 Google isn't the only team interested in efficiencies. In 2018, a group of researchers and industry professionals published the polemical work "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations" that outlined how software companies can optimize delivery performance.
 
-In short, the research identified several important qualities for successful engineering teams:
+In short, the research identified several important practices of successful engineering teams:
 
 - building quality in
 - having frequent releases and short-lived branches
@@ -27,7 +27,7 @@ In short, the research identified several important qualities for successful eng
 - implementing infrastructure as code (checked into version control)
 - constantly running tests and enforcing coverage
 
-While we could probably identify several viable options for the items in this list, one idea comes to mind that would quickly satisfy them all: a CI/CD workflow, of course!
+While we could probably identify several viable implementations of the items in this list, one idea comes to mind that would quickly satisfy them all: a CI/CD workflow, of course!
 
 _Note: I'm assuming readers are aware of what "CI/CD" (continuous integration, continuous delivery) entails. If you're unfamiliar with the term, here's a <a href="https://stackify.com/what-is-cicd-whats-important-and-how-to-get-it-right/" target="_blank">brief overview</a> of the topic._
 
@@ -83,7 +83,7 @@ Before we start, have a look at the tree structure for the project:
 └── yarn.lock
 ```
 
-Let's also have a look at the _package.json_ file to see what's installed:
+Let's also inspect the _package.json_ file to see what's installed:
 
 ```json
 {
@@ -240,7 +240,7 @@ export { handler, SentimentEvent }
 
 The module's responsibility is simple: it invokes the sentiment function with the event details and returns the result.
 
-For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the getSentiment test file first.
+For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the getSentiment test file.
 
 _src\/\_\_tests\_\_\/getSentiment.test.ts:_
 
@@ -256,7 +256,9 @@ describe('Index tests', () => {
 })
 ```
 
-In the test, we're currently invoking the function to reach out to AWS with the static sample text hard-coded in the function (you'll see that soon). In general, though, we see it calling the function and comparing its response with something predefined in a different file. Here's that, for the curious:
+In the test, we invoke the `getSentiment` function, which reaches out to AWS (currently with static sample text hard-coded in the function) to receive a sentiment score. We then compare the result with the predefined response we expect back.
+
+Digging into the mock file will give us a better sense of what we expect.
 
 _src\/\_\_mocks\_\_\/mockAWSResonpse.ts:_
 
@@ -302,17 +304,17 @@ export const getSentiment = () => {
 }
 ```
 
-Quite the sentiment indeed! Glad to see it's working. We live to trust AWS Comprehend another day.
+Quite the sentiment, indeed. I'd say our natural language processing is doing just fine.
 
-Back to the code. As we see in the file, we're importing the AWS sdk to utilize its services in our application. Specifically, we're consuming the Comprehend API. If you're not familiar, think of it as Amazon's ML-as-a-service, with it offering APIs for sentiment analysis and natural language processing.
+As we see in the file, we're importing the AWS sdk to use Comprehend in the service. Again, if you're not familiar with Comprehend, think of it as Amazon's ML-as-a-service solution. Once we receive the response, we relay it upstream.
 
-Now that we've implemented the core logic of our application, it's time to run them against the tests that we wrote earlier. If everything goes well, they should all pass.
+Now that we've implemented the core logic of our application, it's time to run the tests we saw earlier. If everything goes well, they should all pass.
 
 <div id="img-container">
   <img id="jest-run" src="./images/jest-screen.png">
 </div>
 
-Looks like we're in good shape. Time to focus our attention toward the CI/CD layer.
+Looks like we're in good shape. Time for the fun part: setting up the CI/CD workflow.
 
 ### Hooking Into a Build Process
 
