@@ -47,9 +47,7 @@ Now that we've decided to create a CI/CD pipeline, it's time to select one of th
 
 Although I'd probably select CircleCI if it were my project to own, none dominate the market like <a href="https://jenkins.io/" target="_blank">Jenkins</a>. Since it's a technology the average developer will undoubtedly run into at work, it thus deserves a good understanding.
 
-To better show the flow of the CI/CD pipeline, I built a quick Node-based service that uses AWS Comprehend to perform sentiment analysis on my personal journal entries. (I just wanted a way to experiment with machine learning since the algorithms are interesting.)
-
-If you'd like to follow along, you'll need an AWS account. Also note that you'll have to destroy all resources you created during the tutorial, otherwise you'll be charged for them. Don't worry: there's a section on that at the end 🧙.
+To better show the flow of the CI/CD pipeline, I built a quick Node-based service that uses <a href="https://aws.amazon.com/comprehend/" target="_blank">AWS Comprehend</a> to perform sentiment analysis on my personal journal entries. If you'd like to follow along, you'll need an <a href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/" target="_blank">AWS account</a>. Also note that you'll have to destroy all resources you created during the tutorial, otherwise you'll be charged for them. Don't worry: there's a section on that at the end 🧙.
 
 Alright, let's jump into the project.
 
@@ -306,26 +304,26 @@ export const getSentiment = () => {
 
 Quite the sentiment, indeed. I'd say our natural language processing is doing just fine.
 
-As we see in the file, we're importing the AWS sdk to use Comprehend in the service. Again, if you're not familiar with Comprehend, think of it as Amazon's ML-as-a-service solution. Once we receive the response, we relay it upstream.
+As we see in the file, we're importing the AWS SDK to use Comprehend in the service. Specifically, we use the promisified versoion of its `batchDetectSentiment` method, which will inspect a batch of documents and respond with a sentiment score. Once we receive the response, we relay it upstream.
 
-Now that we've implemented the core logic of our application, it's time to run the tests we saw earlier. If everything goes well, they should all pass.
+Now that we've seen the core logic of the application, it's time to run the tests we saw earlier. If everything goes well, they should all pass.
 
 <div id="img-container">
   <img id="jest-run" src="./images/jest-screen.png">
 </div>
 
-Looks like we're in good shape. Time for the fun part: setting up the CI/CD workflow.
+Looks like we're in good shape. Time for the next step: setting up the CI/CD workflow.
 
 ### Hooking Into a Build Process
 
-The downside of Jenkins is that it's not a hosted service. Rather, users must install and host the application on their own hardware. Since I've already committed to learning more about Jenkins, the next step is getting my infrastructure established in the cloud.
+The downside of Jenkins is that it's not a hosted service. Rather, users must install and host the application on their own hardware. Since I already have an AWS account, I decided to use that provider.
 
-For this project, I'm going to run a Jenkins server in a Docker container on an EC2 instance on Amazon Web Services (AWS). There are admittedly countless permutations of different stacks and services I could've chosen to host this service. Ultimately, I chose the Docker route because Jenkins provides the images. This seemed easier than writing or following a script that had me install Java, Jenkins, and other utilities from scratch. I also chose an EC2 instance instead of a more integrated service like ECS or EKS for two reasons:
+For this project, I'm going to run a Jenkins server in a Docker container on an EC2 instance. There are admittedly countless permutations of different stacks and services I could've chosen to host this service. Ultimately, I chose the Docker route because Jenkins provides the images. This seemed easier than writing or following a script that had me install Java, Jenkins, and other utilities from scratch. I also chose an EC2 instance instead of a more integrated service like ECS or EKS for two reasons:
 
 1. I'll only need one build server, so task definitions and services felt like overkill
 2. Keeping it on a VPS with Docker installed is easily repeatable across cloud providers (well, I'm using the Amazon Linux AMI for its CLI helpers, but the lock-in is still loose)
 
-Let's dive in.
+Alright, let's dive in.
 
 ### Creating the EC2 Instance
 
