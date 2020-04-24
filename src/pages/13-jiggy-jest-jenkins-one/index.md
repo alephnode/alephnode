@@ -3,6 +3,16 @@ title: 'Getting Jiggy with Jenkins and Jest, Part One'
 date: '2020-04-06'
 ---
 
+Hello again.
+
+Seeing as there hasn't been an update to this site in some time, I'll provide a brief explanation as to where I've been.
+
+As readers probably know, I accepted a new role in a new state at the beginning of autumn last year. For me, the most exciting part of starting a new position is discovering uncharted best practices and areas of emphasis that I hadn't previously encountered.
+
+At my last job, this involved honing an understanding of low-level rendering concerns such as progressive enhancement; handling virtualization; FOUC and CSS animation control; and building component libraries for larger applications to consume. Although it was fulfilling to
+
+Which brings me to the last few months.
+
 rewrite ideas:
 
 - explain a brief update of where I've been the last few months
