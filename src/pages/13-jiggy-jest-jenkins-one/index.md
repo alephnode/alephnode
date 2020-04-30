@@ -3,28 +3,23 @@ title: 'Getting Jiggy with Jenkins and Jest, Part One'
 date: '2020-04-06'
 ---
 
-Hello again.
+A few months have passed since my last article. Rest assured that the time was not spent in idle; I was busy tending to a new home and new role.
 
-Seeing as there hasn't been an update to this site in some time, I'll provide a brief explanation as to where I've been.
+I've also had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
 
-As readers probably know, I accepted a new role in a new state at the beginning of autumn last year. For me, the most exciting part of starting a new position is discovering uncharted best practices and areas of emphasis that I hadn't previously encountered.
+At the core of this professions growth is the single-most important change I've made: adhering to a test-driven development pattern.
 
-At my last job, this involved honing an understanding of low-level rendering concerns such as progressive enhancement; handling virtualization; FOUC and CSS animation control; and building component libraries for larger applications to consume. Although it was fulfilling to
+I know what you're thinking: I'm one of those assholes that writes about obvious best practices that'll look good on my resume.
 
-Which brings me to the last few months.
+And, to level with you, that's the world I wish we _actually_ lived in. I relish the thought of stating the obvious when discussing thorough testing and the modular, cohesive code that derives from it.
 
-rewrite ideas:
+Instead, we devs often inherit code that has sparse—if _any_—test coverage. Even if there are tests, they're not wired to a CI/CD pipeline that defends your builds from buggy code.
 
-- explain a brief update of where I've been the last few months
-  - took a few months off to immerse myself in the new role, transition into more of a full-stack role from front-end emphasis
-  - compiling a list of topics that are tailored more toward what I've been up to
-  - starting with some excellent TDD resources, practices, love of Jest
-  - intro to TDD, what it means
-  - intro to project
-  - walkthrough of code
-  - explain layers of Jest that make it nice
-    - assertion for free, sensible mocking sometimes automated, coverage report
-  - segue/lead into Jenkins pipeline article for part two
+So I have to be the guy who writes about test-driven development (which will look good on my resume).
+
+Let's examine the benefits.
+
+### Seriously, Why TDD
 
 =============== PROJECT CODE SECTION START ===============
 
