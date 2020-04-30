@@ -7,23 +7,44 @@ A few months have passed since my last article. Rest assured that the time was n
 
 I've also had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
 
-At the core of this professions growth is the single-most important change I've made: adhering to a test-driven development pattern.
+At the core of my professional growth is the single-most beneficial change I've made: adhering to a test-driven development pattern.
 
-I know what you're thinking: I'm one of those assholes that writes about obvious best practices that'll look good on my resume.
+I know what you're thinking: I'm one of those assholes who writes about obvious best practices that'll look good on my resume.
 
 And, to level with you, that's the world I wish we _actually_ lived in. I relish the thought of stating the obvious when discussing thorough testing and the modular, cohesive code that derives from it.
 
-Instead, we devs often inherit code that has sparse—if _any_—test coverage. Even if there are tests, they're not wired to a CI/CD pipeline that defends your builds from buggy code.
+Instead, we often inherit code that has sparse—if _any_—test coverage. Even if there are tests, they're not wired to a CI/CD pipeline that defends your builds from buggy code.
 
 So I have to be the guy who writes about test-driven development (which will look good on my resume).
+
+For the sake of keeping things concentrated (and the article length outside of think-piece territory), I'll publish a testing-themed walkthrough in two parts. The first, this one, aims to hit two goals:
+
+1. explain the rationale for TDD, and
+2. highlight the formidable strength of Jest, a JavaScript framework that makes the DX for testing painless.
 
 Let's examine the benefits.
 
 ### Seriously, Why TDD
 
+TODO
+
+- keep tone consistent
+
+  - aim is developers who have heard of TDD but don't really do it
+  - frustration of the diff. in opinion
+
+    - inverted pyramid or testing trophy?
+    - all the different keywords: should I spy? mock? ugh?
+    - sweet spot is how jest makes this easier
+    - segue into writing a suite of unit tests that'll eventually get hooked up into ci/cd
+
 =============== PROJECT CODE SECTION START ===============
 
-Alright, let's jump into the project.
+To show off how to write meaningful unit tests, I'm going to leverage a few of the features of Jest. I'll elaborate on what I'm doing in the examples.
+
+The example project is a simple script that sends an email to me using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article on Jenkins and Terraform for CI/CD and IaC, respectively.
+
+Alright, let's jump in.
 
 ### High-Level Project Overview
 
@@ -41,14 +62,18 @@ Before we start, have a look at the tree structure for the project:
 │   │   ├── aws-sdk.ts
 │   │   └── mockAWSResponse.ts
 │   ├── __tests__
-│   │   ├── getSentiment.test.ts
 │   │   ├── index.test.ts
-│   │   └── sanity.test.ts
-│   ├── getSentiment.ts
+│   │   ├── sanity.test.ts
+│   │   └── sendEmail.test.ts
 │   ├── index.ts
+│   ├── params
+│   │   └── requestParameters.ts
 │   ├── responses
 │   │   └── invalidDataSupplied.ts
 │   ├── sanity.ts
+│   ├── sendEmail.ts
+│   ├── templates
+│   │   └── emailTemplate.ts
 │   └── validators
 │       └── isValidEvent.ts
 ├── tsconfig.json
@@ -59,8 +84,8 @@ Let's also inspect the _package.json_ file to see what's installed:
 
 ```json
 {
-  "name": "get-sentiment-score",
-  "version": "1.0.21",
+  "name": "email-lambda",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
@@ -70,7 +95,6 @@ Let's also inspect the _package.json_ file to see what's installed:
   "scripts": {
     "test": "jest -i",
     "build": "tsc",
-    "start": "npx nodemon --watch 'src/**/*' --exec 'ts-node' src/index.ts",
     "deploy": "./deploy.sh"
   },
   "keywords": [],
