@@ -17,32 +17,38 @@ Instead, we often inherit code that has sparse—if _any_—test coverage. Even 
 
 So I have to be the guy who writes about test-driven development (which will look good on my resume).
 
-For the sake of keeping things concentrated (and the article length outside of think-piece territory), I'll publish a testing-themed walkthrough in two parts. The first, this one, aims to hit two goals:
+For the sake of keeping things concentrated (and the article length outside of think-piece territory), I'll publish a testing-themed walkthrough in two parts. The first, this one, aims to achieve two goals:
 
 1. explain the rationale for TDD, and
 2. highlight the formidable strength of Jest, a JavaScript framework that makes the DX for testing painless.
 
-Let's examine the benefits.
+### Why TDD
 
-### Seriously, Why TDD
+Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd like to accomplish and then implement logic that gets them to pass. To many, this is the heart of Test-Driven Development, or TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
-TODO
+There are several reasons why this practice produces better code. For one, writing tests forces the engineer to consider edge cases and function boundaries prior to implementation. Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing (keep it SOLID, people).
 
-- keep tone consistent
-
-  - aim is developers who have heard of TDD but don't really do it
-  - frustration of the diff. in opinion
+<TDD book summary here, quote him> = also cover:
 
     - inverted pyramid or testing trophy?
     - all the different keywords: should I spy? mock? ugh?
     - sweet spot is how jest makes this easier
     - segue into writing a suite of unit tests that'll eventually get hooked up into ci/cd
 
-=============== PROJECT CODE SECTION START ===============
+### What We're Building
 
 To show off how to write meaningful unit tests, I'm going to leverage a few of the features of Jest. I'll elaborate on what I'm doing in the examples.
 
 The example project is a simple script that sends an email to me using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article on Jenkins and Terraform for CI/CD and IaC, respectively.
+
+By the end of this article, I hope to show you some of the solutions available through Jest, including:
+
+- coverage reports
+- built-in assertions
+- automatic mocking
+- simple spying
+
+... and many other life-saving features.
 
 Alright, let's jump in.
 
@@ -130,8 +136,6 @@ module.exports = {
 Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using TypeScript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
 
 ### Getting Started: Tests First
-
-Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd _like_ to accomplish and then implement logic that gets them to pass. To many, this is the heart of <b>Test-Driven Development, or TDD</b>. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
 Let's create our first test file. Because this project involves compilation steps, test suite configuration, a CI/CD layer, and deployment scripts, there's quite a bit that could go wrong from development to release. For this reason, I generally include a canary endpoint/module in these types of projects that serves as a base case. I name these files _sanity.\*_ because, as the name implies, they exist solely for me to troubleshoot base integrations if anything goes awry.
 
