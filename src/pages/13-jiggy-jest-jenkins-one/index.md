@@ -38,13 +38,15 @@ Once the tests are written, we can use them to protect our code from breaking ch
 
 ### A Practical Approach: What We're Building
 
-- discuss the results-driven example ahead. Introduce concepts of testing as we encounter them through Jest libraries and functions
+For the sake of this article, I'm going to focus on writing meaningful unit tests to show off common testing practices. To do this, I'll use Jest, a popular JavaScript testing framework. There are quite a few nifty features that come stock with the library, and I'll be sure to point them out as we code along.
 
-      - inverted pyramid or testing trophy?
+It's worth noting that there's been a lot of discussion in the community about the right formula for testing applications. The conventional wisdom was to aim for a <a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank">pyramid-style</a> methodology, where unit testing is the most abundant type of tests available for the service, followed by component and integration tests and finally reaching end-to-end (E2E) tests at the top.
 
-To show off how to write meaningful unit tests, I'm going to leverage a few of the features of Jest. I'll elaborate on what I'm doing in the examples.
+Another model would be the venerable Kent C. Dodds' testing trophy. In short, the mantra is: <a href="https://kentcdodds.com/blog/write-tests" target="_blank">Write tests. Not too many. Mostly integration.</a> According to his heuristic, there's a diminishing return in stability after reaching a certain point (70 percent, for example).
 
-The example project is a simple script that sends an email to me using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article on Jenkins and Terraform for CI/CD and IaC, respectively.
+Whichever you choose, what's important is that it increases your shipping confidence. As long as the project is reliable, scalable, and maintainable, build out any model that is successful for your project or team. For me, I feel uneasy taking on legacy code bases with anything less than 90 percent coverage, at least until I'm familiar with the system. I'm sure other developers feel the same, which leads me to believe that poor coverage might impact a team's ability to attract talent. Food for thought!
+
+Anyway, this brings us to the example project. In short, it's a simple script that sends an email using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article on Jenkins and Terraform for CI/CD and infrastructure as code (IaC), respectively.
 
 By the end of this article, I hope to show you some of the solutions available through Jest, including:
 
