@@ -24,18 +24,23 @@ For the sake of keeping things concentrated (and the article length outside of t
 
 ### Why TDD
 
-Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd like to accomplish and then implement logic that gets them to pass. To many, this is the heart of Test-Driven Development, or TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
+Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd like to accomplish and then implement logic that gets them to pass.
 
-There are several reasons why this practice produces better code. For one, writing tests forces the engineer to consider edge cases and function boundaries prior to implementation. Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing (keep it SOLID, people).
+To many, this is the heart of Test-Driven Development, or TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
-<TDD book summary here, quote him> = also cover:
+There are several reasons why this practice produces better code. For one, writing tests forces the engineer to consider edge cases and function boundaries prior to implementation.
 
-    - inverted pyramid or testing trophy?
-    - all the different keywords: should I spy? mock? ugh?
-    - sweet spot is how jest makes this easier
-    - segue into writing a suite of unit tests that'll eventually get hooked up into ci/cd
+Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing or are tightly coupled (keep it SOLID, people).
 
-### What We're Building
+More specifically _leading_ with tests stems from the fact that it's simply more difficult or time-consuming to write them afterward, and often times get nixed in planning for the sake of delivering more features.
+
+Once the tests are written, we can use them to protect our code from breaking changes by having them run whenever pull requests are opened against a repo, as well as during deployments. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
+
+### A Practical Approach: What We're Building
+
+- discuss the results-driven example ahead. Introduce concepts of testing as we encounter them through Jest libraries and functions
+
+      - inverted pyramid or testing trophy?
 
 To show off how to write meaningful unit tests, I'm going to leverage a few of the features of Jest. I'll elaborate on what I'm doing in the examples.
 
