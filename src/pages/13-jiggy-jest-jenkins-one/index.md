@@ -319,3 +319,17 @@ Now that we've seen the core logic of the application, it's time to run the test
 
 - NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
 - https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
+
+### Wrapping Up
+
+By now, we've written a few tests that showcase mocking, rewiring, asserting, and other key aspects of testing software.
+
+In part two of this article series, I'll show how to deploy the service using infrastructure as code with Terraform, as well as setting up a CI/CD system with Jenkins.
+
+For now, here's the usual reading list for more information.
+
+- Test Driven Development book link
+- Jest walkthrough
+- martin fowler testing article (?)
+
+As always, thanks for reading.
