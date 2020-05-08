@@ -38,24 +38,26 @@ Once the tests are written, we can use them to protect our code from breaking ch
 
 ### A Practical Approach: What We're Building
 
-For the sake of this article, I'm going to focus on writing meaningful unit tests to show off common testing practices. To do this, I'll use Jest, a popular JavaScript testing framework. There are quite a few nifty features that come stock with the library, and I'll be sure to point them out as we code along.
-
-It's worth noting that there's been a lot of discussion in the community about the right formula for testing applications. The conventional wisdom was to aim for a <a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank">pyramid-style</a> methodology, where unit testing is the most abundant type of tests available for the service, followed by component and integration tests and finally reaching end-to-end (E2E) tests at the top.
-
-Another model would be the venerable Kent C. Dodds' testing trophy. In short, the mantra is: <a href="https://kentcdodds.com/blog/write-tests" target="_blank">Write tests. Not too many. Mostly integration.</a> According to his heuristic, there's a diminishing return in stability after reaching a certain point (70 percent, for example).
-
-Whichever you choose, what's important is that it increases your shipping confidence. As long as the project is reliable, scalable, and maintainable, build out any model that is successful for your project or team. For me, I feel uneasy taking on legacy code bases with anything less than 90 percent coverage, at least until I'm familiar with the system. I'm sure other developers feel the same, which leads me to believe that poor coverage might impact a team's ability to attract talent. Food for thought!
-
-Anyway, this brings us to the example project. In short, it's a simple script that sends an email using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article on Jenkins and Terraform for CI/CD and infrastructure as code (IaC), respectively.
-
-By the end of this article, I hope to show you some of the solutions available through Jest, including:
+For the sake of this article, I'm going to focus on writing meaningful unit tests to show off common testing practices. To do this, I'll use Jest, a popular JavaScript testing framework. There are quite a few nifty features that come stock with the library, including:
 
 - coverage reports
 - built-in assertions
 - automatic mocking
 - simple spying
 
-... and many other life-saving features.
+I'll be sure to point them out as we go along.
+
+It's worth noting that there's been a lot of discussion in the community about the right formula for testing applications. The conventional wisdom was to aim for a <a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank">pyramid-style</a> methodology, where unit testing is the most abundant type of tests available for the service, followed by component and integration tests and finally reaching end-to-end (E2E) tests at the top.
+
+Another model would be the venerable Kent C. Dodds' testing trophy. In short, the mantra is:
+
+<a href="https://kentcdodds.com/blog/write-tests" target="_blank">Write tests. Not too many. Mostly integration.</a>
+
+According to his heuristic, there's a diminishing return in stability after reaching a certain point (70 percent, for example).
+
+Whichever you choose, what's important is that it increases your shipping confidence. As long as the project is reliable, scalable, and maintainable, build out any model that is successful for your project or team. For me, I feel uneasy taking on legacy code bases with anything less than 90 percent coverage, at least until I'm familiar with the system. I'm sure other developers feel the same, which leads me to believe that poor coverage might impact a team's ability to attract talent. Food for thought!
+
+Anyway, this brings us to the example project. In short, it's a simple script that sends an email using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article, which will focus on Jenkins and Terraform for CI/CD and infrastructure as code (IaC) examples, respectively.
 
 Alright, let's jump in.
 
@@ -125,9 +127,9 @@ Let's also inspect the _package.json_ file to see what's installed:
 }
 ```
 
-Not much to include with this project aside from the AWS SDK, Jest as my test suite (more on that in a minute), and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
+Not much to include with this project aside from the AWS SDK, Jest, Typescript necessities, and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
 
-It's worth popping open _jest.config.js_ to see how our project's test suite will behave.
+It's worth popping open _jest.config.js_ to see how we're configuring Jest to behave.
 
 _jest.config.js_:
 
@@ -162,7 +164,7 @@ describe('Sanity tests', () => {
 })
 ```
 
-Note that Jest provides test running methods as well as assertion functions out of the gate. This is convenient for those who don't want to import a library at the top or download two separate libs for test handling (I'm looking at you, `mocha` and `chai`). It's conveniences such as this, as well as it auto-mocking third-party dependencies, that make it my go-to testing suite for JS projects.
+Note that Jest provides test running methods as well as assertion functions out of the gate. This is our first example of the convenience it provides. This will appeal to those who don't want to import a module at the top or download a separate library for test assertions (I'm looking at you, `mocha` and `chai` workflow).
 
 OK, let's implement this simple case and make the test pass.
 
@@ -226,44 +228,45 @@ _src/index.ts:_
 
 ```typescript
 import { Handler } from 'aws-lambda'
-import { getSentiment } from './getSentiment'
+import { sendEmail } from './sendEmail'
 import { isValidEvent } from './validators/isValidEvent'
 import { invalidDataSupplied } from './responses/invalidDataSupplied'
 
-type SentimentEvent = {
+type EmailEvent = {
   details: {
     text: string
   }
 }
 
-const handler: Handler = async (event: SentimentEvent) => {
+const handler: Handler = async (event: EmailEvent) => {
   if (!isValidEvent(event)) return invalidDataSupplied
   const params = event.details
-  return await getSentiment()
+  console.log(params)
+  return await sendEmail()
 }
 
-export { handler, SentimentEvent }
+export { handler, EmailEvent }
 ```
 
-The module's responsibility is simple: it invokes the sentiment function with the event details and returns the result.
+The module's responsibility is simple: it invokes the sendEmail function with the event details and returns the result.
 
-For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the getSentiment test file.
+For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the sendEmail test file.
 
-_src\/\_\_tests\_\_\/getSentiment.test.ts:_
+_src\/\_\_tests\_\_\/sendEmail.test.ts:_
 
 ```typescript
-import { getSentiment } from '../getSentiment'
+import { sendEmail } from '../sendEmail'
 import expectedResponse from '../__mocks__/mockAWSResponse'
 
 describe('Index tests', () => {
   it('responds with expected string with valid params', async () => {
-    const res = await getSentiment()
-    expect(res).toEqual(expectedResponse)
+    const res = await sendEmail()
+    expect(JSON.stringify(res)).toEqual(JSON.stringify(expectedResponse))
   })
 })
 ```
 
-In the test, we invoke the `getSentiment` function, which reaches out to AWS (currently with static sample text hard-coded in the function) to receive a sentiment score. We then compare the result with the predefined response we expect back.
+In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) offering to send a simple email to the recipient passed. We then compare the result with the predefined response we expect back.
 
 Digging into the mock file will give us a better sense of what we expect.
 
@@ -330,6 +333,6 @@ For now, here's the usual reading list for more information.
 
 - Test Driven Development book link
 - Jest walkthrough
-- martin fowler testing article (?)
+- testophobia repo
 
 As always, thanks for reading.
