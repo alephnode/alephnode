@@ -22,9 +22,13 @@ For the sake of keeping things concentrated (and the article length outside of t
 1. explain the rationale for TDD, and
 2. highlight the formidable strength of Jest, a JavaScript framework that makes the DX for testing painless.
 
+The second will focus on creating a CI/CD layer that leverages our tests to reject breaking changes and deploy code once merged. It'll also detail how to update infrastructure automatically through code using Terraform.
+
+Let's not get ahead of ourselves. Here's why we need tests in the first place.
+
 ### Why TDD
 
-Instead of using the results-first flow of previous articles, we're going to build the project incrementally with tests that explain what we'd like to accomplish and then implement logic that gets them to pass.
+Instead of using the results-first flow of previous articles, we're going to build a project incrementally with tests that explain what we'd like to accomplish. We'll then implement logic that gets the tests to pass.
 
 To many, this is the heart of Test-Driven Development, or TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
@@ -266,7 +270,7 @@ describe('Index tests', () => {
 })
 ```
 
-In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) offering to send a simple email to the recipient passed. We then compare the result with the predefined response we expect back.
+In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) offering to send an email to the recipient passed. We then compare the result with the predefined response we expect back.
 
 Digging into the mock file will give us a better sense of what we expect.
 
@@ -274,65 +278,50 @@ _src\/\_\_mocks\_\_\/mockAWSResonpse.ts:_
 
 ```typescript
 export default {
-  ErrorList: [],
-  ResultList: [
-    {
-      Index: 0,
-      Sentiment: 'NEGATIVE',
-      SentimentScore: {
-        Mixed: 8.582701980230922e-7,
-        Negative: 0.9986988306045532,
-        Neutral: 0.001219981350004673,
-        Positive: 0.00008040780085138977,
-      },
-    },
-  ],
+  ResponseMetadata: {
+    RequestId: 'd351fa09-5192-4ea2-9b7f-4e94aad9d856',
+  },
+  MessageId: '010001719039e90c-fdd18192-a7e5-4ac0-8e65-c929859181f8-000000',
 }
 ```
-
-Clearly whatever I'm sending at the moment is a negative sentiment. We'll have to fix that.
 
 Alright, enough suspense. Here's the _actual_ implementation.
 
 _src/getSentiment:_
 
 ```typescript
-import AWS from 'aws-sdk'
+import * as aws from 'aws-sdk'
+import { requestParameters } from './params/requestParameters'
 
-export const getSentiment = () => {
-  const params = {
-    LanguageCode: 'en',
-    TextList: ['I hate this'],
-  }
+export const sendEmail = async () => {
+  aws.config.update({ region: 'us-east-1' })
 
-  const comprehend = new AWS.Comprehend({
-    apiVersion: '2017-11-27',
-    region: 'us-east-1',
-  })
+  const ses = new aws.SES()
 
-  return comprehend.batchDetectSentiment(params).promise()
+  const res = await ses.sendEmail(requestParameters).promise()
+
+  return res
 }
 ```
 
-Quite the sentiment, indeed. I'd say our natural language processing is doing just fine.
-
-As we see in the file, we're importing the AWS SDK to use Comprehend in the service. Specifically, we use the promisified versoion of its `batchDetectSentiment` method, which will inspect a batch of documents and respond with a sentiment score. Once we receive the response, we relay it upstream.
+The module sends an email.
 
 Now that we've seen the core logic of the application, it's time to run the tests we saw earlier. If everything goes well, they should all pass.
 
-- NOTE: when setting up the lambda, you have to grant the lambda Comprehend permission. I do full access
-- https://d1.awsstatic.com/Projects/P5505030/aws-project_Jenkins-build-server.pdf (excellent jenkins build server)
+<img screen of passing>
+
+Horray! We've not successfully written tests to describe our desired functionality and implemented the features with their guidance. Woot!
 
 ### Wrapping Up
 
-By now, we've written a few tests that showcase mocking, rewiring, asserting, and other key aspects of testing software.
+By now, we've written a few tests that showcase mocking, asserting, and other key aspects of testing software.
 
-In part two of this article series, I'll show how to deploy the service using infrastructure as code with Terraform, as well as setting up a CI/CD system with Jenkins.
+In part two of this article, I'll show how to deploy the service using infrastructure as code with Terraform, as well as setting up a CI/CD system with Jenkins.
 
 For now, here's the usual reading list for more information.
 
-- Test Driven Development book link
-- Jest walkthrough
-- testophobia repo
+- Pragmatic Bookshelf's "Test-Driving JavaScript Applications" (examples are a bit outdated, but the concepts are sound)
+- Kent Dodd's Testing JavaScript course
+- Testophobia, a web snapshot testing library I built with a former coworker.
 
 As always, thanks for reading.
