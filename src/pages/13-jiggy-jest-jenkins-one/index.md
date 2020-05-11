@@ -146,7 +146,7 @@ module.exports = {
 }
 ```
 
-Nothing controversial being done here. I'm including a preset for Jest so it knows I'm using TypeScript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
+I'm including a preset for Jest so it knows I'm using TypeScript, and also specifying my root directories and test environment. For more info on configuring Jest, check out the project's thorough <a href="https://jestjs.io/docs/en/configuration" target="_blank">documentation</a>.
 
 ### Getting Started: Tests First
 
@@ -208,7 +208,16 @@ import { invalidDataSupplied } from '../responses/invalidDataSupplied'
 
 describe('Index tests', () => {
   it('responds with expected string with valid params', async () => {
-    const res = await handler({ details: { text: 'hello' } }, null, null)
+    const res = await handler(
+      {
+        details: {
+          emailAddress: 'example@mysite.com',
+          message: 'time to get this bread',
+        },
+      },
+      null,
+      null
+    )
     expect(res).toBeTruthy()
   })
   it('responds with error with valid params', async () => {
@@ -238,15 +247,15 @@ import { invalidDataSupplied } from './responses/invalidDataSupplied'
 
 type EmailEvent = {
   details: {
-    text: string
+    emailAddress: string
+    message: string
   }
 }
 
 const handler: Handler = async (event: EmailEvent) => {
   if (!isValidEvent(event)) return invalidDataSupplied
   const params = event.details
-  console.log(params)
-  return await sendEmail()
+  return await sendEmail(params)
 }
 
 export { handler, EmailEvent }
