@@ -36,7 +36,7 @@ There are several reasons why this practice produces better code. For one, writi
 
 Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing or are tightly coupled (keep it SOLID, people).
 
-More specifically _leading_ with tests stems from the fact that it's simply more difficult or time-consuming to write them afterward, and often times get nixed in planning for the sake of delivering more features.
+More specifically, _leading_ with tests stems from the fact that it's simply more difficult or time-consuming to write them afterward, and often times get nixed in planning for the sake of delivering more features.
 
 Once the tests are written, we can use them to protect our code from breaking changes by having them run whenever pull requests are opened against a repo, as well as during deployments. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
 
@@ -168,9 +168,17 @@ describe('Sanity tests', () => {
 })
 ```
 
+The handler will follow the Lambda pattern of accepting three arguments:
+
+- <strong>event</strong>, which pertains metadata about the invoker
+- <strong>context</strong>, where all the information and details about the invocation are located
+- <strong>callback</strong>, which follows the traditional Node callback pattern of `error` and `success` (or in this case `response`).
+
+For more detailed info on Lambda functions, head over to their <a href="https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html" target="_blank">documentation</a>.
+
 Note that Jest provides test running methods as well as assertion functions out of the gate. This is our first example of the convenience it provides. This will appeal to those who don't want to import a module at the top or download a separate library for test assertions (I'm looking at you, `mocha` and `chai` workflow).
 
-OK, let's implement this simple case and make the test pass.
+OK, let's implement this simple case and make the test pass. In order to do so, I'll need to export a function called `handler` that follows the Lambda signature used above.
 
 _src/sanity.ts_:
 
@@ -194,11 +202,14 @@ const handler: Handler = (event, context: Context, cb: Callback) => {
 export { handler, SanityResponse }
 ```
 
-The exported handler in this module returns a response body with the payload expected in our test.
+The exported function in this module returns a response body with the payload expected in our test. If we run our first test, we should see it pass in the console.
 
 Alright, onto our _actual_ project logic.
 
-Since our deploy target is a lambda function, my app's entry point will need to be a file with an exported handler function. Let's start with writing the test file for this module.
+Since our deploy target is a Lambda function, my app's entry point will need to be a file with an exported handler function like the signature used above. Let's start with writing the test file for this module, explaining what we want it to do:
+
+- response with the expected response when valid request is provided, and
+- send an error message when our payload is incorrect.
 
 _src/\_\_tests\_\_/index.test.ts_:
 
@@ -237,6 +248,8 @@ This is considered the AAA pattern and is common in the TDD community. Check out
 
 Anyhow, onto the implementation of our root handler.
 
+In order to accommodate the demands of our test, we'll need to invoke a sendEmail function that performs the SES action needed.
+
 _src/index.ts:_
 
 ```typescript
@@ -260,8 +273,6 @@ const handler: Handler = async (event: EmailEvent) => {
 
 export { handler, EmailEvent }
 ```
-
-The module's responsibility is simple: it invokes the sendEmail function with the event details and returns the result.
 
 For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the sendEmail test file.
 
@@ -319,11 +330,11 @@ Now that we've seen the core logic of the application, it's time to run the test
 
 <img screen of passing>
 
-Horray! We've not successfully written tests to describe our desired functionality and implemented the features with their guidance. Woot!
+Hooray! We've now successfully written tests to describe our desired functionality and implemented the features by coding until we get them to pass.
 
 ### Wrapping Up
 
-By now, we've written a few tests that showcase mocking, asserting, and other key aspects of testing software.
+By now, we've written a few tests that show how to mock, assert, and perform other essential methods for testing our code.
 
 In part two of this article, I'll show how to deploy the service using infrastructure as code with Terraform, as well as setting up a CI/CD system with Jenkins.
 
