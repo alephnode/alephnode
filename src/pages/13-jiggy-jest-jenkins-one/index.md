@@ -82,6 +82,7 @@ Before we start, have a look at the tree structure for the project:
 │   │   └── mockAWSResponse.ts
 │   ├── __tests__
 │   │   ├── index.test.ts
+│   │   ├── isValidEvent.test.ts
 │   │   ├── sanity.test.ts
 │   │   └── sendEmail.test.ts
 │   ├── index.ts
@@ -131,7 +132,7 @@ Let's also inspect the _package.json_ file to see what's installed:
 }
 ```
 
-Not much to include with this project aside from the AWS SDK, Jest, Typescript necessities, and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
+Not much to include with this project aside from the AWS SDK, Jest, TypeScript necessities, and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
 
 It's worth popping open _jest.config.js_ to see how we're configuring Jest to behave.
 
@@ -168,17 +169,17 @@ describe('Sanity tests', () => {
 })
 ```
 
-Because this project will ultimately be an AWS Lambda function, I'll follow it's respective handler function signature pattern to test the service. In doing so, it'll accept three arguments:
+Because this project will be an AWS lambda function, I'll follow it's respective handler signature pattern to test the service. In doing so, it'll accept three arguments:
 
 - <strong>event</strong>, which pertains metadata about the invoker
 - <strong>context</strong>, where all the information and details about the invocation are located
 - <strong>callback</strong>, which follows the traditional Node callback pattern of `error` and `success` (or in this case `response`).
 
-For more detailed info on Lambda functions, head over to their <a href="https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html" target="_blank">documentation</a>.
+For more detailed info on lambda functions, head over to their <a href="https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html" target="_blank">documentation</a>.
 
 Note that Jest provides test-running methods as well as assertion functions out of the gate. This is our first example of the convenience it provides. This will appeal to those who don't want to import a module at the top or download a separate library for test assertions (I'm looking at you, `mocha` and `chai` workflow).
 
-OK, let's implement this simple case and make the test pass. In order to do so, I'll need to export a function called `handler` that follows the Lambda signature used above.
+OK, let's implement this simple case and make the test pass. In order to do so, I'll need to export a function called `handler` that follows the lambda signature used above.
 
 _src/sanity.ts_:
 
@@ -204,11 +205,11 @@ export { handler, SanityResponse }
 
 The exported function in this module returns a response body with the payload expected in our test. If we run our first test, we should see it pass in the console.
 
-Alright, onto our _actual_ project logic.
+Alright, onto our project logic.
 
-In order for this lambda to run, we'll have to implement the _actual_ handler for it. Let's start with writing the test file for this module, explaining what we want it to do:
+In order for this lambda to run, we'll have to implement an _actual_ handler for it. Let's start with writing the test file for this module, explaining what we want it to do:
 
-- response with the expected response when a valid request is provided, and
+- respond with the expected response when a valid request is provided, and
 - send an error message when our payload is incorrect.
 
 _src/\_\_tests\_\_/index.test.ts_:
@@ -285,9 +286,9 @@ describe('isValidEvent tests', () => {
 
 As expected, we pass and fail based on whether the payload passed in matches the shape we expect.
 
-I know this test might seem tedious, but it makes it so you can trust the shape of the data you're processing after a certain phase in the application.
+I know this test might seem tedious, but it makes it so you can trust the shape of the data you're processing after a certain step in the application. It also helps identify when your API request contract changes and fails if not updated. Good stuff!
 
-Onto the code:
+Onto the implementation of this validator function:
 
 _src/validators/isValidEvent.ts_:
 
@@ -304,6 +305,8 @@ export const isValidEvent = (evt: EmailEvent): boolean =>
 ```
 
 We pass the payload received to the validator and ensure it has the data necessary to eventually send the email.
+
+_Note: if you're unfamiliar with the `?.` syntax above, it's a convenient new feature called <strong>optional chaining</strong>. Read more about it <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining" target="_blank">here</a>._
 
 Alright, I'd say we're ready to work on that root handler now.
 
@@ -336,7 +339,9 @@ We see the handler performing two main operations:
 1. validating the request, and
 2. sending the email
 
-For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the sendEmail test file.
+If your eye is keen, you'll see that I called a `sendEmail()` function that we didn't write yet. Let's fix that.
+
+Not to derail our progress, we'll work on the test file first.
 
 _src\/\_\_tests\_\_\/sendEmail.test.ts:_
 
@@ -347,7 +352,7 @@ import expectedResponse from '../__mocks__/mockAWSResponse'
 describe('Index tests', () => {
   it('responds with expected string with valid params', async () => {
     const res = await sendEmail()
-    expect(JSON.stringify(res)).toEqual(JSON.stringify(expectedResponse))
+    expect(res).toStrictEqual(expectedResponse)
   })
 })
 ```
