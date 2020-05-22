@@ -3,9 +3,9 @@ title: 'Getting Jiggy with Jenkins and Jest, Part One'
 date: '2020-04-06'
 ---
 
-A few months have passed since my last article. Rest assured that the time was not spent in idle; I was busy tending to a new home and new role.
+A few months have passed since my last article. I assure you the time has not been spent resting on my laurels; I was busy tending to a new home, new role, and new workload.
 
-I've also had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
+You see, I've had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
 
 At the core of my professional growth is the single-most beneficial change I've made: adhering to a test-driven development pattern.
 
@@ -19,7 +19,7 @@ So I have to be the guy who writes about test-driven development (which will loo
 
 For the sake of keeping things concentrated (and the article length outside of think-piece territory), I'll publish a testing-themed walkthrough in two parts. The first, this one, aims to achieve two goals:
 
-1. explain the rationale for TDD, and
+1. explain the rationale for Test-Driven Development, or TDD, and
 2. highlight the formidable strength of Jest, a JavaScript framework that makes the DX for testing painless.
 
 The second will focus on creating a CI/CD layer that leverages our tests to reject breaking changes and deploy code once merged. It'll also detail how to update infrastructure automatically through code using Terraform.
@@ -30,9 +30,9 @@ Let's not get ahead of ourselves. Here's why we need tests in the first place.
 
 Instead of using the results-first flow of previous articles, we're going to build a project incrementally with tests that explain what we'd like to accomplish. We'll then implement logic that gets the tests to pass.
 
-To many, this is the heart of Test-Driven Development, or TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
+To many, this is the heart of TDD. It's also a commendable philosophy to practice, and nearly essential when taking on legacy code bases.
 
-There are several reasons why this practice produces better code. For one, writing tests forces the engineer to consider edge cases and function boundaries prior to implementation.
+There are several reasons why this is the case. For one, writing tests forces the engineer to consider edge cases and function boundaries prior to implementation.
 
 Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing or are tightly coupled (keep it SOLID, people).
 
@@ -168,7 +168,7 @@ describe('Sanity tests', () => {
 })
 ```
 
-The handler will follow the Lambda pattern of accepting three arguments:
+Because this project will ultimately be an AWS Lambda function, I'll follow it's respective handler function signature pattern to test the service. In doing so, it'll accept three arguments:
 
 - <strong>event</strong>, which pertains metadata about the invoker
 - <strong>context</strong>, where all the information and details about the invocation are located
@@ -176,7 +176,7 @@ The handler will follow the Lambda pattern of accepting three arguments:
 
 For more detailed info on Lambda functions, head over to their <a href="https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html" target="_blank">documentation</a>.
 
-Note that Jest provides test running methods as well as assertion functions out of the gate. This is our first example of the convenience it provides. This will appeal to those who don't want to import a module at the top or download a separate library for test assertions (I'm looking at you, `mocha` and `chai` workflow).
+Note that Jest provides test-running methods as well as assertion functions out of the gate. This is our first example of the convenience it provides. This will appeal to those who don't want to import a module at the top or download a separate library for test assertions (I'm looking at you, `mocha` and `chai` workflow).
 
 OK, let's implement this simple case and make the test pass. In order to do so, I'll need to export a function called `handler` that follows the Lambda signature used above.
 
@@ -206,9 +206,9 @@ The exported function in this module returns a response body with the payload ex
 
 Alright, onto our _actual_ project logic.
 
-Since our deploy target is a Lambda function, my app's entry point will need to be a file with an exported handler function like the signature used above. Let's start with writing the test file for this module, explaining what we want it to do:
+In order for this lambda to run, we'll have to implement the _actual_ handler for it. Let's start with writing the test file for this module, explaining what we want it to do:
 
-- response with the expected response when valid request is provided, and
+- response with the expected response when a valid request is provided, and
 - send an error message when our payload is incorrect.
 
 _src/\_\_tests\_\_/index.test.ts_:
@@ -246,9 +246,66 @@ Again, we use some Jest-specific functions for describing our tests, breaking th
 
 This is considered the AAA pattern and is common in the TDD community. Check out an <a href="https://docs.microsoft.com/en-us/visualstudio/test/unit-test-basics?view=vs-2019" target="_blank">exploration of the concept</a> if you're curious.
 
-Anyhow, onto the implementation of our root handler.
+Inspecting the file, we're simply passing test message events into the handler. When we encounter invalid data, we ensure the response matches our canned invalid data message.
 
-In order to accommodate the demands of our test, we'll need to invoke a sendEmail function that performs the SES action needed.
+_src/responses/index.test.ts_:
+
+```typescript
+export const invalidDataSupplied = {
+  status: 400,
+  message: 'Invalid Data Supplied.',
+}
+```
+
+For the canned response, we set the proper status code and provide a human-readable message back to the user.
+
+Before implementing our root handler, the test presents us with another module that we'll need prior to calling SES: a validation check.
+
+Let's go ahead and write out what we'd expect that validation layer to do for us.
+
+_src/\_\_tests\_\_/isValidEvent.test.ts_:
+
+```typescript
+import { isValidEvent } from '../validators/isValidEvent'
+
+describe('isValidEvent tests', () => {
+  it('responds truthy for valid payload', async () => {
+    const res = isValidEvent({
+      details: { emailAddress: 'test@me.com', message: 'hello' },
+    })
+    expect(res).toEqual(true)
+  })
+  it('response false with invalid payload', async () => {
+    // @ts-ignore
+    const res = isValidEvent({ foo: 'bar' })
+    expect(res).toEqual(false)
+  })
+})
+```
+
+As expected, we pass and fail based on whether the payload passed in matches the shape we expect.
+
+I know this test might seem tedious, but it makes it so you can trust the shape of the data you're processing after a certain phase in the application.
+
+Onto the code:
+
+_src/validators/isValidEvent.ts_:
+
+```typescript
+import { EmailEvent } from '../index'
+
+export const isValidEvent = (evt: EmailEvent): boolean =>
+  Boolean(
+    typeof evt === 'object' &&
+      evt?.details?.emailAddress &&
+      evt?.details?.message
+  )
+
+```
+
+We pass the payload received to the validator and ensure it has the data necessary to eventually send the email.
+
+Alright, I'd say we're ready to work on that root handler now.
 
 _src/index.ts:_
 
@@ -273,6 +330,11 @@ const handler: Handler = async (event: EmailEvent) => {
 
 export { handler, EmailEvent }
 ```
+
+We see the handler performing two main operations:
+
+1. validating the request, and
+2. sending the email
 
 For a better understanding of what's _actually_ happening, and through the looking glass of our test-first approach, let's examine the sendEmail test file.
 
