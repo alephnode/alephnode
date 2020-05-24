@@ -1,6 +1,6 @@
 ---
 title: 'Getting Jiggy with Jenkins and Jest, Part One'
-date: '2020-04-06'
+date: '2020-05-07'
 ---
 
 A few months have passed since my last article. I assure you the time has not been spent resting on my laurels; I was busy tending to a new home, new role, and new workload.
@@ -341,7 +341,7 @@ We see the handler performing two main operations:
 
 If your eye is keen, you'll see that I called a `sendEmail()` function that we didn't write yet. Let's fix that.
 
-Not to derail our progress, we'll work on the test file first.
+Not to derail our progress, we'll work on the test file first. This helps us express what we'd _like_ the function to do before coding it out.
 
 _src\/\_\_tests\_\_\/sendEmail.test.ts:_
 
@@ -351,15 +351,36 @@ import expectedResponse from '../__mocks__/mockAWSResponse'
 
 describe('Index tests', () => {
   it('responds with expected string with valid params', async () => {
-    const res = await sendEmail()
+    const res = await sendEmail({
+      emailAddress: 'test@me.com',
+      message: 'hello',
+    })
     expect(res).toStrictEqual(expectedResponse)
   })
 })
 ```
 
-In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) offering to send an email to the recipient passed. We then compare the result with the predefined response we expect back.
+In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) and sends an email to the recipient passed. We then compare the result with the predefined response we expect back.
 
-Digging into the mock file will give us a better sense of what we expect.
+How did we supposedly call the SES service and know what the response would be in advance? As it turns out, this project is leveraging another cool feature of Jest: path-based mocking conventions. Because I created a file named `aws-sdk` within a `__mocks__` folder in the `src` directory, I was able to mock the response of the library when running tests. Now, instead of calling the SES service on each test run, Jest will _mock_ the response with the one provided. Let's peek into the file for a better understanding.
+
+_src\/\_\_mocks\_\_\/aws-sdk.ts:_
+
+```typescript
+import mockAWSResponse from './mockAWSResponse'
+
+export const config = {
+  update: jest.fn(),
+}
+
+export const SES = jest.fn(() => ({
+  sendEmail: jest.fn().mockReturnValue({
+    promise: () => Promise.resolve(mockAWSResponse),
+  }),
+}))
+```
+
+Here we see that we're telling the SES's `sendEmail()` function to send our mock AWS response. Let's dig into that file to see what that response looks like.
 
 _src\/\_\_mocks\_\_\/mockAWSResonpse.ts:_
 
@@ -372,9 +393,9 @@ export default {
 }
 ```
 
-Alright, enough suspense. Here's the _actual_ implementation.
+That looks like a typical SES response. Alright, enough suspense. Time for the _actual_ implementation.
 
-_src/getSentiment:_
+_src/sendEmail.ts:_
 
 ```typescript
 import * as aws from 'aws-sdk'
@@ -391,13 +412,15 @@ export const sendEmail = async () => {
 }
 ```
 
-The module sends an email.
+As expected, the module uses the AWS sdk to send an email using the SES service and returns the response.
 
 Now that we've seen the core logic of the application, it's time to run the tests we saw earlier. If everything goes well, they should all pass.
 
-<img screen of passing>
+<div id="img-container">
+<img id="passing-tests" src="./images/test-passing.png">
+</div
 
-Hooray! We've now successfully written tests to describe our desired functionality and implemented the features by coding until we get them to pass.
+Hooray! We've now successfully written tests to describe our desired functionality. We then added features by coding until those tests passed. If you ask me, this exercise gave us a taste of the zen-inducing flavor of TDD that helps keep code explicit and maintainable.
 
 ### Wrapping Up
 
@@ -407,8 +430,8 @@ In part two of this article, I'll show how to deploy the service using infrastru
 
 For now, here's the usual reading list for more information.
 
-- Pragmatic Bookshelf's "Test-Driving JavaScript Applications" (examples are a bit outdated, but the concepts are sound)
-- Kent Dodd's Testing JavaScript course
-- Testophobia, a web snapshot testing library I built with a former coworker.
+- <a href="https://pragprog.com/book/vsjavas/test-driving-javascript-applications" target="_blank">Pragmatic Bookshelf's "Test-Driving JavaScript Applications"</a> (examples are a bit outdated, but the concepts are sound)
+- <a href="https://testingjavascript.com/" target="_blank">Kent Dodd's Testing JavaScript course</a>
+- <a href="https://github.com/testophobia/testophobia" target="_blank">Testophobia</a>, a web snapshot testing library I built with a former coworker.
 
 As always, thanks for reading.
