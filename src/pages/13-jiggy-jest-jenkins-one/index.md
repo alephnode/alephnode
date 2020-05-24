@@ -3,6 +3,10 @@ title: 'Getting Jiggy with Jenkins and Jest, Part One'
 date: '2020-05-07'
 ---
 
+<div id="img-container">
+<img id="jest-img" src="images/jest.png">
+</div
+
 A few months have passed since my last article. I assure you the time has not been spent resting on my laurels; I was busy tending to a new home, new role, and new workload.
 
 You see, I've had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
@@ -306,7 +310,7 @@ export const isValidEvent = (evt: EmailEvent): boolean =>
 
 We pass the payload received to the validator and ensure it has the data necessary to eventually send the email.
 
-_Note: if you're unfamiliar with the `?.` syntax above, it's a convenient new feature called <strong>optional chaining</strong>. Read more about it <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining" target="_blank">here</a>._
+Note: if you're unfamiliar with the `?.` syntax above, it's a convenient new feature called <strong>optional chaining</strong>. Read more about it <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining" target="_blank">here</a>.
 
 Alright, I'd say we're ready to work on that root handler now.
 
