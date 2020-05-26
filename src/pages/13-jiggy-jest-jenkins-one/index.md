@@ -42,9 +42,9 @@ There are several reasons why this is the case. For one, writing tests forces th
 
 Another benefit is that, when describing _how_ to do something instead of _actually_ doing it, you're less likely to get entangled in busy functions that try to do more than one thing or are tightly coupled (keep it SOLID, people).
 
-More specifically, _leading_ with tests stems from the fact that it's simply more difficult or time-consuming to write them afterward, and often times get nixed in planning for the sake of delivering more features.
+Finally, _leading_ with tests is beneficial since it's more difficult and time-consuming to write them afterward. Tests also tend to get nixed in planning sessions for the sake of delivering more features.
 
-Once meaningful, thorough tests are written, we can use them to protect our code by running them run whenever pull requests are opened against a repo, as well as during deployment pipelines. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
+If we follow this methodology and write meaningful, thorough tests, we can use them to protect our code by running them whenever pull requests are opened or during deployment pipelines. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
 
 ### A Practical Approach: What We're Building
 
@@ -175,7 +175,7 @@ describe('Sanity tests', () => {
 })
 ```
 
-Because this project will be an AWS lambda function, I'll follow it's respective handler signature pattern to test the service. In doing so, it'll accept three arguments:
+Because this project will be an AWS lambda function, I'll follow its respective handler signature pattern to test the service. In doing so, it'll accept three arguments:
 
 - <strong>event</strong>, which pertains metadata about the invoker
 - <strong>context</strong>, where all the information and details about the invocation are located
