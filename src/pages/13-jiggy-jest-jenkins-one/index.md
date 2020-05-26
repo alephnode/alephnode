@@ -7,11 +7,13 @@ date: '2020-05-07'
 <img id="jest-img" src="images/jest.png">
 </div
 
-A few months have passed since my last article. I assure you the time has not been spent resting on my laurels; I was busy tending to a new home, new role, and new workload.
+A few months have passed since my last article. During that time, I've been tending to a new home, new role, and new workload.
 
-You see, I've had to shift my focus on the endless vista of JavaScript topics. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale. As a result, the next few articles will reflect the resulting learnings and investigations.
+You see, I've had to shift my gaze upon the endless vista that is the JavaScript ecosystem. Whereas the brunt of last year's work involved front-end concerns like rendering virtual lists and optimizing bundle performance, my time lately has been spent supporting JavaScript-based microservices at scale.
 
-At the core of my professional growth is the single-most beneficial change I've made: adhering to a test-driven development pattern.
+As a result, the next few articles will reflect the resulting learnings and investigations.
+
+At the core of my professional growth is the single-most beneficial change I've made: adhering to a Test-Driven Development (or TDD) pattern.
 
 I know what you're thinking: I'm one of those assholes who writes about obvious best practices that'll look good on my resume.
 
@@ -23,14 +25,14 @@ So I have to be the guy who writes about test-driven development (which will loo
 
 For the sake of keeping things concentrated (and the article length outside of think-piece territory), I'll publish a testing-themed walkthrough in two parts. The first, this one, aims to achieve two goals:
 
-1. explain the rationale for Test-Driven Development, or TDD, and
+1. explain the rationale for TDD, and
 2. highlight the formidable strength of Jest, a JavaScript framework that makes the DX for testing painless.
 
-The second will focus on creating a CI/CD layer that leverages our tests to reject breaking changes and deploy code once merged. It'll also detail how to update infrastructure automatically through code using Terraform.
+The second will focus on creating a CI/CD layer that leverages our tests to reject breaking changes and deploy successful code once merged. It'll also detail how to update infrastructure automatically through Terraform.
 
-Let's not get ahead of ourselves. Here's why we need tests in the first place.
+But let's not get ahead of ourselves. Here's why we need tests in the first place.
 
-### Why TDD
+### Why TDD?
 
 Instead of using the results-first flow of previous articles, we're going to build a project incrementally with tests that explain what we'd like to accomplish. We'll then implement logic that gets the tests to pass.
 
@@ -42,7 +44,7 @@ Another benefit is that, when describing _how_ to do something instead of _actua
 
 More specifically, _leading_ with tests stems from the fact that it's simply more difficult or time-consuming to write them afterward, and often times get nixed in planning for the sake of delivering more features.
 
-Once the tests are written, we can use them to protect our code from breaking changes by having them run whenever pull requests are opened against a repo, as well as during deployments. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
+Once meaningful, thorough tests are written, we can use them to protect our code by running them run whenever pull requests are opened against a repo, as well as during deployment pipelines. This is invaluable for anyone who's ever open-sourced a project or worked on a project with more than a few people.
 
 ### A Practical Approach: What We're Building
 
@@ -51,11 +53,10 @@ For the sake of this article, I'm going to focus on writing meaningful unit test
 - coverage reports
 - built-in assertions
 - automatic mocking
-- simple spying
 
-I'll be sure to point them out as we go along.
+and other niceties. I'll be sure to point them out as we go along.
 
-It's worth noting that there's been a lot of discussion in the community about the right formula for testing applications. The conventional wisdom was to aim for a <a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank">pyramid-style</a> methodology, where unit testing is the most abundant type of tests available for the service, followed by component and integration tests and finally reaching end-to-end (E2E) tests at the top.
+It's worth noting that there's been discussion in the community about the right formula for testing applications. The conventional wisdom was to aim for a <a href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank">pyramid-style</a> methodology, where unit testing is the most abundant type of tests available for the service, followed by component and integration tests and finally reaching end-to-end (E2E) tests at the top.
 
 Another model would be the venerable Kent C. Dodds' testing trophy. In short, the mantra is:
 
@@ -63,9 +64,11 @@ Another model would be the venerable Kent C. Dodds' testing trophy. In short, th
 
 According to his heuristic, there's a diminishing return in stability after reaching a certain point (70 percent, for example).
 
-Whichever you choose, what's important is that it increases your shipping confidence. As long as the project is reliable, scalable, and maintainable, build out any model that is successful for your project or team. For me, I feel uneasy taking on legacy code bases with anything less than 90 percent coverage, at least until I'm familiar with the system. I'm sure other developers feel the same, which leads me to believe that poor coverage might impact a team's ability to attract talent. Food for thought!
+Whichever you choose, what's important is that it increases your shipping confidence. As long as the project is reliable, scalable, and maintainable, build out any model that is successful for your project or team.
 
-Anyway, this brings us to the example project. In short, it's a simple script that sends an email using Amazon's SES service. The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article, which will focus on Jenkins and Terraform for CI/CD and infrastructure as code (IaC) examples, respectively.
+For me, I feel uneasy taking on legacy code bases with anything less than 90 percent coverage, at least until I'm familiar with the system. I'm sure other developers feel the same, which leads me to believe that poor coverage might impact a team's ability to attract talent. Food for thought!
+
+Anyway, this brings us to the example project. In short, it's a simple script that sends an email using Amazon's Simple Email Service (SES). The deploy target is a lambda function. I'll explain more on the infrastructure in the follow-up article, which will focus on Jenkins and Terraform for CI/CD and infrastructure as code (IaC) examples, respectively.
 
 Alright, let's jump in.
 
@@ -113,8 +116,7 @@ Let's also inspect the _package.json_ file to see what's installed:
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
-    "aws-sdk": "^2.601.0",
-    "nodemon": "^1.19.4"
+    "aws-sdk": "^2.601.0"
   },
   "scripts": {
     "test": "jest -i",
@@ -136,7 +138,7 @@ Let's also inspect the _package.json_ file to see what's installed:
 }
 ```
 
-Not much to include with this project aside from the AWS SDK, Jest, TypeScript necessities, and project-specific utilities (config presets and the types for our external libraries). Oh, and nodemon for the dev server.
+Not much to include with this project aside from the AWS SDK, Jest, TypeScript necessities, and project-specific utilities (config presets and the types for our external libraries).
 
 It's worth popping open _jest.config.js_ to see how we're configuring Jest to behave.
 
@@ -159,7 +161,7 @@ Let's create our first test file. Because this project involves compilation step
 
 Implementing my canary module will start with a test. Because the purpose is for the file to be simple, I'll assert that the sanity module returns a simple "Hello, World!" response.
 
-_src/\_\_tests\_\_/sanity.test.ts_:
+_src/\__tests__/sanity.test.ts_:
 
 ```typescript
 import { handler, SanityResponse } from '../sanity'
@@ -207,7 +209,7 @@ const handler: Handler = (event, context: Context, cb: Callback) => {
 export { handler, SanityResponse }
 ```
 
-The exported function in this module returns a response body with the payload expected in our test. If we run our first test, we should see it pass in the console.
+The exported function in this module returns a response body with the payload expected in our test. 
 
 Alright, onto our project logic.
 
@@ -216,7 +218,7 @@ In order for this lambda to run, we'll have to implement an _actual_ handler for
 - respond with the expected response when a valid request is provided, and
 - send an error message when our payload is incorrect.
 
-_src/\_\_tests\_\_/index.test.ts_:
+_src/\__tests__/index.test.ts_:
 
 ```typescript
 import { handler } from '../index'
@@ -268,7 +270,7 @@ Before implementing our root handler, the test presents us with another module t
 
 Let's go ahead and write out what we'd expect that validation layer to do for us.
 
-_src/\_\_tests\_\_/isValidEvent.test.ts_:
+_src/\__tests__/isValidEvent.test.ts_:
 
 ```typescript
 import { isValidEvent } from '../validators/isValidEvent'
@@ -305,7 +307,6 @@ export const isValidEvent = (evt: EmailEvent): boolean =>
       evt?.details?.emailAddress &&
       evt?.details?.message
   )
-
 ```
 
 We pass the payload received to the validator and ensure it has the data necessary to eventually send the email.
@@ -347,7 +348,7 @@ If your eye is keen, you'll see that I called a `sendEmail()` function that we d
 
 Not to derail our progress, we'll work on the test file first. This helps us express what we'd _like_ the function to do before coding it out.
 
-_src\/\_\_tests\_\_\/sendEmail.test.ts:_
+_src/\__tests__/sendEmail.test.ts:_
 
 ```typescript
 import { sendEmail } from '../sendEmail'
@@ -364,11 +365,11 @@ describe('Index tests', () => {
 })
 ```
 
-In the test, we invoke the `sendEmail` function, which reaches out to the AWS Simple Email Service (SES) and sends an email to the recipient passed. We then compare the result with the predefined response we expect back.
+In the test, we invoke the `sendEmail` function, which reaches out to SES and sends an email to the recipient passed. We then compare the result with the predefined response we expect back.
 
 How did we supposedly call the SES service and know what the response would be in advance? As it turns out, this project is leveraging another cool feature of Jest: path-based mocking conventions. Because I created a file named `aws-sdk` within a `__mocks__` folder in the `src` directory, I was able to mock the response of the library when running tests. Now, instead of calling the SES service on each test run, Jest will _mock_ the response with the one provided. Let's peek into the file for a better understanding.
 
-_src\/\_\_mocks\_\_\/aws-sdk.ts:_
+_src/\__mocks__/aws-sdk.ts:_
 
 ```typescript
 import mockAWSResponse from './mockAWSResponse'
@@ -386,7 +387,7 @@ export const SES = jest.fn(() => ({
 
 Here we see that we're telling the SES's `sendEmail()` function to send our mock AWS response. Let's dig into that file to see what that response looks like.
 
-_src\/\_\_mocks\_\_\/mockAWSResonpse.ts:_
+_src/\__mocks__/mockAWSResonpse.ts:_
 
 ```typescript
 export default {
